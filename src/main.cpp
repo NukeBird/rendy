@@ -37,8 +37,13 @@ R"(
 	void main()
 	{
 		FragColor = vertexColor;
+		#ifdef USE_VERTEX_COLOR
+			FragColor = vec4(1, 1, 1, 1);
+		#endif
 	} 
 )";
+
+#include "es2/vertex_array.h"
 
 int main(int argc, char** argv) 
 {
@@ -113,6 +118,33 @@ int main(int argc, char** argv)
 	auto sh = ShaderManager::get_instance()->make(vtx, frg);
 	std::cout << "VALIDATION " << sh->validate() << std::endl;
 
+	float verts[] =
+	{
+		-0.5f,  0.5f,  -1.0f,
+		 0.5f,  0.5f,  -1.0f,
+		 0.5f, -0.5f,  -1.0f,
+		-0.5f, -0.5f,  -1.0f
+	};
+
+	uint16_t indices[] =
+	{
+		0, 1, 2,
+		0, 2, 3
+	};
+
+	GLuint fucking_vao; //should be active at least one _REAL_ vao
+	glGenVertexArrays(1, &fucking_vao);
+	glBindVertexArray(fucking_vao);
+
+	auto layout = std::make_shared<BufferLayout>(std::initializer_list<BufferElement>{{ShaderDataType::Float3, "aPos"} });
+
+	ES2::VertexArray vao(verts, 12 * sizeof(float),
+		indices, 6 * sizeof(uint16_t), layout);
+
+	std::cout << "VAO status: " << vao.validate() << std::endl;
+
+	glDisable(GL_CULL_FACE);
+
 	SDL_Event event;
 	bool is_running = true;
 	while (is_running)
@@ -126,12 +158,18 @@ int main(int argc, char** argv)
 		}
 
 		glClearColor(0, 0, 0, 1);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		auto shader = sh->compile(ShaderFlag::USE_VERTEX_COLOR);
+		shader->bind();
+		vao.bind();
+		vao.draw();
+		vao.unbind();
+		shader->unbind();
 
 		SDL_GL_SwapWindow(window);
 	}
 
-	// После окончания работы программы, SDL_GLContext должен быть удалён
 	SDL_GL_DeleteContext(glcontext);
 
 	return 0;
