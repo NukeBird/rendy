@@ -3,6 +3,7 @@
 #include "texture_format.h"
 #include "texture_type.h"
 #include <glm/vec3.hpp>
+#include <memory>
 
 struct AbstractTexture: public AbstractResource
 {
@@ -13,3 +14,5 @@ struct AbstractTexture: public AbstractResource
 	virtual TextureFormat get_format() const = 0;
 	virtual TextureType get_type() const = 0;
 };
+
+using AbstractTextureRef = std::shared_ptr<AbstractTexture>;

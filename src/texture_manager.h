@@ -4,8 +4,6 @@
 #include <vector>
 #include <memory>
 
-using AbstractTextureRef = std::shared_ptr<AbstractTexture>;
-
 class TextureManager final: public Singleton<TextureManager>
 {
 public:
