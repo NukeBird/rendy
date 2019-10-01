@@ -1,5 +1,6 @@
 #pragma once
 #include "abstract_resource.h"
+#include <memory>
 
 struct AbstractShaderVariant: public AbstractResource
 {
