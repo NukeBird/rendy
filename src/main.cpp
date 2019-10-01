@@ -1,4 +1,3 @@
-#include "animator.h"
 #include <iostream>
 #include <SDL.h>
 
@@ -44,6 +43,7 @@ R"(
 )";
 
 #include "es2/vertex_array.h"
+#include "model_builder.h"
 
 int main(int argc, char** argv) 
 {
