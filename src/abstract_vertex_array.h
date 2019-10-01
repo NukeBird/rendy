@@ -13,3 +13,5 @@ struct AbstractVertexArray: public AbstractResource
 	virtual AbstractBufferRef get_vertex_buffer() = 0;
 	virtual AbstractBufferRef get_index_buffer() = 0;
 };
+
+using AbstractVertexArraytRef = std::shared_ptr<AbstractVertexArray>;
