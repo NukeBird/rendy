@@ -15,6 +15,16 @@ std::string shader_flags_to_defines(uint32_t flags)
 	}
 
 	std::string result;
+
+	if (flags & USE_VERTEX_POSITION)
+	{
+		result += "#define USE_VERTEX_POSITION\n";
+	}
+
+	if (flags & USE_VERTEX_COORD)
+	{
+		result += "#define USE_VERTEX_COORD\n";
+	}
 	
 	if (flags & USE_VERTEX_COLOR)
 	{
