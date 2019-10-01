@@ -49,7 +49,7 @@ void Model::reload()
 
 bool Model::validate() const
 {
-	for (auto& material : materials)
+	for (auto& material: materials)
 	{
 		if (!material->validate())
 		{
@@ -57,7 +57,7 @@ bool Model::validate() const
 		}
 	}
 
-	for (auto& mesh : meshes)
+	for (auto& mesh: meshes)
 	{
 		if (!mesh.validate())
 		{
@@ -86,7 +86,7 @@ void Model::draw_node(uint32_t node_id,
 
 	auto transform = node.transform * base_transform;
 	
-	for (const auto& mesh_id : node.mesh_ids)
+	for (const auto& mesh_id: node.mesh_ids)
 	{
 		assert(mesh_id < get_mesh_count());
 		auto& mesh = meshes[mesh_id];
@@ -105,7 +105,7 @@ void Model::draw_node(uint32_t node_id,
 		material->unbind(mesh.flags);
 	}
 
-	for (const auto& child_id : node.child_ids)
+	for (const auto& child_id: node.child_ids)
 	{
 		draw_node(child_id, transform);
 	}
