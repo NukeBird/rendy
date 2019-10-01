@@ -1,9 +1,13 @@
 #pragma once
 #include "abstract_resource.h"
-#include "smart_enum.hpp"
 #include <memory>
 
-smart_enum_class(BufferTarget, VBO, IBO, Invalid);
+enum class BufferTarget
+{
+	VBO,
+	IBO,
+	Invalid
+};
 
 struct AbstractBuffer: public AbstractResource
 {

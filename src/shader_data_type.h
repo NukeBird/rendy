@@ -1,8 +1,8 @@
 #pragma once
-#include "smart_enum.hpp"
 #include <cstdint>
 
-smart_enum_class(ShaderDataType,  //TODO
+enum class ShaderDataType
+{
 	Float,
 	Float2,
 	Float3,
@@ -13,6 +13,7 @@ smart_enum_class(ShaderDataType,  //TODO
 	Int2,
 	Int3,
 	Int4,
-	Bool);
+	Bool
+};
 
 uint32_t get_shader_data_type_size(ShaderDataType type);

@@ -1,37 +1,69 @@
 #include "shader_flags.h"
+#include <limits>
 
-inline ShaderFlag operator|(ShaderFlag a, ShaderFlag b)
+uint32_t get_all_shader_flags()
 {
-	return static_cast<ShaderFlag>(static_cast<uint32_t>(a) | static_cast<uint32_t>(b));
-}
-
-inline bool operator&(ShaderFlag a, ShaderFlag b)
-{
-	return static_cast<bool>(static_cast<uint32_t>(a) & static_cast<uint32_t>(b));
-}
-
-ShaderFlag get_all_shader_flags()
-{
-	ShaderFlag flags = ShaderFlag::NOTHING;
-
-	for (const auto& f : ShaderFlag_list)
-	{
-		flags = flags | f;
-	}
-
+	constexpr uint32_t flags = std::numeric_limits<uint32_t>::max();
 	return flags;
 }
 
-std::string shader_flags_to_defines(ShaderFlag flags)
+std::string shader_flags_to_defines(uint32_t flags)
 {
+	if (flags == NOTHING)
+	{
+		return "";
+	}
+
 	std::string result;
 	
-	for (const auto& f : ShaderFlag_list)
+	if (flags & USE_VERTEX_COLOR)
 	{
-		if (flags & f)
-		{
-			result += "#define " + ShaderFlag_to_string(f) + "\n";
-		}
+		result += "#define USE_VERTEX_COLOR\n";
+	}
+
+	if (flags & USE_VERTEX_NORMAL)
+	{
+		result += "#define USE_VERTEX_NORMAL\n";
+	}
+
+	if (flags & USE_VERTEX_TANGENT)
+	{
+		result += "#define USE_VERTEX_TANGENT\n";
+	}
+
+	if (flags & USE_VERTEX_BITANGENT)
+	{
+		result += "#define USE_VERTEX_BITANGENT\n";
+	}
+
+	if (flags & USE_VERTEX_BONES)
+	{
+		result += "#define USE_VERTEX_BONES\n";
+	}
+
+	if (flags & USE_COLOR_TEXTURE)
+	{
+		result += "#define USE_COLOR_TEXTURE\n";
+	}
+
+	if (flags & USE_NORMAL_TEXTURE)
+	{
+		result += "#define USE_NORMAL_TEXTURE\n";
+	}
+
+	if (flags & USE_AMBIENT_TEXTURE)
+	{
+		result += "#define USE_AMBIENT_TEXTURE\n";
+	}
+
+	if (flags & USE_SPECULAR_TEXTURE)
+	{
+		result += "#define USE_SPECULAR_TEXTURE\n";
+	}
+
+	if (flags & USE_METALLIC_ROUGHNESS_TEXTURE)
+	{
+		result += "#define USE_METALLIC_ROUGHNESS_TEXTURE\n";
 	}
 
 	return result;

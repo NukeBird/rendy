@@ -10,7 +10,7 @@ using ShaderVariantRef = std::shared_ptr<AbstractShaderVariant>;
 struct AbstractShader: public AbstractResource
 {
 	virtual ~AbstractShader() = default; //TODO: = 0?
-	virtual ShaderVariantRef compile(ShaderFlag flags) = 0;
+	virtual ShaderVariantRef compile(uint32_t flags) = 0;
 	virtual uint32_t get_variant_count() const = 0;
 	//TODO: get "uniform buffer"
 };

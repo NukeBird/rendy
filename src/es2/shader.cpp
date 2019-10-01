@@ -18,7 +18,7 @@ void ES2::Shader::reload()
 	}
 }
 
-ShaderVariantRef ES2::Shader::compile(ShaderFlag flags)
+ShaderVariantRef ES2::Shader::compile(uint32_t flags)
 {
 	auto it = variants.find(flags);
 

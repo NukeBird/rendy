@@ -113,7 +113,8 @@ void ES2::VertexArray::bind_layout()
 		///TODO!!!!!!!!!!!!
 		glEnableVertexAttribArray(index);
 		glVertexAttribPointer(index, e.get_component_count(), get_gl_type(e), 
-			false, layout->get_stride(), reinterpret_cast<const void*>(e.offset));
+			false, layout->get_stride(), reinterpret_cast<const void*>(e.offset)); //warning C4312:  'reinterpret_cast': 
+													//conversion from 'const uint32_t' to 'const void *' of greater size
 		index++;
 	}
 }
