@@ -34,6 +34,62 @@ bool ES2::ShaderVariant::validate() const
 	return false;
 }
 
+void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::mat4& mat)
+{
+	auto location = get_uniform_location(name);
+
+	if (location == -1)
+	{
+		//TODO: warning
+	}
+	else
+	{
+		glUniform4fv(location, 1, &mat[0][0]);
+	}
+}
+
+void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::mat3& mat)
+{
+	auto location = get_uniform_location(name);
+
+	if (location == -1)
+	{
+		//TODO: warning
+	}
+	else
+	{
+		glUniform3fv(location, 1, &mat[0][0]);
+	}
+}
+
+void ES2::ShaderVariant::set_uniform(const std::string& name, const float number)
+{
+	auto location = get_uniform_location(name);
+
+	if (location == -1)
+	{
+		//TODO: warning
+	}
+	else
+	{
+		glUniform1fv(location, 1, &number);
+	}
+}
+
+void ES2::ShaderVariant::set_uniform(const std::string& name, const int number)
+{
+	auto location = get_uniform_location(name);
+
+	if (location == -1)
+	{
+		//TODO: warning
+	}
+	else
+	{
+		glUniform1iv(location, 1, &number);
+	}
+}
+
 void ES2::ShaderVariant::bind()
 {
 	glUseProgram(program_id);
@@ -42,6 +98,11 @@ void ES2::ShaderVariant::bind()
 void ES2::ShaderVariant::unbind()
 {
 	glUseProgram(0);
+}
+
+int ES2::ShaderVariant::get_uniform_location(const std::string& name) const
+{
+	return glGetUniformLocation(program_id, name.c_str()); //TODO: optimize (map locations once)
 }
 
 void ES2::ShaderVariant::compile_shader()
