@@ -2,6 +2,7 @@
 #include "singleton.h"
 #include "abstract_buffer.h"
 #include <memory>
+#include <vector>
 
 class IndexBufferManager: public Singleton<IndexBufferManager>
 {
