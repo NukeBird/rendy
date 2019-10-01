@@ -41,7 +41,7 @@ public:
 	uint32_t get_node_count() const;
 	virtual void reload() override;
 	virtual bool validate() const override;
-	virtual void draw() override; //TODO: pass transform
+	virtual void draw(const glm::mat4& transform = glm::mat4(1.0)) override; //TODO: pass transform
 private:
 	void draw_node(uint32_t node_id, 
 		const glm::mat4& base_transform = glm::mat4(1.0));

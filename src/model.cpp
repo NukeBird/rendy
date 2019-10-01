@@ -70,11 +70,11 @@ bool Model::validate() const
 	return true;
 }
 
-void Model::draw()
+void Model::draw(const glm::mat4& transform)
 {
 	if (get_node_count() > 0)
 	{
-		draw_node(0); //TODO: pass base transform
+		draw_node(0, transform); //TODO: pass base transform
 	}
 }
 
