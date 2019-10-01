@@ -4,5 +4,5 @@
 struct AbstractDrawable: public AbstractResource
 {
 	virtual ~AbstractDrawable() = default;
-	virtual void draw() = 0;
+	virtual void draw() = 0; //TODO: pass transform
 };
