@@ -5,8 +5,6 @@
 #include <memory>
 #include <string>
 
-using ShaderVariantRef = std::shared_ptr<AbstractShaderVariant>;
-
 struct AbstractShader: public AbstractResource
 {
 	virtual ~AbstractShader() = default; //TODO: = 0?
