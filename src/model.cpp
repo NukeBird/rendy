@@ -84,7 +84,7 @@ void Model::draw_node(uint32_t node_id,
 	assert(node_id < get_node_count());
 	auto& node = nodes[node_id];
 
-	auto transform = node.transform * base_transform; //TODO: pass to shader
+	auto transform = node.transform * base_transform;
 	
 	for (const auto& mesh_id : node.mesh_ids)
 	{
@@ -94,7 +94,11 @@ void Model::draw_node(uint32_t node_id,
 		assert(mesh.material_id < get_material_count());
 		auto& material = materials[mesh.material_id];
 
+		auto shader = material->get_shader();
+		auto shader_variant = shader->compile(mesh.flags | material->get_flags()); //TODO
+
 		material->bind(mesh.flags);
+		shader_variant->set_uniform("u_transform", transform);
 		mesh.vao->bind();
 		mesh.vao->draw();
 		mesh.vao->unbind();
