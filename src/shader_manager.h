@@ -4,8 +4,6 @@
 #include <vector>
 #include <memory>
 
-using AbstractShaderRef = std::shared_ptr<AbstractShader>;
-
 class ShaderManager: public Singleton<ShaderManager>
 {
 public:

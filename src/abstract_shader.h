@@ -13,3 +13,5 @@ struct AbstractShader: public AbstractResource
 	virtual ShaderVariantRef compile(ShaderFlag flags) = 0;
 	virtual uint32_t get_variant_count() const = 0;
 };
+
+using AbstractShaderRef = std::shared_ptr<AbstractShader>;
