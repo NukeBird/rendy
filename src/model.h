@@ -4,11 +4,7 @@
 #include "abstract_vertex_array.h"
 #include "abstract_texture.h"
 #include "abstract_shader.h"
-#include <assimp/Importer.hpp>
-#include <assimp/cimport.h>
-#include <assimp/config.h>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+#include <memory>
 #include <vector>
 #include <glm/glm.hpp>
 #include <string>
@@ -43,8 +39,6 @@ public:
 	virtual bool validate() const override;
 	virtual void draw(const glm::mat4& transform = glm::mat4(1.0)) override; //TODO: pass transform
 private:
-	Model() = default;
-
 	void draw_node(uint32_t node_id, 
 		const glm::mat4& base_transform = glm::mat4(1.0));
 
@@ -54,3 +48,5 @@ private:
 
 	friend class ModelBuilder;
 };
+
+using ModelRef = std::shared_ptr<Model>;
