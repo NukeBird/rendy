@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include "shader_data_type.h"
+#include <string>
 
 struct BufferElement
 {
