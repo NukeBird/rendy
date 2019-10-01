@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-class ShaderManager: public Singleton<ShaderManager>
+class ShaderManager: public Singleton<ShaderManager> //TODO: should store and return only ONE generic shader
 {
 public:
 	//TODO: make from memory?
