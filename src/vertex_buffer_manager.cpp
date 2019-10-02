@@ -16,7 +16,7 @@ AbstractBufferRef VertexBufferManager::make(uint32_t size, const void* ptr)
 
 void VertexBufferManager::reload()
 {
-	for (auto& vbo : vbo_list)
+	for (auto& vbo: vbo_list)
 	{
 		vbo->reload();
 	}
