@@ -95,10 +95,53 @@ uint32_t parse_mesh_size(uint32_t flags)
 
 	/*if (flags & USE_VERTEX_BONES)
 	{
-		element_count += 4;
+		element_count += 4; //TODO
 	}*/
 
 	return element_count * sizeof(float);
+}
+
+BufferLayoutRef parse_buffer_layout(uint32_t flags)
+{
+	std::vector<BufferElement> buffer_elements;
+
+	//POSITION
+	if (flags & USE_VERTEX_POSITION)
+	{
+		buffer_elements.emplace_back(ShaderDataType::Float3, "a_position");
+	}
+
+	//COORD
+	if (flags & USE_VERTEX_COORD)
+	{
+		buffer_elements.emplace_back(ShaderDataType::Float2, "a_coord");
+	}
+
+	//COLOR
+	if (flags & USE_VERTEX_COLOR)
+	{
+		buffer_elements.emplace_back(ShaderDataType::Float4, "a_color");
+	}
+
+	//NORMAL
+	if (flags & USE_VERTEX_NORMAL)
+	{
+		buffer_elements.emplace_back(ShaderDataType::Float3, "a_normal");
+	}
+
+	//TANGENT
+	if (flags & USE_VERTEX_TANGENT)
+	{
+		buffer_elements.emplace_back(ShaderDataType::Float3, "a_tangent");
+	}
+
+	//BITANGENT
+	if (flags & USE_VERTEX_BITANGENT)
+	{
+		buffer_elements.emplace_back(ShaderDataType::Float3, "a_bitangnet");
+	}
+
+	return std::make_shared<BufferLayout>(buffer_elements);
 }
 
 std::vector<Mesh> parse_meshes(const aiScene* scene)
