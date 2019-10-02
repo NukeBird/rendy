@@ -232,6 +232,8 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 			}
 		}
 
+		auto layout = parse_buffer_layout(mesh_flags);
+
 		//TODO
 	}
 	//TODO
