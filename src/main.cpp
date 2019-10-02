@@ -44,6 +44,7 @@ R"(
 
 #include "es2/vertex_array.h"
 #include "model_builder.h"
+#include "vertex_array_manager.h"
 
 int main(int argc, char** argv) 
 {
@@ -138,10 +139,10 @@ int main(int argc, char** argv)
 
 	auto layout = std::make_shared<BufferLayout>(std::initializer_list<BufferElement>{{ShaderDataType::Float3, "aPos"} });
 
-	ES2::VertexArray vao(verts, 12 * sizeof(float),
+	auto vao = VertexArrayManager::get_instance()->make(verts, 12 * sizeof(float),
 		indices, 6 * sizeof(uint16_t), layout);
 
-	std::cout << "VAO status: " << vao.validate() << std::endl;
+	std::cout << "VAO status: " << vao->validate() << std::endl;
 
 	glDisable(GL_CULL_FACE);
 
@@ -162,9 +163,9 @@ int main(int argc, char** argv)
 
 		auto shader = sh->compile(ShaderFlag::USE_VERTEX_COLOR);
 		shader->bind();
-		vao.bind();
-		vao.draw();
-		vao.unbind();
+		vao->bind();
+		vao->draw();
+		vao->unbind();
 		shader->unbind();
 
 		SDL_GL_SwapWindow(window);
