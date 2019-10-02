@@ -221,6 +221,17 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 			}
 		}
 
+		std::vector<uint16_t> indices; //TODO: sometimes uint32_t?
+		for (unsigned j = 0; j < assimp_mesh->mNumFaces; ++j)
+		{
+			auto& face = assimp_mesh->mFaces[j];
+
+			for (unsigned k = 0; k < face.mNumIndices; ++k)
+			{
+				indices.emplace_back(face.mIndices[k]);
+			}
+		}
+
 		//TODO
 	}
 	//TODO
