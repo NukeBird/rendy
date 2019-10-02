@@ -6,6 +6,8 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "vertex_array_manager.h"
+#include <unordered_map>
+#include <stack>
 
 const unsigned get_import_flags()
 {
@@ -245,6 +247,115 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 	return result;
 }
 
+glm::mat4 parse_transform(const aiMatrix4x4* from) //TODO: legit?
+{
+	glm::mat4 to;
+
+	to[0][0] = from->a1; 
+	to[0][1] = from->b1;  
+	to[0][2] = from->c1; 
+	to[0][3] = from->d1;
+
+	to[1][0] = from->a2;
+	to[1][1] = from->b2;  
+	to[1][2] = from->c2; 
+	to[1][3] = from->d2;
+
+	to[2][0] = from->a3; 
+	to[2][1] = from->b3; 
+	to[2][2] = from->c3; 
+	to[2][3] = from->d3;
+
+	to[3][0] = from->a4;
+	to[3][1] = from->b4;  
+	to[3][2] = from->c4; 
+	to[3][3] = from->d4;
+
+	return to;
+}
+
+Node parse_node(const aiNode* node)
+{
+	Node result;
+	
+	result.name = std::string(node->mName.data, 
+		node->mName.length); //TODO: legit?
+
+	result.mesh_ids.reserve(static_cast<size_t>(node->mNumMeshes));
+
+	for (unsigned i = 0; i < node->mNumMeshes; ++i)
+	{
+		result.mesh_ids.emplace_back(node->mMeshes[i]);
+	}
+
+	result.transform = parse_transform(&node->mTransformation);
+
+	return result;
+}
+
+void link_nodes(std::vector<Node>& node_list,
+	std::unordered_map<uint32_t, const aiNode*>& index_to_node,
+	std::unordered_map<const aiNode*, uint32_t>& node_to_index)
+{
+	for (uint32_t index = 0; index < static_cast<uint32_t>(node_list.size()); 
+		++index)
+	{
+		auto& node = node_list[index];
+		auto assimp_node = index_to_node[index];
+
+		if (assimp_node->mParent == nullptr)
+		{
+			node.root_id = 0;
+		}
+		else
+		{
+			node.root_id = node_to_index[assimp_node->mParent];
+		}
+
+		node.child_ids.reserve(static_cast<size_t>(assimp_node->mNumChildren));
+
+		for (unsigned j = 0; j < assimp_node->mNumChildren; ++j)
+		{
+			node.child_ids.emplace_back(node_to_index[assimp_node->mChildren[j]]);
+		}
+	}
+}
+
+std::vector<Node> parse_nodes(const aiScene* scene)
+{
+	std::vector<Node> result;
+
+	std::stack<const aiNode*> unhandled_nodes;
+	unhandled_nodes.emplace(scene->mRootNode);
+
+	std::unordered_map<const aiNode*, uint32_t> node_to_index;
+	std::unordered_map<uint32_t, const aiNode*> index_to_node;
+
+	while (!unhandled_nodes.empty())
+	{
+		auto node = unhandled_nodes.top();
+		unhandled_nodes.pop();
+
+		if (node_to_index.find(node) == node_to_index.end())
+		{
+			result.emplace_back(parse_node(node));
+
+			const uint32_t index = static_cast<uint32_t>(result.size() - 1);
+			node_to_index[node] = index;
+			index_to_node[index] = node;
+
+			for (unsigned i = 0; i < node->mNumChildren; ++i)
+			{
+				unhandled_nodes.emplace(node->mChildren[i]);
+			}
+		}
+	}
+
+	link_nodes(result, index_to_node, node_to_index);
+
+	return result;
+}
+
 
 ModelRef ModelBuilder::build(const char* filename)
 {
@@ -258,6 +369,7 @@ ModelRef ModelBuilder::build(const char* filename)
 
 	auto model = std::make_shared<Model>();
 	model->meshes = std::move(parse_meshes(scene));
+	model->nodes = std::move(parse_nodes(scene));
 	//TODO
 
 	return model;
