@@ -9,9 +9,6 @@ namespace ES2
 	public:
 		VertexArray(AbstractBufferRef vbo, AbstractBufferRef ibo,
 			const BufferLayoutRef& layout);
-		VertexArray(const void* vbo_ptr, uint32_t vbo_size,
-			const void* ibo_ptr, uint16_t ibo_size,
-			const BufferLayoutRef& layout);
 		virtual void reload() override;
 		virtual bool validate() const override;
 		virtual void bind() override;

@@ -1,6 +1,4 @@
 #include "vertex_array.h"
-#include "../vertex_buffer_manager.h"
-#include "../index_buffer_manager.h"
 
 ES2::VertexArray::VertexArray(AbstractBufferRef vbo, 
 	AbstractBufferRef ibo, const BufferLayoutRef& layout)
@@ -8,15 +6,6 @@ ES2::VertexArray::VertexArray(AbstractBufferRef vbo,
 	this->vbo = vbo;
 	this->ibo = ibo;
 	this->layout = layout;
-}
-
-ES2::VertexArray::VertexArray(const void* vbo_ptr, 
-	uint32_t vbo_size, const void* ibo_ptr, 
-	uint16_t ibo_size, const BufferLayoutRef& layout):
-	VertexArray(VertexBufferManager::get_instance()->make(vbo_size, vbo_ptr),
-		IndexBufferManager::get_instance()->make(ibo_size, ibo_ptr), layout) 
-{
-
 }
 
 void ES2::VertexArray::reload()
