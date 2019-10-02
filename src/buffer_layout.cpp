@@ -1,6 +1,6 @@
 #include "buffer_layout.h"
 
-BufferLayout::BufferLayout(const std::initializer_list<BufferElement>& elements)
+BufferLayout::BufferLayout(const std::vector<BufferElement>& elements)
 {
 	this->elements = elements;
 	calculate();

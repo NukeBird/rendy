@@ -24,7 +24,7 @@ class BufferLayout
 public:
 	BufferLayout() = default;
 	virtual ~BufferLayout() = default;
-	BufferLayout(const std::initializer_list<BufferElement>& elements);
+	BufferLayout(const std::vector<BufferElement>& elements);
 
 	uint32_t get_stride() const;
 	const std::vector<BufferElement>& get_elements() const;
