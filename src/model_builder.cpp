@@ -5,6 +5,7 @@
 #include <assimp/config.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include "vertex_array_manager.h"
 
 const unsigned get_import_flags()
 {
@@ -234,7 +235,10 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 
 		auto layout = parse_buffer_layout(mesh_flags);
 
-		//TODO
+		auto vao = VertexArrayManager::get_instance()->make(verts,
+			indices, layout);
+
+		mesh.vao = vao;
 	}
 	//TODO
 

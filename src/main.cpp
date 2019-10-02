@@ -116,6 +116,11 @@ int main(int argc, char** argv)
 		}
 	#endif // _WIN32
 
+	auto model = ModelBuilder::build("bird.fbx");
+	std::cout << "Material count: " << model->get_material_count() << std::endl;
+	std::cout << "Node count: " << model->get_node_count() << std::endl;
+	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
+
 	auto sh = ShaderManager::get_instance()->make(vtx, frg);
 	std::cout << "VALIDATION " << sh->validate() << std::endl;
 
