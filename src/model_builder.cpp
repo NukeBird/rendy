@@ -9,6 +9,7 @@
 #include "vertex_array_manager.h"
 #include "texture_manager.h"
 #include "default_material.h"
+#include "pbr_material.h"
 #include <unordered_map>
 #include <stack>
 
@@ -24,7 +25,8 @@ const unsigned get_import_flags()
 		aiProcess_OptimizeGraph |
 		aiProcess_JoinIdenticalVertices |
 		aiProcess_SplitByBoneCount |
-		aiProcess_SortByPType;
+		aiProcess_SortByPType |
+		aiProcess_FlipUVs;
 }
 
 uint32_t parse_mesh_flags(const aiMesh* mesh)
@@ -517,9 +519,20 @@ AbstractMaterialRef parse_pbr_material(const aiScene* scene,
 				normalmap = get_texture(scene, to_index(path));
 			}
 		}
+
+		if (!normalmap)
+		{
+			if (mat.GetTexture(aiTextureType_HEIGHT, 0, &path))
+			{
+				if (path.length > 0)
+				{
+					normalmap = get_texture(scene, to_index(path));
+				}
+			}
+		}
 	}
 
-	return nullptr;
+	return std::make_shared<PBRMaterial>(albedo, ao_metallic_roughness, normalmap);
 }
 
 AbstractMaterialRef parse_material(const aiScene* scene,
