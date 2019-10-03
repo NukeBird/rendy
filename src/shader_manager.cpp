@@ -1,6 +1,7 @@
 #include "shader_manager.h"
 #include "es2/shader.h"
 #include <algorithm>
+#include "generic_shader_sources.hpp"
 
 AbstractShaderRef ShaderManager::make(const std::string& vtx, const std::string& frg)
 {
@@ -9,9 +10,19 @@ AbstractShaderRef ShaderManager::make(const std::string& vtx, const std::string&
 	return shader;
 }
 
+AbstractShaderRef ShaderManager::get_generic_shader()
+{
+	if (!generic_shader)
+	{
+		generic_shader = make(generic_vertex_shader, generic_fragment_shader); //TODO
+	}
+
+	return generic_shader;
+}
+
 void ShaderManager::reload()
 {
-	for (auto& shader : shader_list)
+	for (auto& shader: shader_list)
 	{
 		shader->reload();
 	}
