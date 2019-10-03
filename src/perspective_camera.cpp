@@ -48,20 +48,23 @@ bool PerspectiveCamera::is_dirty() const
 
 const glm::vec3& PerspectiveCamera::get_position() const
 {
-	// TODO: insert return statement here
+	return position;
 }
 
 const glm::vec3& PerspectiveCamera::get_rotation() const
 {
-	// TODO: insert return statement here
+	return rotation;
 }
 
 const glm::mat4& PerspectiveCamera::get_view_matrix()
 {
 	if (view_matrix_is_dirty)
 	{
+		//TODO
 		view_matrix_is_dirty = false;
 	}
+
+	return view_matrix;
 }
 
 const glm::mat4& PerspectiveCamera::get_projection_matrix()
@@ -78,7 +81,7 @@ const glm::mat4& PerspectiveCamera::get_projection_matrix()
 
 const glm::mat4& PerspectiveCamera::get_view_projection_matrix()
 {
-	if (is_dirty)
+	if (is_dirty())
 	{
 		view_projection_matrix = get_projection_matrix() * get_view_matrix();
 	}
