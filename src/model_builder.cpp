@@ -249,10 +249,6 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 			}
 		}
 
-		printf("AAAA %d\n", assimp_mesh->mNumFaces * 3);
-		printf("INDICES SIZE %d (bytes)\n", indices.size() * sizeof(uint16_t));
-		printf("INDICES %d (elements)\n", indices.size());
-
 		auto layout = parse_buffer_layout(mesh_flags);
 
 		auto vao = VertexArrayManager::get_instance()->make(verts,
@@ -379,14 +375,12 @@ std::vector<Node> parse_nodes(const aiScene* scene)
 
 int to_index(aiString str)
 {
-	printf("%s\n", str.C_Str());
 	if (str.data[0] == '*')
 	{
 		str.data[0] = ' ';
 		std::string sss(str.data, str.length);
 		return std::stoi(sss);
 	}
-	printf("oof\n");
 
 	return -1;
 }
@@ -395,14 +389,11 @@ std::shared_ptr<AbstractTexture> get_texture(const aiScene* scene, int index)
 {
 	if (index < 0)
 	{
-		printf("%d\n\n", index);
-		printf("SUKA3\n");
 		return nullptr;
 	}
 
 	if (static_cast<unsigned>(index) >= scene->mNumTextures)
 	{
-		printf("SUKA4\n");
 		return nullptr;
 	}
 
@@ -544,27 +535,7 @@ AbstractMaterialRef parse_material(const aiScene* scene,
 
 	if (!result)
 	{
-		printf("PBR NULLPTR\n");
-
 		result = parse_default_material(scene, material);
-
-		if (result)
-		{
-			printf("DEFAULT NOICE\n");
-		}
-		else
-		{
-			printf("WTF\n");
-		}
-	}
-	else
-	{
-		printf("PBR NOICE\n");
-	}
-
-	if (result)
-	{
-		printf("NICE\n");
 	}
 
 	return result;

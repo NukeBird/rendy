@@ -7,7 +7,6 @@ ES2::Texture::Texture(const char* memory, uint32_t length)
 {
 	glGenTextures(1, &id);
 
-	printf("LENGTH %d\n", length);
 	this->length = length;
 
 	if (!load_from_memory(memory, length))
@@ -36,43 +35,36 @@ bool ES2::Texture::validate() const
 {
 	if (!data)
 	{
-		printf("NO DATA\n");
 		return false;
 	}
 
 	if (length == 0)
 	{
-		printf("LENGTH 0\n");
 		return false;
 	}
 
 	if (id == 0)
 	{
-		printf("ID 0\n");
 		return false;
 	}
 
 	if (type == TextureType::Invalid)
 	{
-		printf("INVALID TYPE\n");
 		return false;
 	}
 
 	if (format == TextureFormat::Invalid)
 	{
-		printf("INVALID FORMAT\n");
 		return false;
 	}
 
 	if (size.x == 0 || size.y == 0) //|| size.z == 0) TODO
 	{
-		printf("INVALID SIZE\n");
 		return false;
 	}
 
 	if (!glIsTexture(id))
 	{
-		printf("IS NOT TEXTURE\n");
 		return false;
 	}
 
@@ -158,7 +150,6 @@ TextureFormat ES2::Texture::parse_format(int c) const
 
 void ES2::Texture::reset()
 {
-	printf("RESET\n");
 	STBI_FREE(data);
 	data = nullptr;
 	length = 0;

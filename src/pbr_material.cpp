@@ -38,14 +38,12 @@ bool PBRMaterial::validate() const
 {
 	if (!albedo_texture || !albedo_texture->validate())
 	{
-		printf("INVALID ALBEDO TEXTURE\n");
 		return false;
 	}
 
 	if (!ambient_metallic_roughness_texture ||
 		!ambient_metallic_roughness_texture->validate())
 	{
-		printf("INVALID METALLIC_ROUGHNESS TEXTURE\n");
 		return false;
 	}
 
@@ -53,14 +51,12 @@ bool PBRMaterial::validate() const
 	{
 		if (!normal_texture->validate())
 		{
-			printf("INVALID NORMAL TEXTURE\n");
 			return false;
 		}
 	}
 
 	if (!shader->validate())
 	{
-		printf("INVALID SHADER VARIANT\n");
 		return false;
 	}
 
