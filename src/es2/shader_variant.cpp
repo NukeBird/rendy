@@ -44,7 +44,7 @@ void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::mat4& m
 	}
 	else
 	{
-		glUniform4fv(location, 1, &mat[0][0]);
+		glUniformMatrix4fv(location, 1, false, &mat[0][0]);
 	}
 }
 
@@ -58,7 +58,7 @@ void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::mat3& m
 	}
 	else
 	{
-		glUniform3fv(location, 1, &mat[0][0]);
+		glUniformMatrix3fv(location, 1, false, &mat[0][0]);
 	}
 }
 
@@ -102,7 +102,8 @@ void ES2::ShaderVariant::unbind()
 
 int ES2::ShaderVariant::get_uniform_location(const std::string& name) const
 {
-	return glGetUniformLocation(program_id, name.c_str()); //TODO: optimize (map locations once)
+	int location = glGetUniformLocation(program_id, name.c_str()); //TODO: optimize (map locations once)
+	return location;
 }
 
 void ES2::ShaderVariant::compile_shader()
