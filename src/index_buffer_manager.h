@@ -7,7 +7,7 @@
 class IndexBufferManager: public Singleton<IndexBufferManager>
 {
 public:
-	AbstractBufferRef make(uint16_t size, const void* ptr);
+	AbstractBufferRef make(uint32_t size, const void* ptr);
 	void reload();
 	void flush();
 private:

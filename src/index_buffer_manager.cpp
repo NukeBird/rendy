@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cassert>
 
-AbstractBufferRef IndexBufferManager::make(uint16_t size, const void* ptr)
+AbstractBufferRef IndexBufferManager::make(uint32_t size, const void* ptr)
 {
 	if (size == 0 || ptr == nullptr)
 	{
