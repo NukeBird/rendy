@@ -126,7 +126,7 @@ int main(int argc, char** argv)
 		}
 	#endif // _WIN32
 
-	auto model = ModelBuilder::build("sphere.glb");
+	auto model = ModelBuilder::build("assets/matball.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;

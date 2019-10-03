@@ -38,6 +38,7 @@ if(WIN32)
     set(PROJECT_LIBS ${PROJECT_LIBS} glew::glew)
 
     add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_FILES})
+    file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
 else()
     add_library(${PROJECT_NAME} ${PROJECT_SOURCE_FILES})
 endif()
