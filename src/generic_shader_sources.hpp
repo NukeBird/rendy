@@ -86,18 +86,27 @@ R"(
 	in vec3 v_bitangent;
 #endif
 
+#ifdef USE_COLOR_TEXTURE
+	uniform sampler2D color_texture;
+#endif
+	uniform sampler2D normal_texture;
+	uniform sampler2D metallic_roughness_texture;
+
 	out vec4 output_color;
 
 	void main()
 	{
 		/*#ifdef USE_VERTEX_COLOR
 			output_color = v_color;
-		#else*/
+		#else
 			output_color = vec4(1, 1, 1, 1);
-		//#endif
+		#endif*/
 
-	#ifdef USE_VERTEX_NORMAL
-		output_color = vec4(v_normal*vec3(0.5) + vec3(0.5), 1);
+	#ifdef USE_COLOR_TEXTURE
+		output_color = vec4(vec3(texture(metallic_roughness_texture, v_coord).b), 1);
+		//output_color = vec4(1, 1, 1, 1);
+	#else
+		output_color = vec4(1, 1, 1, 1);
 	#endif
 	} 
 )";
