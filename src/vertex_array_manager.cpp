@@ -11,14 +11,14 @@ AbstractVertexArrayRef VertexArrayManager::make(const std::vector<float>& vbo_sr
 	const uint32_t vbo_size = vbo_src.size() * sizeof(float);
 	const void* vbo_ptr = &vbo_src[0];
 
-	const uint16_t ibo_size = ibo_src.size() * sizeof(uint16_t);
+	const uint32_t ibo_size = ibo_src.size() * sizeof(uint16_t);
 	const void* ibo_ptr = &ibo_src[0];
 
 	return make(vbo_ptr, vbo_size, ibo_ptr, ibo_size, layout);
 }
 
 AbstractVertexArrayRef VertexArrayManager::make(const void* vbo_ptr, uint32_t vbo_size,
-	const void* ibo_ptr, uint16_t ibo_size, const BufferLayoutRef& layout)
+	const void* ibo_ptr, uint32_t ibo_size, const BufferLayoutRef& layout)
 {
 	return std::make_shared<ES2::VertexArray>(
 		VertexBufferManager::get_instance()->make(vbo_size, vbo_ptr),

@@ -11,7 +11,7 @@ public:
 		const BufferLayoutRef& layout);
 
 	AbstractVertexArrayRef make(const void* vbo_ptr, uint32_t vbo_size,
-		const void* ibo_ptr, uint16_t ibo_size, const BufferLayoutRef& layout);
+		const void* ibo_ptr, uint32_t ibo_size, const BufferLayoutRef& layout);
 
 	void reload();
 	void flush();
