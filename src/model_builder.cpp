@@ -5,7 +5,10 @@
 #include <assimp/config.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <assimp/pbrmaterial.h>
 #include "vertex_array_manager.h"
+#include "texture_manager.h"
+#include "default_material.h"
 #include <unordered_map>
 #include <stack>
 
@@ -152,6 +155,8 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 	std::vector<Mesh> result;
 	result.reserve(static_cast<size_t>(scene->mNumMeshes));
 
+	glm::vec3 min(9999), max(-9999);
+
 	for (unsigned i = 0; i < scene->mNumMeshes; ++i)
 	{
 		result.emplace_back();
@@ -166,7 +171,7 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 
 		std::vector<float> verts;
 		verts.reserve(static_cast<size_t>(parse_mesh_size(mesh_flags) / sizeof(float)));
-
+		
 		for (unsigned j = 0; j < assimp_mesh->mNumVertices; ++j)
 		{
 			//POSITION
@@ -176,6 +181,12 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 				verts.emplace_back(v.x);
 				verts.emplace_back(v.y);
 				verts.emplace_back(v.z);
+
+				for (int l = 0; l < 3; ++l)
+				{
+					min[l] = glm::min(min[l], v[l]);
+					max[l] = glm::max(max[l], v[l]);
+				}
 			}
 
 			//COORD
@@ -225,15 +236,20 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 		}
 
 		std::vector<uint16_t> indices; //TODO: sometimes uint32_t?
+
 		for (unsigned j = 0; j < assimp_mesh->mNumFaces; ++j)
 		{
 			auto& face = assimp_mesh->mFaces[j];
 
 			for (unsigned k = 0; k < face.mNumIndices; ++k)
 			{
-				indices.emplace_back(face.mIndices[k]);
+				indices.emplace_back(static_cast<uint16_t>(face.mIndices[k]));
 			}
 		}
+
+		printf("AAAA %d\n", assimp_mesh->mNumFaces * 3);
+		printf("INDICES SIZE %d (bytes)\n", indices.size() * sizeof(uint16_t));
+		printf("INDICES %d (elements)\n", indices.size());
 
 		auto layout = parse_buffer_layout(mesh_flags);
 
@@ -243,6 +259,9 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 		mesh.vao = vao;
 	}
 	//TODO
+
+	printf("MIN %f %f %f\n", min.x, min.y, min.z);
+	printf("MAX %f %f %f\n", max.x, max.y, max.z);
 
 	return result;
 }
@@ -356,21 +375,235 @@ std::vector<Node> parse_nodes(const aiScene* scene)
 	return result;
 }
 
-
-ModelRef ModelBuilder::build(const char* filename)
+int to_index(aiString str)
 {
-	Assimp::Importer importer;
-	auto scene = importer.ReadFile(filename, get_import_flags());
-	
-	if (!scene)
+	printf("%s\n", str.C_Str());
+	if (str.data[0] == '*')
 	{
+		str.data[0] = ' ';
+		std::string sss(str.data, str.length);
+		return std::stoi(sss);
+	}
+	printf("oof\n");
+
+	return -1;
+}
+
+std::shared_ptr<AbstractTexture> get_texture(const aiScene* scene, int index)
+{
+	if (index < 0)
+	{
+		printf("%d\n\n", index);
+		printf("SUKA3\n");
 		return nullptr;
 	}
 
-	auto model = std::make_shared<Model>();
-	model->meshes = std::move(parse_meshes(scene));
-	model->nodes = std::move(parse_nodes(scene));
-	//TODO
+	if (static_cast<unsigned>(index) >= scene->mNumTextures)
+	{
+		printf("SUKA4\n");
+		return nullptr;
+	}
 
-	return model;
+	auto assimp_texture = scene->mTextures[index];
+
+	const char* texture_ptr = 
+		reinterpret_cast<const char*>(assimp_texture->pcData);
+	uint32_t texture_size = assimp_texture->mWidth;
+
+	if (assimp_texture->mHeight > 0)
+	{
+		texture_size *= assimp_texture->mHeight;
+	}
+
+	auto texture_manager = TextureManager::get_instance();
+	return texture_manager->make(texture_ptr, texture_size);
+}
+
+AbstractMaterialRef parse_default_material(const aiScene* scene,
+	const aiMaterial* material)
+{
+	auto& mat = *material;
+
+	std::shared_ptr<AbstractTexture> diffuse;
+	std::shared_ptr<AbstractTexture> normalmap;
+
+	//DIFFUSE
+	{
+		aiString path;
+		if (mat.GetTexture(aiTextureType_DIFFUSE, 0, &path))
+		{
+			if (path.length > 0)
+			{
+				diffuse = get_texture(scene, to_index(path));
+			}
+		}
+	}
+
+	//NORMALMAP
+	{
+		aiString path;
+		if (mat.GetTexture(aiTextureType_NORMALS, 0, &path))
+		{
+			if (path.length > 0)
+			{
+				normalmap = get_texture(scene, to_index(path));
+			}
+		}
+	}
+
+	return std::make_shared<DefaultMaterial>(diffuse, normalmap);
+}
+
+AbstractMaterialRef parse_pbr_material(const aiScene* scene,
+	const aiMaterial* material)
+{
+	auto& mat = *material;
+
+	std::shared_ptr<AbstractTexture> albedo;
+	std::shared_ptr<AbstractTexture> ao_metallic_roughness;
+	std::shared_ptr<AbstractTexture> normalmap;
+
+	//ALBEDO
+	{
+		aiString path;
+		if (mat.GetTexture(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_TEXTURE,
+			&path) != AI_SUCCESS)
+		{
+			return nullptr;
+		}
+
+		if (path.length == 0)
+		{
+			return nullptr;
+		}
+
+		albedo = get_texture(scene, to_index(path));
+
+		if (!albedo)
+		{
+			return nullptr;
+		}
+	}
+
+	//AO_METALLIC_ROUGHNESS
+	{
+		aiString path;
+		if(mat.GetTexture(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLICROUGHNESS_TEXTURE,
+			&path) != AI_SUCCESS)
+		{
+			return nullptr;
+		}
+
+		if (path.length == 0)
+		{
+			return nullptr;
+		}
+
+		ao_metallic_roughness = get_texture(scene, to_index(path));
+
+		if (!ao_metallic_roughness)
+		{
+			return nullptr;
+		}
+	}
+
+	//NORMALMAP
+	{
+		aiString path;
+		if (mat.GetTexture(aiTextureType_NORMALS, 0, &path))
+		{
+			if (path.length > 0)
+			{
+				normalmap = get_texture(scene, to_index(path));
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+AbstractMaterialRef parse_material(const aiScene* scene,
+	const aiMaterial* material)
+{
+	AbstractMaterialRef result;
+
+	result = parse_pbr_material(scene, material);
+
+	if (!result)
+	{
+		printf("PBR NULLPTR\n");
+
+		result = parse_default_material(scene, material);
+
+		if (result)
+		{
+			printf("DEFAULT NOICE\n");
+		}
+		else
+		{
+			printf("WTF\n");
+		}
+	}
+	else
+	{
+		printf("PBR NOICE\n");
+	}
+
+	if (result)
+	{
+		printf("NICE\n");
+	}
+
+	return result;
+}
+
+std::vector<AbstractMaterialRef> parse_materials(const aiScene* scene)
+{
+	std::vector<AbstractMaterialRef> result;
+	result.reserve(static_cast<size_t>(scene->mNumMaterials));
+
+	for (unsigned i = 0; i < scene->mNumMaterials; ++i)
+	{
+		result.emplace_back(parse_material(scene, scene->mMaterials[i]));
+	}
+
+	return result;
+}
+
+
+ModelRef ModelBuilder::build(const char* filename)
+{
+	try
+	{
+		Assimp::Importer importer;	
+		importer.SetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT, std::numeric_limits<unsigned short>::max());
+		importer.SetPropertyInteger(AI_CONFIG_IMPORT_TER_MAKE_UVS, 1);
+		importer.SetPropertyInteger(AI_CONFIG_PP_SBBC_MAX_BONES, 35);
+		importer.SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE, 80.0f);
+		importer.SetPropertyInteger(AI_CONFIG_PP_SBP_REMOVE, aiPrimitiveType_LINE | aiPrimitiveType_POINT);
+		auto scene = importer.ReadFile(filename, get_import_flags());
+
+		if (!scene)
+		{
+			return nullptr;
+		}
+
+		auto model = std::make_shared<Model>();
+		model->meshes = std::move(parse_meshes(scene));
+		model->nodes = std::move(parse_nodes(scene));
+		model->materials = std::move(parse_materials(scene));
+		//TODO
+
+		return model;
+	}
+	catch (const std::exception& e)
+	{
+		//TODO: error
+		return nullptr;
+	}
+	catch (...)
+	{
+		//TODO: error
+		return nullptr;
+	}
 }

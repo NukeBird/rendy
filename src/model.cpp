@@ -100,6 +100,7 @@ void Model::draw_node(uint32_t node_id,
 		material->bind(mesh.flags);
 		shader_variant->set_uniform("u_transform", transform);
 		mesh.vao->bind();
+
 		mesh.vao->draw();
 		mesh.vao->unbind();
 		material->unbind(mesh.flags);

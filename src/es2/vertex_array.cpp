@@ -97,6 +97,7 @@ AbstractBufferRef ES2::VertexArray::get_index_buffer()
 void ES2::VertexArray::bind_layout()
 {
 	uint32_t index = 0;
+
 	for (const auto& e : (*layout))
 	{
 		///TODO!!!!!!!!!!!!

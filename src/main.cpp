@@ -1,5 +1,8 @@
 #include <iostream>
 #include <SDL.h>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtc/matrix_transform.hpp> 
+#include <glm/gtx/transform.hpp>
 
 #ifdef _WIN32
 	#include <gl/glew.h>
@@ -10,7 +13,6 @@
 	#include <GLES/glplatform.h>
 #endif
 
-#include <assimp/pbrmaterial.h>
 #include "texture_manager.h"
 #include "shader_manager.h"
 
@@ -116,13 +118,19 @@ int main(int argc, char** argv)
 		}
 	#endif // _WIN32
 
-	auto model = ModelBuilder::build("bird.fbx");
+	auto model = ModelBuilder::build("MatBall2.8.gltf");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
 
 	auto sh = ShaderManager::get_instance()->make(vtx, frg);
 	std::cout << "VALIDATION " << sh->validate() << std::endl;
+
+	std::cout << "GENERIC SHADER STATUS: "
+		<< ShaderManager::get_instance()->get_generic_shader()->validate()
+		<< std::endl;
+
+	std::cout << "MODEL STATUS: " << model->validate() << std::endl;
 
 	float verts[] =
 	{
@@ -142,14 +150,15 @@ int main(int argc, char** argv)
 	glGenVertexArrays(1, &fucking_vao);
 	glBindVertexArray(fucking_vao);
 
-	auto layout = std::make_shared<BufferLayout>(std::initializer_list<BufferElement>{{ShaderDataType::Float3, "aPos"} });
+	/*auto layout = std::make_shared<BufferLayout>(std::initializer_list<BufferElement>{{ShaderDataType::Float3, "aPos"} });
 
 	auto vao = VertexArrayManager::get_instance()->make(verts, 12 * sizeof(float),
 		indices, 6 * sizeof(uint16_t), layout);
 
-	std::cout << "VAO status: " << vao->validate() << std::endl;
+	std::cout << "VAO status: " << vao->validate() << std::endl;*/
 
 	glDisable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
 
 	SDL_Event event;
 	bool is_running = true;
@@ -163,15 +172,17 @@ int main(int argc, char** argv)
 			}
 		}
 
-		glClearColor(0, 0, 0, 1);
+		glClearColor(0, 0, 0, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		auto shader = sh->compile(ShaderFlag::USE_VERTEX_COLOR);
+		/*auto shader = sh->compile(ShaderFlag::USE_VERTEX_COLOR);
 		shader->bind();
 		vao->bind();
 		vao->draw();
 		vao->unbind();
-		shader->unbind();
+		shader->unbind();*/
+
+		model->draw(glm::scale(glm::vec3(0.4f)));
 
 		SDL_GL_SwapWindow(window);
 	}
