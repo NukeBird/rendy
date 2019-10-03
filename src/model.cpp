@@ -70,16 +70,16 @@ bool Model::validate() const
 	return true;
 }
 
-void Model::draw(const glm::mat4& transform)
+void Model::draw(const glm::mat4& transform, const glm::mat4& view, const glm::mat4& proj)
 {
 	if (get_node_count() > 0)
 	{
-		draw_node(0, transform);
+		draw_node(0, transform, view, proj);
 	}
 }
 
 void Model::draw_node(uint32_t node_id,
-	const glm::mat4& base_transform)
+	const glm::mat4& base_transform, const glm::mat4& view, const glm::mat4& proj)
 {
 	assert(node_id < get_node_count());
 	auto& node = nodes[node_id];
@@ -98,6 +98,9 @@ void Model::draw_node(uint32_t node_id,
 		auto shader_variant = shader->compile(mesh.flags | material->get_flags()); //TODO
 
 		material->bind(mesh.flags);
+		shader_variant->set_uniform("u_view", view);
+		shader_variant->set_uniform("u_projection", proj);
+		shader_variant->set_uniform("u_view_projection", proj * view);
 		shader_variant->set_uniform("u_transform", transform);
 		mesh.vao->bind();
 

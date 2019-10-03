@@ -190,7 +190,20 @@ int main(int argc, char** argv)
 		vao->unbind();
 		shader->unbind();*/
 
-		model->draw(glm::scale(glm::vec3(1.0f)));
+		static float cam_fov(60.0f);
+		static float cam_aspect = 640.0f / 480.0f;
+		static glm::vec3 cam_pos(1, 0, 0);
+		static glm::vec3 cam_target(0, 0, 0);
+		static float near = 0.01f;
+		static float far = 100.0f;
+		
+		glm::mat4 view = glm::lookAt(cam_pos, cam_target,
+			glm::vec3(0, 1, 0));
+
+		glm::mat4 proj = glm::perspective(glm::radians(cam_fov), 
+			cam_aspect, near, far);
+
+		model->draw(glm::mat4(1.0), view, proj);
 
 		SDL_GL_SwapWindow(window);
 	}

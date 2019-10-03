@@ -33,11 +33,14 @@ R"(
 #endif
   
 	uniform mat4 u_transform;
-
+	uniform mat4 u_view;
+	uniform mat4 u_projection;
+	uniform mat4 u_view_projection;
+ 
 	void main()
 	{
 	#ifdef USE_VERTEX_POSITION
-		gl_Position = u_transform * vec4(a_position, 1.0);
+		gl_Position = u_view_projection * u_transform * vec4(a_position, 1.0);
 	#else
 		gl_Position = vec4(vec3(0.0, 0.0, 0.0), 1.0);
 	#endif
