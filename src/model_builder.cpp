@@ -15,15 +15,24 @@
 
 const unsigned get_import_flags()
 {
-	return aiProcessPreset_TargetRealtime_Quality |
+	return //aiProcessPreset_TargetRealtime_MaxQuality |
 		aiProcess_GenNormals |
 		aiProcess_GenSmoothNormals |
 		aiProcess_FindInstances |
+		aiProcess_FindDegenerates |
+		aiProcess_FindInvalidData |
 		aiProcess_CalcTangentSpace |
 		aiProcess_ValidateDataStructure |
 		aiProcess_OptimizeMeshes |
 		aiProcess_OptimizeGraph |
 		aiProcess_JoinIdenticalVertices |
+		aiProcess_ImproveCacheLocality |
+		aiProcess_LimitBoneWeights |
+		aiProcess_RemoveRedundantMaterials |
+		aiProcess_SplitLargeMeshes |
+		aiProcess_Triangulate |
+		aiProcess_GenUVCoords |
+		aiProcess_GenBoundingBoxes | //TODO
 		aiProcess_SplitByBoneCount |
 		aiProcess_SortByPType |
 		aiProcess_FlipUVs;
@@ -59,6 +68,12 @@ uint32_t parse_mesh_flags(const aiMesh* mesh)
 		flags |= USE_VERTEX_BITANGENT;
 	}
 
+	if ((flags & USE_VERTEX_TANGENT) && 
+		(flags & USE_VERTEX_BITANGENT) &&
+		(flags & USE_VERTEX_NORMAL))
+	{
+		flags |= USE_VERTEX_TBN_MATRIX;
+	}
 	/*if (mesh->HasBones())
 	{
 		flags |= USE_VERTEX_BONES; //TODO
@@ -563,7 +578,7 @@ ModelRef ModelBuilder::build(const char* filename)
 		importer.SetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT, std::numeric_limits<unsigned short>::max());
 		importer.SetPropertyInteger(AI_CONFIG_IMPORT_TER_MAKE_UVS, 1);
 		importer.SetPropertyInteger(AI_CONFIG_PP_SBBC_MAX_BONES, 35);
-		importer.SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE, 80.0f);
+		//importer.SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE, 80.0f);
 		importer.SetPropertyInteger(AI_CONFIG_PP_SBP_REMOVE, aiPrimitiveType_LINE | aiPrimitiveType_POINT);
 		auto scene = importer.ReadFile(filename, get_import_flags());
 
