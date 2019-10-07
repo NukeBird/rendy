@@ -46,6 +46,11 @@ std::string shader_flags_to_defines(uint32_t flags)
 		result += "#define USE_VERTEX_BITANGENT\n";
 	}
 
+	if (flags & USE_VERTEX_TBN_MATRIX)
+	{
+		result += "#define USE_VERTEX_TBN_MATRIX\n";
+	}
+
 	/*if (flags & USE_VERTEX_BONES)
 	{
 		result += "#define USE_VERTEX_BONES\n";
