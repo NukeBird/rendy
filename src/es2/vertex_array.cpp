@@ -96,17 +96,16 @@ AbstractBufferRef ES2::VertexArray::get_index_buffer()
 
 void ES2::VertexArray::bind_layout(const ShaderVariantRef& shader)
 {
-	uint32_t index = 0;
-
 	for (const auto& e : (*layout))
 	{
-		///TODO!!!!!!!!!!!!
-		//TODO: bind attribute to proper index by its name!
+		int index = shader->get_attribute(e.name);
+
+		printf("%s : %d\n", e.name.c_str(), index);
+
 		glEnableVertexAttribArray(index);
 		glVertexAttribPointer(index, e.get_component_count(), get_gl_type(e), 
-			false, layout->get_stride(), reinterpret_cast<const void*>(e.offset)); //warning C4312:  'reinterpret_cast': 
+			false, layout->get_stride(), reinterpret_cast<const void*>(e.offset)); //TODO warning C4312:  'reinterpret_cast': 
 													//conversion from 'const uint32_t' to 'const void *' of greater size
-		index++;
 	}
 }
 

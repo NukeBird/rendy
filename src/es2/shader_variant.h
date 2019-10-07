@@ -10,11 +10,12 @@ namespace ES2
 		ShaderVariant(const std::string& vtx, const std::string& frg);
 		~ShaderVariant();
 		virtual void reload() override; //TODO: pass sources from AbstractShader
-		virtual bool validate() const override;
+		virtual bool validate() const override; 
 		virtual void set_uniform(const std::string& name, const glm::mat4& mat) override;
 		virtual void set_uniform(const std::string& name, const glm::mat3& mat) override;
 		virtual void set_uniform(const std::string& name, const float number) override;
 		virtual void set_uniform(const std::string& name, const int number) override;
+		virtual int get_attribute_location(const std::string& name) const override;
 		virtual void bind() override;
 		virtual void unbind() override;
 	private:

@@ -90,6 +90,11 @@ void ES2::ShaderVariant::set_uniform(const std::string& name, const int number)
 	}
 }
 
+int ES2::ShaderVariant::get_attribute_location(const std::string& name) const
+{
+	return glGetAttribLocation(program_id, name.c_str());
+}
+
 void ES2::ShaderVariant::bind()
 {
 	glUseProgram(program_id);
