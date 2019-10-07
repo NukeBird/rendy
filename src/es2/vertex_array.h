@@ -11,14 +11,14 @@ namespace ES2
 			const BufferLayoutRef& layout);
 		virtual void reload() override;
 		virtual bool validate() const override;
-		virtual void bind() override;
+		virtual void bind(const ShaderVariantRef& shader) override;
 		virtual void draw() override; //TODO: move to another class?
 		virtual void unbind() override;
 		virtual BufferLayoutRef get_layout() const override;
 		virtual AbstractBufferRef get_vertex_buffer() override;
 		virtual AbstractBufferRef get_index_buffer() override;
 	private:
-		void bind_layout();
+		void bind_layout(const ShaderVariantRef& shader);
 
 		GLenum get_gl_type(const BufferElement& element);
 

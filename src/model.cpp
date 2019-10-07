@@ -97,12 +97,13 @@ void Model::draw_node(uint32_t node_id,
 		auto shader = material->get_shader();
 		auto shader_variant = shader->compile(mesh.flags | material->get_flags()); //TODO
 
+		mesh.vao->bind(shader_variant);
+
 		material->bind(mesh.flags);
 		shader_variant->set_uniform("u_view", view);
 		shader_variant->set_uniform("u_projection", proj);
 		shader_variant->set_uniform("u_view_projection", proj * view);
 		shader_variant->set_uniform("u_transform", transform);
-		mesh.vao->bind();
 
 		mesh.vao->draw();
 		mesh.vao->unbind();

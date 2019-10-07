@@ -4,31 +4,32 @@
 const std::string generic_vertex_shader =
 R"(
 #ifdef USE_VERTEX_POSITION
-	layout (location = 0) in vec3 a_position;
+	in vec3 a_position;
+	out vec3 v_position;
 #endif
 
 #ifdef USE_VERTEX_COORD
-	layout (location = 1) in vec2 a_coord;
+	in vec2 a_coord;
 	out vec2 v_coord;
 #endif
 
 #ifdef USE_VERTEX_COLOR
-	layout (location = 2) in vec4 a_color;
+	in vec4 a_color;
 	out vec4 v_color; 
 #endif
 
 #ifdef USE_VERTEX_NORMAL
-	layout (location = 3) in vec3 a_normal;
+	in vec3 a_normal;
 	out vec3 v_normal;
 #endif
 
 #ifdef USE_VERTEX_TANGENT
-	layout (location = 4) in vec3 a_tangent;
+	in vec3 a_tangent;
 	out vec3 v_tangent;
 #endif
 
 #ifdef USE_VERTEX_BITANGENT 
-	layout (location = 5) in vec3 a_bitangent;
+	in vec3 a_bitangent;
 	out vec3 v_bitangent;
 #endif
   
@@ -44,6 +45,7 @@ R"(
 	#else
 		gl_Position = vec4(vec3(0.0, 0.0, 0.0), 1.0);
 	#endif
+	v_position = gl_Position.xyz;
 
 	#ifdef USE_VERTEX_COORD
 		v_coord = a_coord;
@@ -69,6 +71,10 @@ R"(
 
 const std::string generic_fragment_shader =
 R"(
+#ifdef USE_VERTEX_POSITION
+	in vec3 v_position;
+#endif
+
 #ifdef USE_VERTEX_COORD
 	in vec2 v_coord;
 #endif

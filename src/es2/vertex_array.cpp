@@ -34,14 +34,14 @@ bool ES2::VertexArray::validate() const
 	return is_valid;
 }
 
-void ES2::VertexArray::bind()
+void ES2::VertexArray::bind(const ShaderVariantRef& shader)
 {
 	if (vbo)
 	{
 		vbo->bind();
 	}
 
-	bind_layout();
+	bind_layout(shader);
 
 	if (ibo)
 	{
@@ -94,7 +94,7 @@ AbstractBufferRef ES2::VertexArray::get_index_buffer()
 	return ibo;
 }
 
-void ES2::VertexArray::bind_layout()
+void ES2::VertexArray::bind_layout(const ShaderVariantRef& shader)
 {
 	uint32_t index = 0;
 
