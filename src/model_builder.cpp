@@ -146,7 +146,7 @@ BufferLayoutRef parse_buffer_layout(uint32_t flags)
 	//BITANGENT
 	if (flags & USE_VERTEX_BITANGENT)
 	{
-		buffer_elements.emplace_back(ShaderDataType::Float3, "a_bitangnet");
+		buffer_elements.emplace_back(ShaderDataType::Float3, "a_bitangent");
 	}
 
 	return std::make_shared<BufferLayout>(buffer_elements);

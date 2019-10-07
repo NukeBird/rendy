@@ -98,10 +98,7 @@ void ES2::VertexArray::bind_layout(const ShaderVariantRef& shader)
 {
 	for (const auto& e : (*layout))
 	{
-		int index = shader->get_attribute(e.name);
-
-		printf("%s : %d\n", e.name.c_str(), index);
-
+		const int index = shader->get_attribute_location(e.name);
 		glEnableVertexAttribArray(index);
 		glVertexAttribPointer(index, e.get_component_count(), get_gl_type(e), 
 			false, layout->get_stride(), reinterpret_cast<const void*>(e.offset)); //TODO warning C4312:  'reinterpret_cast': 
