@@ -45,27 +45,33 @@ uint32_t parse_mesh_flags(const aiMesh* mesh)
 	if (mesh->HasPositions())
 	{
 		flags |= USE_VERTEX_POSITION;
+		printf("USE_VERTEX_POSITION\n");
 	}
 
 	if (mesh->HasTextureCoords(0))
 	{
 		flags |= USE_VERTEX_COORD;
+		printf("USE_VERTEX_COORD\n");
 	}
 
 	if (mesh->HasVertexColors(0))
 	{
 		flags |= USE_VERTEX_COLOR;
+		printf("USE_VERTEX_COLOR\n");
 	}
 
 	if (mesh->HasNormals())
 	{
 		flags |= USE_VERTEX_NORMAL;
+		printf("USE_VERTEX_NORMAL\n");
 	}
 
 	if (mesh->HasTangentsAndBitangents())
 	{
 		flags |= USE_VERTEX_TANGENT;
 		flags |= USE_VERTEX_BITANGENT;
+		printf("USE_VERTEX_TANGENT\n");
+		printf("USE_VERTEX_BITANGENT\n");
 	}
 
 	if ((flags & USE_VERTEX_TANGENT) && 
@@ -73,11 +79,14 @@ uint32_t parse_mesh_flags(const aiMesh* mesh)
 		(flags & USE_VERTEX_NORMAL))
 	{
 		flags |= USE_VERTEX_TBN_MATRIX;
+		printf("USE_VERTEX_TBN_MATRIX\n");
 	}
 	/*if (mesh->HasBones())
 	{
 		flags |= USE_VERTEX_BONES; //TODO
 	}*/
+
+	printf("\n");
 
 	return flags;
 }
@@ -578,7 +587,7 @@ ModelRef ModelBuilder::build(const char* filename)
 		importer.SetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT, std::numeric_limits<unsigned short>::max());
 		importer.SetPropertyInteger(AI_CONFIG_IMPORT_TER_MAKE_UVS, 1);
 		importer.SetPropertyInteger(AI_CONFIG_PP_SBBC_MAX_BONES, 35);
-		//importer.SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE, 80.0f);
+		importer.SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE, 80.0f);
 		importer.SetPropertyInteger(AI_CONFIG_PP_SBP_REMOVE, aiPrimitiveType_LINE | aiPrimitiveType_POINT);
 		auto scene = importer.ReadFile(filename, get_import_flags());
 
@@ -587,10 +596,15 @@ ModelRef ModelBuilder::build(const char* filename)
 			return nullptr;
 		}
 
+		printf("(BEFORE)\n");
 		auto model = std::make_shared<Model>();
+		printf("MESHES\n");
 		model->meshes = std::move(parse_meshes(scene));
+		printf("NODES\n");
 		model->nodes = std::move(parse_nodes(scene));
+		printf("MATERIALS\n");
 		model->materials = std::move(parse_materials(scene));
+		printf("DONE\n");
 		//TODO
 
 		return model;
