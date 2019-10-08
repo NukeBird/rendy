@@ -84,8 +84,17 @@ void Model::draw_node(uint32_t node_id,
 	assert(node_id < get_node_count());
 	auto& node = nodes[node_id];
 
-	auto transform = node.transform * base_transform;
+	auto transform = base_transform * node.transform;
+
+
+	glm::mat3 view_rotation(view);
+	glm::vec3 camera_position = -view[3] * view_rotation;
 	
+	/*printf("%f %f %f\n",
+		camera_position.x,
+		camera_position.y,
+		camera_position.z);*/
+
 	for (const auto& mesh_id: node.mesh_ids)
 	{
 		assert(mesh_id < get_mesh_count());
@@ -97,6 +106,26 @@ void Model::draw_node(uint32_t node_id,
 		auto shader = material->get_shader();
 		auto shader_variant = shader->compile(mesh.flags | material->get_flags()); //TODO
 
+		/*if (material->get_flags() & USE_METALLIC_ROUGHNESS_TEXTURE)
+		{
+			printf("METALLICROUGHNESS\n");
+		}
+
+		if (material->get_flags() & USE_NORMAL_TEXTURE)
+		{
+			printf("NORMALMAP\n");
+		}
+
+		if (material->get_flags() & USE_COLOR_TEXTURE)
+		{
+			printf("COLORMAP\n");
+		}*/
+
+		if (shader_variant->validate())
+		{
+			//printf("VALID\n");
+		}
+
 		mesh.vao->bind(shader_variant);
 
 		material->bind(mesh.flags);
@@ -104,6 +133,7 @@ void Model::draw_node(uint32_t node_id,
 		shader_variant->set_uniform("u_projection", proj);
 		shader_variant->set_uniform("u_view_projection", proj * view);
 		shader_variant->set_uniform("u_transform", transform);
+		shader_variant->set_uniform("u_camera_position", camera_position);
 
 		mesh.vao->draw();
 		mesh.vao->unbind();

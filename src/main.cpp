@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SDL.h>
+#define GLM_FORCE_RADIANS 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtc/matrix_transform.hpp> 
 #include <glm/gtx/transform.hpp>
@@ -63,7 +64,7 @@ int main(int argc, char** argv)
 		}
 	#endif // _WIN32
 
-	auto model = ModelBuilder::build("assets/matball.glb");
+	auto model = ModelBuilder::build("assets/dyno.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
@@ -106,6 +107,27 @@ int main(int argc, char** argv)
 	bool is_running = true;
 	while (is_running)
 	{
+		static float cam_fov(60.0f);
+		static float cam_aspect = width / static_cast<float>(height);
+		static glm::vec3 cam_pos(0.0, 0.0, 0.0); //TODO: weird
+		static glm::vec3 cam_target(0, 0, 0.8);
+		static float near = 0.01f;
+		static float far = 40.0f;
+
+		glm::mat4 view = glm::lookAt(cam_pos, cam_target,
+			glm::vec3(0, 1, 0)); //TODO: check cam_target
+
+		glm::mat4 proj = glm::perspective(glm::radians(cam_fov),
+			cam_aspect, near, far);
+
+		static float angle = 180.0f;
+
+		angle += 0.05f;
+
+		glm::mat4 transform = glm::translate(cam_target) * 
+			glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
+			glm::scale(glm::vec3{ 1.0 });
+
 		while (SDL_PollEvent(&event) != 0)
 		{
 			if (event.type == SDL_QUIT)
@@ -117,27 +139,7 @@ int main(int argc, char** argv)
 		glClearColor(0, 0, 0, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		/*auto shader = sh->compile(ShaderFlag::USE_VERTEX_COLOR);
-		shader->bind();
-		vao->bind();
-		vao->draw();
-		vao->unbind();
-		shader->unbind();*/
-
-		static float cam_fov(60.0f);
-		static float cam_aspect = width / static_cast<float>(height);
-		static glm::vec3 cam_pos(0, 0, 0);
-		static glm::vec3 cam_target(0, 0, -0.5);
-		static float near = 0.01f;
-		static float far = 100.0f;
-
-		glm::mat4 view = glm::lookAt(cam_pos, cam_target,
-			glm::vec3(0, 1, 0));
-
-		glm::mat4 proj = glm::perspective(glm::radians(cam_fov),
-			cam_aspect, near, far);
-
-		model->draw(glm::translate(cam_target) * glm::scale(glm::vec3{ 1.0 }), view, proj);
+		model->draw(transform, view, proj);
 
 		SDL_GL_SwapWindow(window);
 	}

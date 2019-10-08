@@ -128,7 +128,7 @@ R"(
 	#define MODEL_COOK_TORRANCE
 #endif
 
-	//uniform vec3 u_camera_position; TODO
+	uniform vec3 u_camera_position;
 
 	out vec4 output_color;
 
@@ -259,9 +259,9 @@ R"(
 
 	vec4 calculate_direct_light()
 	{	
-		vec3 light_pos = vec3(0, 0.6, 1.6);
+		vec3 light_pos = vec3(0, 0.2, -0.8);
 		vec3 light_dir = normalize(light_pos - v_position); //TODO
-		vec3 camera_position = vec3(0, 0, 0); //TODO
+		vec3 camera_position = u_camera_position;
 
 		vec4 f_albedo = get_diffuse(); //TODO?
 		float f_metallic = get_metallic();
@@ -276,7 +276,7 @@ R"(
 
 		float distance    = length(light_pos - v_position);
         float attenuation = 1.0 / (distance * distance);
-        vec3 radiance     = vec3(30*attenuation);        
+        vec3 radiance     = vec3(5.5*attenuation);        
 
 		float f_ndf = distribution_ggx(f_normal, f_h, f_roughness);  
 		float f_g   = geometry_smith(f_normal, f_v, f_l, f_roughness);  
@@ -312,5 +312,12 @@ R"(
 		result.rgb = pow(result.rgb, vec3(1.0/gamma));
 
 		output_color = result;
+
+		/*#ifdef USE_VERTEX_COORD
+			output_color = vec4(0, 0, 1, 1);
+		#else
+			output_color = vec4(0, 1, 0, 1);
+		#endif*/
+		//output_color.rgb = vec3(0, 0, 1);
 	} 
 )";
