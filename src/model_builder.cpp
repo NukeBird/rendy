@@ -12,6 +12,9 @@
 #include "pbr_material.h"
 #include <unordered_map>
 #include <stack>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 const unsigned get_import_flags()
 {
@@ -288,31 +291,9 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 	return result;
 }
 
-glm::mat4 parse_transform(const aiMatrix4x4* from) //TODO: legit?
+glm::mat4 parse_transform(const aiMatrix4x4& from) //TODO: legit?
 {
-	glm::mat4 to;
-
-	to[0][0] = from->a1; 
-	to[0][1] = from->b1;  
-	to[0][2] = from->c1; 
-	to[0][3] = from->d1;
-
-	to[1][0] = from->a2;
-	to[1][1] = from->b2;  
-	to[1][2] = from->c2; 
-	to[1][3] = from->d2;
-
-	to[2][0] = from->a3; 
-	to[2][1] = from->b3; 
-	to[2][2] = from->c3; 
-	to[2][3] = from->d3;
-
-	to[3][0] = from->a4;
-	to[3][1] = from->b4;  
-	to[3][2] = from->c4; 
-	to[3][3] = from->d4;
-
-	return to;
+	return glm::transpose(glm::make_mat4(&from.a1));
 }
 
 Node parse_node(const aiNode* node)
@@ -329,7 +310,7 @@ Node parse_node(const aiNode* node)
 		result.mesh_ids.emplace_back(node->mMeshes[i]);
 	}
 
-	result.transform = parse_transform(&node->mTransformation);
+	result.transform = parse_transform(node->mTransformation);
 
 	return result;
 }

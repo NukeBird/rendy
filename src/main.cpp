@@ -2,8 +2,11 @@
 #include <SDL.h>
 #define GLM_FORCE_RADIANS 
 #define GLM_ENABLE_EXPERIMENTAL
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE //TODO: ???
 #include <glm/gtc/matrix_transform.hpp> 
 #include <glm/gtx/transform.hpp>
+#include <chrono>
+#include <thread>
 
 #ifdef _WIN32
 	#include <gl/glew.h>
@@ -22,7 +25,7 @@
 
 int main(int argc, char** argv) 
 {
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) 
+	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
 	{
 		std::cout << "Error while initializing SDL: " << SDL_GetError() << std::endl;
 		SDL_Quit();
@@ -38,6 +41,7 @@ int main(int argc, char** argv)
 		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
@@ -47,8 +51,8 @@ int main(int argc, char** argv)
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 	#endif
 
-	const int width = 640 * 2;
-	const int height = 640;
+	const int width = 640 * 2.5;
+	const int height = 640 * 1.5;
 
 	SDL_Window *window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, 
 		SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
@@ -62,6 +66,8 @@ int main(int argc, char** argv)
 		{
 			std::cout << glewGetErrorString(glewInit()) << std::endl;
 		}
+
+		SDL_GL_SetSwapInterval(0);
 	#endif // _WIN32
 
 	auto model = ModelBuilder::build("assets/dyno.glb");
@@ -100,19 +106,28 @@ int main(int argc, char** argv)
 
 	std::cout << "VAO status: " << vao->validate() << std::endl;*/
 
-	glDisable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
+
+	auto last = std::chrono::steady_clock::now();
+	auto last_render = last;
 
 	SDL_Event event;
 	bool is_running = true;
 	while (is_running)
 	{
-		static float cam_fov(60.0f);
+		static float cam_fov(45.0f);
 		static float cam_aspect = width / static_cast<float>(height);
 		static glm::vec3 cam_pos(0.0, 0.0, 0.0); //TODO: weird
-		static glm::vec3 cam_target(0, 0, 0.8);
+		static glm::vec3 cam_target(0, 0, 1.3);
 		static float near = 0.01f;
 		static float far = 40.0f;
+
+		auto now = std::chrono::steady_clock::now();
+		std::chrono::duration<float> d = now - last;
+		float dt = glm::max(0.0001f, d.count());
+		last = now;
+		//printf("%f\n", dt);
 
 		glm::mat4 view = glm::lookAt(cam_pos, cam_target,
 			glm::vec3(0, 1, 0)); //TODO: check cam_target
@@ -120,15 +135,16 @@ int main(int argc, char** argv)
 		glm::mat4 proj = glm::perspective(glm::radians(cam_fov),
 			cam_aspect, near, far);
 
-		static float angle = 180.0f;
+		static float angle = 0.0f;
 
-		angle += 0.05f;
+		angle = glm::mod(angle + 20.0f*dt, 360.0f);
+
 
 		glm::mat4 transform = glm::translate(cam_target) * 
 			glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
 			glm::scale(glm::vec3{ 1.0 });
 
-		while (SDL_PollEvent(&event) != 0)
+		while (SDL_PollEvent(&event))
 		{
 			if (event.type == SDL_QUIT)
 			{
@@ -136,12 +152,17 @@ int main(int argc, char** argv)
 			}
 		}
 
-		glClearColor(0, 0, 0, 0);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		if (std::chrono::duration<float>(now - last_render).count() >= 1.0f / 60.0f)
+		{
+			last_render = now;
+			glClearColor(0, 0, 0, 0);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		model->draw(transform, view, proj);
+			model->draw(transform, view, proj);
 
+		}
 		SDL_GL_SwapWindow(window);
+		//std::this_thread::sleep_for(std::chrono::milliseconds(5));
 	}
 
 	SDL_GL_DeleteContext(glcontext);

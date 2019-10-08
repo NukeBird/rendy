@@ -154,6 +154,7 @@ R"(
 					return v_normal; 
 				#else
 					vec3 f_normal = read_texture(normal_texture, v_coord).rgb;
+					//f_normal *= vec3(vec2(1.0), 1.0); //TODO
 					f_normal = normalize(f_normal * 2.0 - 1.0); 
 					f_normal = normalize(v_tbn * f_normal);	
 					return f_normal;
@@ -259,7 +260,7 @@ R"(
 
 	vec4 calculate_direct_light()
 	{	
-		vec3 light_pos = vec3(0, 0.2, -0.8);
+		vec3 light_pos = vec3(0, 0.6, -0.2);
 		vec3 light_dir = normalize(light_pos - v_position); //TODO
 		vec3 camera_position = u_camera_position;
 
@@ -276,7 +277,7 @@ R"(
 
 		float distance    = length(light_pos - v_position);
         float attenuation = 1.0 / (distance * distance);
-        vec3 radiance     = vec3(5.5*attenuation);        
+        vec3 radiance     = vec3(7.5*attenuation);        
 
 		float f_ndf = distribution_ggx(f_normal, f_h, f_roughness);  
 		float f_g   = geometry_smith(f_normal, f_v, f_l, f_roughness);  
@@ -296,8 +297,8 @@ R"(
 		vec4 result = f_albedo;
         result.rgb = (f_d * f_albedo.rgb / PI + specular) * radiance * NdotL; 
 
-		vec3 ambient = vec3(0.03) * f_albedo.rgb;
-		result.rgb += ambient;
+		//vec3 ambient = vec3(0.03) * f_albedo.rgb;
+		//result.rgb += ambient;
 
 		return vec4(result);
 	}
