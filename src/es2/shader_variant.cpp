@@ -34,6 +34,20 @@ bool ES2::ShaderVariant::validate() const
 	return false;
 }
 
+void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::vec3& vec)
+{
+	auto location = get_uniform_location(name);
+
+	if (location == -1)
+	{
+		//TODO: warning
+	}
+	else
+	{
+		glUniformMatrix3fv(location, 1, false, &vec[0]);
+	}
+}
+
 void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::mat4& mat)
 {
 	auto location = get_uniform_location(name);
