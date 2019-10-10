@@ -82,7 +82,9 @@ uint32_t PBRMaterial::get_flags() const
 
 void PBRMaterial::bind(uint32_t extra_flags)
 {
-	auto shader_variant = shader->compile(get_flags() | extra_flags);
+	ShaderSettings settings; //TODO: lights
+	settings.flags = get_flags() | extra_flags;
+	auto shader_variant = shader->compile(settings);
 	shader_variant->bind();
 
 	if (albedo_texture)
@@ -106,7 +108,9 @@ void PBRMaterial::bind(uint32_t extra_flags)
 
 void PBRMaterial::unbind(uint32_t extra_flags)
 {
-	auto shader_variant = shader->compile(get_flags() | extra_flags);
+	ShaderSettings settings; //TODO: lights
+	settings.flags = get_flags() | extra_flags;
+	auto shader_variant = shader->compile(settings);
 	shader_variant->unbind();
 
 	if (albedo_texture)

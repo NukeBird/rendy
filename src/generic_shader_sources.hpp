@@ -128,6 +128,10 @@ R"(
 	#define MODEL_COOK_TORRANCE
 #endif
 
+#ifdef USE_DIRECT_LIGHTS
+	uniform vec3 direct_lights[DIRECT_LIGHT_COUNT];
+#endif
+
 	uniform vec3 u_camera_position;
 
 	out vec4 output_color;
@@ -154,7 +158,7 @@ R"(
 					return v_normal; 
 				#else
 					vec3 f_normal = read_texture(normal_texture, v_coord).rgb;
-					//f_normal *= vec3(vec2(1.0), 1.0); //TODO
+					f_normal *= vec3(vec2(0.9), 1.0); //TODO
 					f_normal = normalize(f_normal * 2.0 - 1.0); 
 					f_normal = normalize(v_tbn * f_normal);	
 					return f_normal;
@@ -277,7 +281,7 @@ R"(
 
 		float distance    = length(light_pos - v_position);
         float attenuation = 1.0 / (distance * distance);
-        vec3 radiance     = vec3(7.5*attenuation);        
+        vec3 radiance     = vec3(1.0, 0.839, 0.66) * vec3(10.5) * vec3(attenuation);        
 
 		float f_ndf = distribution_ggx(f_normal, f_h, f_roughness);  
 		float f_g   = geometry_smith(f_normal, f_v, f_l, f_roughness);  

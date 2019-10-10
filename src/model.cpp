@@ -86,14 +86,8 @@ void Model::draw_node(uint32_t node_id,
 
 	auto transform = base_transform * node.transform;
 
-
 	glm::mat3 view_rotation(view);
 	glm::vec3 camera_position = -view[3] * view_rotation;
-	
-	/*printf("%f %f %f\n",
-		camera_position.x,
-		camera_position.y,
-		camera_position.z);*/
 
 	for (const auto& mesh_id: node.mesh_ids)
 	{
@@ -104,27 +98,10 @@ void Model::draw_node(uint32_t node_id,
 		auto& material = materials[mesh.material_id];
 
 		auto shader = material->get_shader();
-		auto shader_variant = shader->compile(mesh.flags | material->get_flags()); //TODO
 
-		/*if (material->get_flags() & USE_METALLIC_ROUGHNESS_TEXTURE)
-		{
-			printf("METALLICROUGHNESS\n");
-		}
-
-		if (material->get_flags() & USE_NORMAL_TEXTURE)
-		{
-			printf("NORMALMAP\n");
-		}
-
-		if (material->get_flags() & USE_COLOR_TEXTURE)
-		{
-			printf("COLORMAP\n");
-		}*/
-
-		if (shader_variant->validate())
-		{
-			//printf("VALID\n");
-		}
+		ShaderSettings settings; //TODO: lights
+		settings.flags = mesh.flags | material->get_flags();
+		auto shader_variant = shader->compile(settings); //TODO
 
 		mesh.vao->bind(shader_variant);
 

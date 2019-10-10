@@ -7,7 +7,10 @@ ES2::Shader::Shader(const std::string& vertex_source, const std::string& fragmen
 	this->vertex_source = vertex_source;
 	this->fragment_source = fragment_source;
 
-	compile(get_all_shader_flags());
+	ShaderSettings settings;
+	settings.flags = get_all_shader_flags();
+
+	compile(settings);
 }
 
 void ES2::Shader::reload()
@@ -18,20 +21,21 @@ void ES2::Shader::reload()
 	}
 }
 
-ShaderVariantRef ES2::Shader::compile(uint32_t flags)
+ShaderVariantRef ES2::Shader::compile(const ShaderSettings& settings)
 {
-	auto it = variants.find(flags);
+	auto it = variants.find(settings);
 
 	if (it == variants.end())
 	{
 		const std::string meta = "#version 330 core\n" //TODO
-			+ shader_flags_to_defines(flags);
+			+ settings.generate_definitions();
 		const std::string vertex_source_variant = meta + vertex_source;
 		const std::string fragment_source_variant = meta + fragment_source;
-		variants[flags] = std::make_shared<ShaderVariant>(vertex_source_variant,
+
+		variants[settings] = std::make_shared<ShaderVariant>(vertex_source_variant,
 			fragment_source_variant);
 			
-		it = variants.find(flags);
+		it = variants.find(settings);
 	}
 
 	return it->second;

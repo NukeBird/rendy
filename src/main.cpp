@@ -51,8 +51,8 @@ int main(int argc, char** argv)
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 	#endif
 
-	const int width = 640 * 2.5;
-	const int height = 640 * 1.5;
+	const int width = 640 * 2;
+	const int height = 640;
 
 	SDL_Window *window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, 
 		SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
@@ -78,6 +78,9 @@ int main(int argc, char** argv)
 	std::cout << "GENERIC SHADER STATUS: "
 		<< ShaderManager::get_instance()->get_generic_shader()->validate()
 		<< std::endl;
+
+	//ShaderManager::get_instance()->reload();
+	//VertexArrayManager::get_instance()->reload();
 
 	std::cout << "MODEL STATUS: " << model->validate() << std::endl;
 
@@ -106,7 +109,7 @@ int main(int argc, char** argv)
 
 	std::cout << "VAO status: " << vao->validate() << std::endl;*/
 
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 
 	auto last = std::chrono::steady_clock::now();
@@ -120,8 +123,8 @@ int main(int argc, char** argv)
 		static float cam_aspect = width / static_cast<float>(height);
 		static glm::vec3 cam_pos(0.0, 0.0, 0.0); //TODO: weird
 		static glm::vec3 cam_target(0, 0, 1.3);
-		static float near = 0.01f;
-		static float far = 40.0f;
+		static float near = 0.1f;
+		static float far = 30.0f;
 
 		auto now = std::chrono::steady_clock::now();
 		std::chrono::duration<float> d = now - last;
@@ -159,10 +162,9 @@ int main(int argc, char** argv)
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			model->draw(transform, view, proj);
-
 		}
 		SDL_GL_SwapWindow(window);
-		//std::this_thread::sleep_for(std::chrono::milliseconds(5));
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 
 	SDL_GL_DeleteContext(glcontext);

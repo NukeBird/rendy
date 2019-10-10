@@ -81,5 +81,10 @@ std::string shader_flags_to_defines(uint32_t flags)
 		result += "#define USE_METALLIC_ROUGHNESS_TEXTURE\n";
 	}
 
+	if (flags & USE_DIRECT_LIGHTS)
+	{
+		result += "#define USE_DIRECT_LIGHTS\n";
+	}
+
 	return result;
 }

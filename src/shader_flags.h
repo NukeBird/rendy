@@ -18,6 +18,7 @@ enum ShaderFlag
 	USE_AMBIENT_TEXTURE = 1 << 11,
 	USE_SPECULAR_TEXTURE = 1 << 12,
 	USE_METALLIC_ROUGHNESS_TEXTURE = 1 << 13,
+	USE_DIRECT_LIGHTS = 1 << 14,
 };
 
 uint32_t get_all_shader_flags();
