@@ -264,7 +264,7 @@ R"(
 
 	vec4 calculate_direct_light()
 	{	
-		vec3 light_pos = vec3(0, 0.6, -0.2);
+		vec3 light_pos = vec3(0, 0.6, 3.2);
 		vec3 light_dir = normalize(light_pos - v_position); //TODO
 		vec3 camera_position = u_camera_position;
 
@@ -272,7 +272,8 @@ R"(
 		float f_metallic = get_metallic();
 		float f_roughness = get_roughness();
 		vec3 f_normal = get_normal();
-		vec3 f_v = normalize(camera_position - v_position);
+
+		vec3 f_v = normalize(v_position - camera_position);
 		vec3 f_f0 = vec3(0.04f);
 		f_f0 = mix(f_f0, f_albedo.rgb, f_metallic);
 
@@ -281,7 +282,7 @@ R"(
 
 		float distance    = length(light_pos - v_position);
         float attenuation = 1.0 / (distance * distance);
-        vec3 radiance     = vec3(1.0, 0.839, 0.66) * vec3(10.5) * vec3(attenuation);        
+        vec3 radiance     = vec3(1.0, 0.839, 0.66) * vec3(15.5) * vec3(attenuation);        
 
 		float f_ndf = distribution_ggx(f_normal, f_h, f_roughness);  
 		float f_g   = geometry_smith(f_normal, f_v, f_l, f_roughness);  

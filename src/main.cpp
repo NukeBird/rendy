@@ -119,9 +119,9 @@ int main(int argc, char** argv)
 	bool is_running = true;
 	while (is_running)
 	{
-		static float cam_fov(45.0f);
+		static float cam_fov(60.0f);
 		static float cam_aspect = width / static_cast<float>(height);
-		static glm::vec3 cam_pos(0.0, 0.0, 0.0); //TODO: weird
+		static glm::vec3 cam_pos(0.0, 0.0, 2.2);
 		static glm::vec3 cam_target(0, 0, 1.3);
 		static float near = 0.1f;
 		static float far = 30.0f;
@@ -130,10 +130,9 @@ int main(int argc, char** argv)
 		std::chrono::duration<float> d = now - last;
 		float dt = glm::max(0.0001f, d.count());
 		last = now;
-		//printf("%f\n", dt);
 
 		glm::mat4 view = glm::lookAt(cam_pos, cam_target,
-			glm::vec3(0, 1, 0)); //TODO: check cam_target
+			glm::vec3(0, 1, 0));
 
 		glm::mat4 proj = glm::perspective(glm::radians(cam_fov),
 			cam_aspect, near, far);
