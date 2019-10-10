@@ -142,7 +142,6 @@ int main(int argc, char** argv)
 
 		angle = glm::mod(angle + 20.0f*dt, 360.0f);
 
-
 		glm::mat4 transform = glm::translate(cam_target) * 
 			glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
 			glm::scale(glm::vec3{ 1.0 });

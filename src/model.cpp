@@ -70,11 +70,47 @@ bool Model::validate() const
 	return true;
 }
 
-void Model::draw(const glm::mat4& transform, const glm::mat4& view, const glm::mat4& proj)
+DrawCallList Model::generate_draw_calls(const glm::mat4& model, const glm::mat4& view, 
+	const glm::mat4& proj)
 {
+	DrawCallList calls;
 	if (get_node_count() > 0)
 	{
-		draw_node(0, transform, view, proj);
+		generate_draw_calls(0, model, view, proj, calls);
+	}
+	return std::move(calls);
+}
+
+void Model::draw(const glm::mat4& transform, const glm::mat4& view, const glm::mat4& proj)
+{
+	auto calls = generate_draw_calls(transform, view, proj);
+
+	glm::mat3 view_rotation(view);
+	glm::vec3 camera_position = -view[3] * view_rotation;
+
+	for (auto& draw_call : calls)
+	{
+		auto material = draw_call.material;
+
+		auto shader = material->get_shader();
+
+		ShaderSettings settings; //TODO: lights
+		settings.flags = draw_call.extra_flags | material->get_flags();
+		auto shader_variant = shader->compile(settings); //TODO
+
+		draw_call.vao->bind(shader_variant);
+
+		material->bind(draw_call.extra_flags);
+		shader_variant->set_uniform("u_view", draw_call.view);
+		shader_variant->set_uniform("u_projection", draw_call.proj);
+		shader_variant->set_uniform("u_view_projection", draw_call.proj * 
+			draw_call.view);
+		shader_variant->set_uniform("u_transform", draw_call.model);
+		shader_variant->set_uniform("u_camera_position", camera_position);
+
+		draw_call.vao->draw();
+		draw_call.vao->unbind();
+		material->unbind(draw_call.extra_flags);
 	}
 }
 
@@ -119,6 +155,37 @@ void Model::draw_node(uint32_t node_id,
 
 	for (const auto& child_id: node.child_ids)
 	{
-		draw_node(child_id, transform);
+		draw_node(child_id, transform, view, proj);
+	}
+}
+
+void Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_transform, 
+	const glm::mat4& view, const glm::mat4& proj, DrawCallList& calls)
+{
+	auto& node = nodes[node_id];
+
+	auto transform = base_transform * node.transform;
+
+	for (const auto& mesh_id: node.mesh_ids)
+	{
+		assert(mesh_id < get_mesh_count());
+		auto& mesh = meshes[mesh_id];
+
+		assert(mesh.material_id < get_material_count());
+		auto& material = materials[mesh.material_id];
+
+		calls.emplace_back();
+		auto& call = calls[calls.size() - 1];
+		call.vao = mesh.vao;
+		call.extra_flags = mesh.flags;
+		call.material = material;
+		call.model = transform;
+		call.view = view;
+		call.proj = proj;
+	}
+
+	for (const auto& child_id : node.child_ids)
+	{
+		generate_draw_calls(child_id, transform, view, proj, calls);
 	}
 }

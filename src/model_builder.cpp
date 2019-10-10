@@ -344,7 +344,7 @@ void link_nodes(std::vector<Node>& node_list,
 }
 
 std::vector<Node> parse_nodes(const aiScene* scene)
-{
+{ 
 	std::vector<Node> result;
 
 	std::stack<const aiNode*> unhandled_nodes;
