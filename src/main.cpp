@@ -71,7 +71,7 @@ int main(int argc, char** argv)
 		SDL_GL_SetSwapInterval(0);
 	#endif // _WIN32
 
-	auto model = ModelBuilder::build("assets/backpack.glb");
+	auto model = ModelBuilder::build("assets/shoes.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
@@ -148,7 +148,7 @@ int main(int argc, char** argv)
 
 		glm::mat4 transform = glm::translate(cam_target) * 
 			glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
-			glm::scale(glm::vec3{ 1.0 });
+			glm::scale(glm::vec3{ 0.4 });
 
 		while (SDL_PollEvent(&event))
 		{
