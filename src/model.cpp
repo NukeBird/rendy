@@ -81,12 +81,35 @@ DrawCallList Model::generate_draw_calls(const glm::mat4& model, const glm::mat4&
 	return std::move(calls);
 }
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/matrix_decompose.hpp>
+
 void Model::draw(const glm::mat4& transform, const glm::mat4& view, const glm::mat4& proj)
 {
 	auto calls = generate_draw_calls(transform, view, proj);
 
 	glm::mat3 view_rotation(view);
 	glm::vec3 camera_position = -view[3] * view_rotation;
+
+	/*std::sort(calls.begin(), calls.end(),
+		[=](const DrawCall& a, const DrawCall& b)
+		{
+			glm::quat rotation;
+			glm::vec3 skew;
+			glm::vec4 perspective;
+
+			glm::vec3 scale_a;
+			glm::vec3 scale_b;
+
+			glm::vec3 translation_a;
+			glm::vec3 translation_b;
+
+			glm::decompose(a.model, scale_a, rotation, translation_a, skew, perspective);
+			glm::decompose(b.model, scale_b, rotation, translation_b, skew, perspective);
+
+			return glm::distance(translation_a + glm::normalize(translation_a - camera_position) * scale_a, camera_position) >
+				glm::distance(translation_b + glm::normalize(translation_b - camera_position) * scale_b, camera_position);
+		});*/
 
 	for (auto& draw_call : calls)
 	{

@@ -158,7 +158,8 @@ R"(
 					return v_normal; 
 				#else
 					vec3 f_normal = read_texture(normal_texture, v_coord).rgb;
-					f_normal *= vec3(vec2(0.9), 1.0); //TODO
+					//f_normal *= vec3(vec2(0.85), 1.0); //TODO
+					//f_normal.g = 1.0 - f_normal.g;
 					f_normal = normalize(f_normal * 2.0 - 1.0); 
 					f_normal = normalize(v_tbn * f_normal);	
 					return f_normal;
@@ -264,7 +265,7 @@ R"(
 
 	vec4 calculate_direct_light()
 	{	
-		vec3 light_pos = vec3(0, 0.6, 3.2);
+		vec3 light_pos = vec3(0, 0.7, 2.3);
 		vec3 light_dir = normalize(light_pos - v_position); //TODO
 		vec3 camera_position = u_camera_position;
 
@@ -281,8 +282,8 @@ R"(
 		vec3 f_h = normalize(f_v + f_l);
 
 		float distance    = length(light_pos - v_position);
-        float attenuation = 1.0 / (distance * distance);
-        vec3 radiance     = vec3(1.0, 0.839, 0.66) * vec3(15.5) * vec3(attenuation);        
+        float attenuation = 1.0 / max(distance * distance, 0.001);
+        vec3 radiance     = vec3(1.0, 0.839, 0.66) * vec3(8.5) * vec3(attenuation);        
 
 		float f_ndf = distribution_ggx(f_normal, f_h, f_roughness);  
 		float f_g   = geometry_smith(f_normal, f_v, f_l, f_roughness);  
@@ -318,12 +319,5 @@ R"(
 		result.rgb = pow(result.rgb, vec3(1.0/gamma));
 
 		output_color = result;
-
-		/*#ifdef USE_VERTEX_COORD
-			output_color = vec4(0, 0, 1, 1);
-		#else
-			output_color = vec4(0, 1, 0, 1);
-		#endif*/
-		//output_color.rgb = vec3(0, 0, 1);
 	} 
 )";

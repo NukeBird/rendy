@@ -39,11 +39,12 @@ int main(int argc, char** argv)
 		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+		//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
 	#else
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
@@ -51,8 +52,8 @@ int main(int argc, char** argv)
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 	#endif
 
-	const int width = 640 * 2;
-	const int height = 640;
+	const int width = 1280;// *2;
+	const int height = 720;
 
 	SDL_Window *window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, 
 		SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
@@ -70,7 +71,7 @@ int main(int argc, char** argv)
 		SDL_GL_SetSwapInterval(0);
 	#endif // _WIN32
 
-	auto model = ModelBuilder::build("assets/dyno.glb");
+	auto model = ModelBuilder::build("assets/backpack.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
@@ -109,8 +110,12 @@ int main(int argc, char** argv)
 
 	std::cout << "VAO status: " << vao->validate() << std::endl;*/
 
-	glEnable(GL_CULL_FACE);
+	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_ALWAYS);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_BLEND); 
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	auto last = std::chrono::steady_clock::now();
 	auto last_render = last;
@@ -121,8 +126,8 @@ int main(int argc, char** argv)
 	{
 		static float cam_fov(60.0f);
 		static float cam_aspect = width / static_cast<float>(height);
-		static glm::vec3 cam_pos(0.0, 0.0, 2.2);
-		static glm::vec3 cam_target(0, 0, 1.3);
+		static glm::vec3 cam_pos(0.0, 0.0, 2.6);
+		static glm::vec3 cam_target(0.0, 0.0, 1.3);
 		static float near = 0.1f;
 		static float far = 30.0f;
 
@@ -156,7 +161,7 @@ int main(int argc, char** argv)
 		if (std::chrono::duration<float>(now - last_render).count() >= 1.0f / 60.0f)
 		{
 			last_render = now;
-			glClearColor(0, 0, 0, 0);
+			glClearColor(0.1, 0.1, 0.1, 0);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			model->draw(transform, view, proj);

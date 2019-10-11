@@ -535,7 +535,7 @@ AbstractMaterialRef parse_material(const aiScene* scene,
 	const aiMaterial* material)
 {
 	AbstractMaterialRef result;
-
+	
 	result = parse_pbr_material(scene, material);
 
 	if (!result)
@@ -570,10 +570,14 @@ ModelRef ModelBuilder::build(const char* filename)
 		importer.SetPropertyInteger(AI_CONFIG_PP_SBBC_MAX_BONES, 35);
 		importer.SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE, 80.0f);
 		importer.SetPropertyInteger(AI_CONFIG_PP_SBP_REMOVE, aiPrimitiveType_LINE | aiPrimitiveType_POINT);
+
+		printf("NANI");
 		auto scene = importer.ReadFile(filename, get_import_flags());
+		printf("NANI");
 
 		if (!scene)
 		{
+			printf("%s\n", importer.GetErrorString());
 			return nullptr;
 		}
 
