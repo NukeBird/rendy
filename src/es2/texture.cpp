@@ -143,6 +143,7 @@ bool ES2::Texture::load_from_memory(const char* memory, uint32_t length)
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); //TODO
 	glTexImage2D(GL_TEXTURE_2D, 0, gl_format, w, h, 0, gl_format, gl_type, data);
 
+	glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	glBindTexture(GL_TEXTURE_2D, 0);

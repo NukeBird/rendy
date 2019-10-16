@@ -22,7 +22,7 @@
 #include "es2/vertex_array.h"
 #include "model_builder.h"
 #include "vertex_array_manager.h"
-
+#include "scene.h"
 #include "generic_shader_sources.hpp"
 #include <regex>
 
@@ -138,12 +138,12 @@ int main(int argc, char** argv)
 	bool is_running = true;
 	while (is_running)
 	{
-		static float cam_fov(45.0f);
+		static float cam_fov(40.0f);
 		static float cam_aspect = width / static_cast<float>(height);
 		static glm::vec3 cam_pos(0.0, 0.0, 2.6);
 		static glm::vec3 cam_target(0.0, 0.0, 1.3);
-		static float near = 0.25f;
-		static float far = 10.0f;
+		static float near = 0.1f;
+		static float far = 20.0f;
 
 		auto now = std::chrono::steady_clock::now();
 		std::chrono::duration<float> d = now - last;
@@ -162,7 +162,7 @@ int main(int argc, char** argv)
 
 		glm::mat4 transform = glm::translate(cam_target) * 
 			glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
-			glm::scale(glm::vec3{ 0.4 });
+			glm::scale(glm::vec3{ 0.4f });
 
 		while (SDL_PollEvent(&event))
 		{
@@ -175,7 +175,7 @@ int main(int argc, char** argv)
 		if (std::chrono::duration<float>(now - last_render).count() >= 1.0f / 60.0f)
 		{
 			last_render = now;
-			glClearColor(0.1, 0.1, 0.1, 0);
+			glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			model->draw(transform, view, proj);

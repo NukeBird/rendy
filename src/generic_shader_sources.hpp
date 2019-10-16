@@ -3,6 +3,8 @@
 
 const std::string generic_vertex_shader =
 R"(
+precision highp float;
+
 #ifdef USE_VERTEX_POSITION
 	in vec3 a_position;
 	out vec3 v_position;
@@ -80,6 +82,8 @@ R"(
 
 const std::string generic_fragment_shader =
 R"(
+precision mediump float;
+
 #ifdef USE_VERTEX_POSITION
 	in vec3 v_position;
 #endif
