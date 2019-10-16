@@ -1,7 +1,7 @@
 #include "vertex_array_manager.h"
 #include "es2/vertex_array.h"
 #include "vertex_buffer_manager.h"
-#include "index_buffer_manager.h"
+#include "index_buffer_factory.h"
 #include <algorithm>
 #include <memory>
 
@@ -22,7 +22,7 @@ AbstractVertexArrayRef VertexArrayManager::make(const void* vbo_ptr, uint32_t vb
 {
 	return std::make_shared<ES2::VertexArray>(
 		VertexBufferManager::get_instance()->make(vbo_size, vbo_ptr),
-		IndexBufferManager::get_instance()->make(ibo_size, ibo_ptr), layout);
+		IndexBufferFactory::get_instance()->make(ibo_size, ibo_ptr), layout);
 }
 
 void VertexArrayManager::reload()

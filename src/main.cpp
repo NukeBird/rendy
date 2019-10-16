@@ -23,7 +23,7 @@
 #include "model_builder.h"
 #include "vertex_array_manager.h"
 #include "vertex_buffer_manager.h"
-#include "index_buffer_manager.h"
+#include "index_buffer_factory.h"
 #include "scene.h"
 #include "scene_builder.h"
 #include "generic_shader_sources.hpp"
@@ -147,7 +147,6 @@ int main(int argc, char** argv)
 		TextureManager::get_instance()->flush();
 		VertexArrayManager::get_instance()->flush();
 		VertexBufferManager::get_instance()->flush();
-		IndexBufferManager::get_instance()->flush();
 
 		static float cam_fov(40.0f);
 		static float cam_aspect = width / static_cast<float>(height);
