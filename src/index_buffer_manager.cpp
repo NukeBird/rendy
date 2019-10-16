@@ -27,11 +27,11 @@ void IndexBufferManager::flush()
 {
 	const auto rule = [](const AbstractBufferRef& vbo)
 	{
-		return vbo.use_count() == 1 || !vbo->validate();
+		return vbo.use_count() == 1; //|| !vbo->validate();
 	};
 
 	auto remove_it = std::remove_if(ibo_list.begin(),
 		ibo_list.end(), rule);
 
-	ibo_list.erase(remove_it);
+	ibo_list.erase(remove_it, ibo_list.end());
 }

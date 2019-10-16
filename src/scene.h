@@ -6,7 +6,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-struct MeshS: public AbstractResource //TODO: rename
+struct MeshS//TODO: rename
 {
 	AbstractVertexArrayRef vao;
 	uint32_t material_id;
@@ -77,3 +77,5 @@ struct Scene //TODO: struct?
 	std::unordered_map<std::string, NodeS::NodeRef> node_map;
 	NodeS::NodeRef root_node;
 };
+
+using SceneRef = std::shared_ptr<Scene>;

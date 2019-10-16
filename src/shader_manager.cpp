@@ -32,11 +32,11 @@ void ShaderManager::flush()
 {
 	const auto rule = [](const AbstractShaderRef& shader)
 	{
-		return shader.use_count() == 1 || !shader->validate();
+		return shader.use_count() == 1; //|| !shader->validate();
 	};
 
 	auto remove_it = std::remove_if(shader_list.begin(),
 		shader_list.end(), rule);
 
-	shader_list.erase(remove_it);
+	shader_list.erase(remove_it, shader_list.end());
 }

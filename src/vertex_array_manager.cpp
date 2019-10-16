@@ -37,11 +37,11 @@ void VertexArrayManager::flush()
 {
 	const auto rule = [](const AbstractVertexArrayRef& vbo)
 	{
-		return vbo.use_count() == 1 || !vbo->validate();
+		return vbo.use_count() == 1;// || !vbo->validate();
 	};
 
 	auto remove_it = std::remove_if(vao_list.begin(),
 		vao_list.end(), rule);
 
-	vao_list.erase(remove_it);
+	vao_list.erase(remove_it, vao_list.end());
 }

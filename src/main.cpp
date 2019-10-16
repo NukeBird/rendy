@@ -22,7 +22,10 @@
 #include "es2/vertex_array.h"
 #include "model_builder.h"
 #include "vertex_array_manager.h"
+#include "vertex_buffer_manager.h"
+#include "index_buffer_manager.h"
 #include "scene.h"
+#include "scene_builder.h"
 #include "generic_shader_sources.hpp"
 #include <regex>
 
@@ -73,6 +76,8 @@ int main(int argc, char** argv)
 
 		SDL_GL_SetSwapInterval(0);
 	#endif // _WIN32
+
+	SceneBuilder::build("assets/shoes.glb");
 
 	auto model = ModelBuilder::build("assets/shoes.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
@@ -138,6 +143,12 @@ int main(int argc, char** argv)
 	bool is_running = true;
 	while (is_running)
 	{
+		ShaderManager::get_instance()->flush();
+		TextureManager::get_instance()->flush();
+		VertexArrayManager::get_instance()->flush();
+		VertexBufferManager::get_instance()->flush();
+		IndexBufferManager::get_instance()->flush();
+
 		static float cam_fov(40.0f);
 		static float cam_aspect = width / static_cast<float>(height);
 		static glm::vec3 cam_pos(0.0, 0.0, 2.6);

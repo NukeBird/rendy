@@ -21,11 +21,11 @@ void TextureManager::flush()
 {
 	const auto rule = [](const AbstractTextureRef& texture)
 	{
-		return texture.use_count() == 1 || !texture->validate();
+		return texture.use_count() == 1; //|| !texture->validate();
 	};
 
 	auto remove_it = std::remove_if(texture_list.begin(),
 		texture_list.end(), rule);
 
-	texture_list.erase(remove_it);
+	texture_list.erase(remove_it, texture_list.end());
 }
