@@ -50,6 +50,11 @@ static glm::vec3 to_vec3(const aiVector3D& vec)
 	return glm::vec3{ vec.x, vec.y, vec.z };
 }
 
+static glm::mat4 to_mat4(const aiMatrix4x4& from)
+{
+	return glm::transpose(glm::make_mat4(&from.a1));
+}
+
 static uint32_t parse_mesh_flags(const aiMesh* mesh)
 {
 	uint32_t flags = 0;
@@ -367,12 +372,45 @@ static void parse_textures(const aiScene* assimp_scene, SceneRef& result)
 	}
 }
 
+static NodeS::NodeRef parse_node(const aiNode* assimp_node)
+{
+	if (!assimp_node)
+	{
+		return nullptr;
+	}
+
+	NodeS::NodeRef node = std::make_shared<NodeS>();
+
+	node->name = to_string(assimp_node->mName);
+	node->transform = to_mat4(assimp_node->mTransformation);
+	
+	node->mesh_ids.reserve(assimp_node->mNumMeshes);
+	for (uint32_t i = 0; i < assimp_node->mNumMeshes; ++i)
+	{
+		node->mesh_ids.emplace_back(assimp_node->mMeshes[i]);
+	}
+
+	node->child_list.reserve(assimp_node->mNumChildren);
+	for (uint32_t i = 0; i < assimp_node->mNumChildren; ++i)
+	{
+		node->child_list.emplace_back(parse_node(assimp_node->mChildren[i]));
+	}
+
+	return node;
+}
+
+static void parse_nodes(const aiScene* assimp_scene, SceneRef& result)
+{
+	result->root_node = parse_node(assimp_scene->mRootNode);
+}
+
+
 static void parse_scene(const aiScene* assimp_scene, SceneRef& result)
 {
 	parse_meshes(assimp_scene, result);
 	parse_textures(assimp_scene, result);
 	//TODO: parse_materials
-	//TODO: parse_nodes
+	parse_nodes(assimp_scene, result);
 	//TODO: parse_animations
 	parse_cameras(assimp_scene, result);
 }
