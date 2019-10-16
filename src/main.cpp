@@ -2,7 +2,7 @@
 #include <SDL.h>
 #define GLM_FORCE_RADIANS 
 #define GLM_ENABLE_EXPERIMENTAL
-#define GLM_FORCE_DEPTH_ZERO_TO_ONE //TODO: ???
+//#define GLM_FORCE_DEPTH_ZERO_TO_ONE //TODO: ???
 #include <glm/gtc/matrix_transform.hpp> 
 #include <glm/gtx/transform.hpp>
 #include <chrono>
@@ -22,6 +22,9 @@
 #include "es2/vertex_array.h"
 #include "model_builder.h"
 #include "vertex_array_manager.h"
+
+#include "generic_shader_sources.hpp"
+#include <regex>
 
 int main(int argc, char** argv) 
 {
@@ -119,6 +122,17 @@ int main(int argc, char** argv)
 
 	auto last = std::chrono::steady_clock::now();
 	auto last_render = last;
+
+	std::smatch m;
+	std::regex rgx("#ifdef (\\w+)[^ ]*\\n");
+
+	auto s = generic_vertex_shader;
+
+	while (std::regex_search(s, m, rgx)) 
+	{
+		std::cout << m[1].str() << std::endl;
+		s = m.suffix().str();
+	}
 
 	SDL_Event event;
 	bool is_running = true;
