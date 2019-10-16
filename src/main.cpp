@@ -17,7 +17,7 @@
 	#include <GLES/glplatform.h>
 #endif
 
-#include "texture_manager.h"
+#include "texture_factory.h"
 #include "shader_manager.h"
 #include "es2/vertex_array.h"
 #include "model_builder.h"
@@ -144,7 +144,6 @@ int main(int argc, char** argv)
 	while (is_running)
 	{
 		ShaderManager::get_instance()->flush();
-		TextureManager::get_instance()->flush();
 
 		static float cam_fov(40.0f);
 		static float cam_aspect = width / static_cast<float>(height);

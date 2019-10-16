@@ -7,7 +7,7 @@
 #include <assimp/postprocess.h>
 #include <assimp/pbrmaterial.h>
 #include "vertex_array_factory.h"
-#include "texture_manager.h"
+#include "texture_factory.h"
 #include "default_material.h"
 #include "pbr_material.h"
 #include <glm/glm.hpp>
@@ -352,7 +352,7 @@ static AbstractTextureRef parse_texture(const aiTexture* assimp_texture)
 		texture_size *= assimp_texture->mHeight;
 	}
 
-	auto texture_manager = TextureManager::get_instance();
+	auto texture_manager = TextureFactory::get_instance();
 	return texture_manager->make(texture_ptr, texture_size);
 }
 
