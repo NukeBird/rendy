@@ -371,6 +371,9 @@ static void parse_scene(const aiScene* assimp_scene, SceneRef& result)
 {
 	parse_meshes(assimp_scene, result);
 	parse_textures(assimp_scene, result);
+	//TODO: parse_materials
+	//TODO: parse_nodes
+	//TODO: parse_animations
 	parse_cameras(assimp_scene, result);
 }
 
