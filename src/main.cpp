@@ -18,7 +18,7 @@
 #endif
 
 #include "texture_factory.h"
-#include "shader_manager.h"
+#include "shader_factory.h"
 #include "es2/vertex_array.h"
 #include "model_builder.h"
 #include "vertex_array_factory.h"
@@ -85,7 +85,7 @@ int main(int argc, char** argv)
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
 
 	std::cout << "GENERIC SHADER STATUS: "
-		<< ShaderManager::get_instance()->get_generic_shader()->validate()
+		<< ShaderFactory::get_instance()->get_generic_shader()->validate()
 		<< std::endl;
 
 	//ShaderManager::get_instance()->reload();
@@ -143,8 +143,6 @@ int main(int argc, char** argv)
 	bool is_running = true;
 	while (is_running)
 	{
-		ShaderManager::get_instance()->flush();
-
 		static float cam_fov(40.0f);
 		static float cam_aspect = width / static_cast<float>(height);
 		static glm::vec3 cam_pos(0.0, 0.0, 2.6);

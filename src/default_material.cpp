@@ -1,10 +1,10 @@
 #include "default_material.h"
-#include "shader_manager.h"
+#include "shader_factory.h"
 
 DefaultMaterial::DefaultMaterial(const AbstractTextureRef& diffuse_texture,
 	const AbstractTextureRef& normal_texture)
 {
-	auto shader_manager = ShaderManager::get_instance();
+	auto shader_manager = ShaderFactory::get_instance();
 	shader = shader_manager->get_generic_shader();
 	this->diffuse_texture = diffuse_texture;
 	this->normal_texture = normal_texture;

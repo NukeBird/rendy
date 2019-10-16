@@ -1,11 +1,11 @@
 #include "pbr_material.h"
-#include "shader_manager.h"
+#include "shader_factory.h"
 
 PBRMaterial::PBRMaterial(const AbstractTextureRef& albedo_texture,
 	const AbstractTextureRef& ambient_metallic_roughness_texture, 
 	const AbstractTextureRef& normal_texture)
 {
-	auto shader_manager = ShaderManager::get_instance();
+	auto shader_manager = ShaderFactory::get_instance();
 	shader = shader_manager->get_generic_shader();
 
 	this->albedo_texture = albedo_texture;
