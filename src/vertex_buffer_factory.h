@@ -3,12 +3,8 @@
 #include "abstract_buffer.h"
 #include <vector>
 
-class VertexBufferManager: public Singleton<VertexBufferManager>
+class VertexBufferFactory: public Singleton<VertexBufferFactory>
 {
 public:
 	AbstractBufferRef make(uint32_t size, const void* ptr);
-	void reload();
-	void flush();
-private:
-	std::vector<AbstractBufferRef> vbo_list;
 };
