@@ -6,7 +6,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <assimp/pbrmaterial.h>
-#include "vertex_array_manager.h"
+#include "vertex_array_factory.h"
 #include "texture_manager.h"
 #include "default_material.h"
 #include "pbr_material.h"
@@ -311,7 +311,7 @@ static void parse_meshes(const aiScene* scene, SceneRef& result)
 	{
 		auto& mesh = result->mesh_list[i];
 
-		auto vao = VertexArrayManager::get_instance()->make
+		auto vao = VertexArrayFactory::get_instance()->make
 		(
 			vert_list[i].get(),
 			index_list[i].get(), 
