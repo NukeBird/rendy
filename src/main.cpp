@@ -42,7 +42,7 @@ int main(int argc, char** argv)
 		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
@@ -138,12 +138,12 @@ int main(int argc, char** argv)
 	bool is_running = true;
 	while (is_running)
 	{
-		static float cam_fov(60.0f);
+		static float cam_fov(45.0f);
 		static float cam_aspect = width / static_cast<float>(height);
 		static glm::vec3 cam_pos(0.0, 0.0, 2.6);
 		static glm::vec3 cam_target(0.0, 0.0, 1.3);
-		static float near = 0.1f;
-		static float far = 30.0f;
+		static float near = 0.25f;
+		static float far = 10.0f;
 
 		auto now = std::chrono::steady_clock::now();
 		std::chrono::duration<float> d = now - last;

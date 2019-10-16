@@ -2,6 +2,7 @@
 #include <GL/glew.h> //TODO
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
+#include <mutex> //call_once
 
 ES2::Texture::Texture(const char* memory, uint32_t length)
 {
@@ -77,10 +78,22 @@ void ES2::Texture::bind(uint32_t slot)
 	glActiveTexture(GL_TEXTURE0 + slot);
 	glBindTexture(GL_TEXTURE_2D, id);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); //TODO
+
+#ifdef _WIN32
+	static std::once_flag flag;
+	static float max_aniso = 0.0f;
+	std::call_once(flag, [&]()
+	{
+		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max_aniso);
+		printf("MAX_ANISOTROPY : %f\n", max_aniso);
+	});
+
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, max_aniso);
+#endif
 }
 
 void ES2::Texture::unbind(uint32_t slot)

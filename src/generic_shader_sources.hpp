@@ -265,7 +265,7 @@ R"(
 
 	vec4 calculate_direct_light()
 	{	
-		vec3 light_pos = vec3(0, 2.7, 2.3);
+		vec3 light_pos = vec3(0, 0.7, 2.6);
 		vec3 light_dir = normalize(light_pos - v_position); //TODO
 		vec3 camera_position = u_camera_position;
 
@@ -283,7 +283,7 @@ R"(
 
 		float distance    = length(light_pos - v_position);
         float attenuation = 1.0 / max(distance * distance, 0.001);
-        vec3 radiance     = vec3(1.0, 0.839, 0.66) * vec3(28.5) * vec3(attenuation);        
+        vec3 radiance     = vec3(1.0, 0.839, 0.66) * vec3(10.5) * vec3(attenuation);        
 
 		float f_ndf = distribution_ggx(f_normal, f_h, f_roughness);  
 		float f_g   = geometry_smith(f_normal, f_v, f_l, f_roughness);  
