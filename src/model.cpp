@@ -123,7 +123,7 @@ void Model::draw(const glm::mat4& transform, const glm::mat4& view, const glm::m
 
 		draw_call.vao->bind(shader_variant);
 
-		material->bind(draw_call.extra_flags);
+		material->bind(settings);
 		shader_variant->set_uniform("u_view", draw_call.view);
 		shader_variant->set_uniform("u_projection", draw_call.proj);
 		shader_variant->set_uniform("u_view_projection", draw_call.proj * 
@@ -164,7 +164,7 @@ void Model::draw_node(uint32_t node_id,
 
 		mesh.vao->bind(shader_variant);
 
-		material->bind(mesh.flags);
+		material->bind(settings);
 		shader_variant->set_uniform("u_view", view);
 		shader_variant->set_uniform("u_projection", proj);
 		shader_variant->set_uniform("u_view_projection", proj * view);

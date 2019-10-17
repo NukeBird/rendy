@@ -44,7 +44,7 @@ void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::vec3& v
 	}
 	else
 	{
-		glUniformMatrix3fv(location, 1, false, &vec[0]);
+		glUniform3fv(location, 1, &vec[0]);
 	}
 }
 

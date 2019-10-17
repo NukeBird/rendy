@@ -133,13 +133,7 @@ precision mediump float;
 #endif
 
 #ifdef USE_DIRECT_LIGHTS
-	struct DirectLight
-	{
-		vec3 color;
-		vec3 direction;
-	};
-
-	uniform DirectLight direct_lights[DIRECT_LIGHT_COUNT];
+	uniform vec3 direct_lights[DIRECT_LIGHT_COUNT];
 #endif
 
 	uniform vec3 u_camera_position;
@@ -275,57 +269,48 @@ precision mediump float;
 
 	vec4 calculate_direct_light()
 	{	
+		vec3 light_pos = vec3(0, 0.8, 2.6);
+		vec3 light_dir = normalize(light_pos - v_position); //TODO
 		vec3 camera_position = u_camera_position;
 
 		vec4 f_albedo = get_diffuse(); //TODO?
 		float f_metallic = get_metallic();
 		float f_roughness = get_roughness();
 		vec3 f_normal = get_normal();
-		vec3 f_v = normalize(v_position - camera_position);
+
+		vec3 f_v = normalize(camera_position - v_position);
 		vec3 f_f0 = vec3(0.04f);
 		f_f0 = mix(f_f0, f_albedo.rgb, f_metallic);
 
-		vec4 result = f_albedo;
+		vec3 f_l = light_dir;
+		vec3 f_h = normalize(f_v + f_l);
 
-		for(int i = 0; i < DIRECT_LIGHT_COUNT; ++i)
-		{
-			vec3 light_dir = normalize(direct_lights[i].direction); 
-			vec3 light_color = direct_lights[i].color; 
-			//normalize(light_pos - v_position); //TODO
+		float distance    = length(light_pos - v_position);
+        float attenuation = 1.0 / max(distance * distance, 0.001);
+        vec3 radiance     = vec3(1.0, 0.839, 0.66) * vec3(4.5) * vec3(attenuation);        
 
-			vec3 f_l = light_dir;
-			vec3 f_h = normalize(f_v + f_l);
+		float f_ndf = distribution_ggx(f_normal, f_h, f_roughness);  
+		float f_g   = geometry_smith(f_normal, f_v, f_l, f_roughness);  
+		vec3 f_f = fresnel_schlick(max(dot(f_h, f_v), 0.0), f_f0);
 
-			/*float distance    = length(light_pos - v_position);
-			float attenuation = 1.0 / max(distance * distance, 0.001);
-			vec3 radiance     = vec3(1.0, 0.839, 0.66) * vec3(10.5) * vec3(attenuation);*/        
-
-			float f_ndf = distribution_ggx(f_normal, f_h, f_roughness);  
-			float f_g   = geometry_smith(f_normal, f_v, f_l, f_roughness);  
-			vec3 f_f = fresnel_schlick(max(dot(f_h, f_v), 0.0), f_f0);
-
-			vec3 f_s = f_f;
-			vec3 f_d = vec3(1.0) - f_s;
-			f_d *= 1.0 - f_metallic;	  
+		vec3 f_s = f_f;
+        vec3 f_d = vec3(1.0) - f_s;
+        f_d *= 1.0 - f_metallic;	  
         
-			vec3 numerator    = f_ndf * f_g * f_f;
-			float denominator = 4.0 * max(dot(f_normal, f_v), 0.0) * max(dot(f_normal, f_l), 0.0);
-			vec3 specular     = numerator / max(denominator, 0.001);  
+        vec3 numerator    = f_ndf * f_g * f_f;
+        float denominator = 4.0 * max(dot(f_normal, f_v), 0.0) * max(dot(f_normal, f_l), 0.0);
+        vec3 specular     = numerator / max(denominator, 0.001);  
             
-			// add to outgoing radiance Lo
-			float NdotL = max(dot(f_normal, f_l), 0.0);   
+        // add to outgoing radiance Lo
+        float NdotL = max(dot(f_normal, f_l), 0.0);   
 
-			
-			result.rgb += (f_d * f_albedo.rgb / PI + specular) * NdotL; 
+		vec4 result = f_albedo;
+        result.rgb = (f_d * f_albedo.rgb / PI + specular) * radiance * NdotL; 
 
-			//vec3 ambient = vec3(0.03) * f_albedo.rgb;
-			//result.rgb += ambient;
+		//vec3 ambient = vec3(0.03) * f_albedo.rgb;
+		//result.rgb += ambient;
 
-		}
-
-		//result.rgb /= float(DIRECT_LIGHT_COUNT);
-
-		return result;
+		return vec4(result);
 	}
 #endif
 

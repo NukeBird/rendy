@@ -79,9 +79,9 @@ int main(int argc, char** argv)
 		SDL_GL_SetSwapInterval(0);
 	#endif // _WIN32
 
-	auto scene = SceneBuilder::build("assets/shoes.glb");
+	//auto scene = SceneBuilder::build("assets/matball.glb");
 
-	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	/*unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::mt19937 generator(seed);
 	std::uniform_real_distribution<float> uniform01(0.0, 1.0);
 
@@ -101,19 +101,23 @@ int main(int argc, char** argv)
 
 		glm::vec3 color
 		{
-			uniform01(generator)*10,
-			uniform01(generator)*10,
-			uniform01(generator)*10
+			glm::max(0.75f, uniform01(generator) * 5.0f)
 		};
 
-		scene->direct_light_list.emplace_back(color, direction);
-	}
+		scene->direct_light_list.emplace_back(color, glm::normalize(direction));
+	}*/
+
+	static glm::vec3 cam_pos(0.0, 0.0, 2.6);
+	static glm::vec3 cam_target(0.0, 0.0, 1.3);
+
+	/*scene->direct_light_list.emplace_back(glm::vec3(1),
+		glm::normalize(cam_target - cam_pos));*/
 
 
-	/*auto model = ModelBuilder::build("assets/shoes.glb");
+	auto model = ModelBuilder::build("assets/shoes.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
-	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;*/
+	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
 
 	std::cout << "GENERIC SHADER STATUS: "
 		<< ShaderFactory::get_instance()->get_generic_shader()->validate()
@@ -155,12 +159,10 @@ int main(int argc, char** argv)
 	bool is_running = true;
 	while (is_running)
 	{
-		static float cam_fov(50.0f);
+		static float cam_fov(60.0f);
 		static float cam_aspect = width / static_cast<float>(height);
-		static glm::vec3 cam_pos(0.0, 0.0, 2.6);
-		static glm::vec3 cam_target(0.0, 0.0, 1.3);
-		static float near = 0.1f;
-		static float far = 20.0f;
+		static float near = 0.01f;
+		static float far = 30.0f;
 
 		auto now = std::chrono::steady_clock::now();
 		std::chrono::duration<float> d = now - last;
@@ -179,7 +181,7 @@ int main(int argc, char** argv)
 
 		glm::mat4 transform = glm::translate(cam_target) * 
 			glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
-			glm::scale(glm::vec3{ 0.2f });
+			glm::scale(glm::vec3{ 0.5f });
 
 		while (SDL_PollEvent(&event))
 		{
@@ -195,7 +197,8 @@ int main(int argc, char** argv)
 			glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			quack.render(scene, transform, view, proj);
+			model->draw(transform, view, proj);
+			//quack.render(scene, transform, view, proj);
 		}
 		SDL_GL_SwapWindow(window);
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));

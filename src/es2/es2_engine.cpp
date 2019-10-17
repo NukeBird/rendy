@@ -71,24 +71,23 @@ void ES2Engine::render(const DrawCall& draw_call,
 	ShaderSettings settings; //TODO: lights
 	settings.flags = draw_call.extra_flags | material->get_flags();
 
-	if (!scene->direct_light_list.empty())
+	/*if (!scene->direct_light_list.empty())
 	{
 		settings.flags |= ShaderFlag::USE_DIRECT_LIGHTS;
 		settings.properties[ShaderProperty::DIRECT_LIGHT_COUNT] = 
 			static_cast<uint32_t>(scene->direct_light_list.size());
-	}
+	}*/
 
 	auto shader_variant = shader->compile(settings); //TODO
 
-	if (!shader_variant->validate())
+	//if (!shader_variant->validate())
 	{
-		printf("NOT VALID\n");
+		//printf("NOT VALID\n");
 	}
 
-	printf("A: %p\n", shader_variant.get());
-
 	draw_call.vao->bind(shader_variant);
-	material->bind(settings.flags);
+	//printf("%d\n", material->validate());
+	material->bind(settings);
 	shader_variant->set_uniform("u_view", draw_call.view);
 	shader_variant->set_uniform("u_projection", draw_call.proj);
 	shader_variant->set_uniform("u_view_projection", draw_call.proj *
@@ -96,14 +95,14 @@ void ES2Engine::render(const DrawCall& draw_call,
 	shader_variant->set_uniform("u_transform", draw_call.model);
 	shader_variant->set_uniform("u_camera_position", camera_position);
 
-	for (uint32_t i = 0; i < scene->direct_light_list.size(); ++i)
+	/*for (uint32_t i = 0; i < scene->direct_light_list.size(); ++i)
 	{
 		auto& light = scene->direct_light_list[i];
 
 		auto meta = "direct_lights[" + std::to_string(i) + "]";
 		shader_variant->set_uniform(meta  + ".color", light.color);
 		shader_variant->set_uniform(meta + ".direction", light.direction);
-	}
+	}*/
 
 	draw_call.vao->draw();
 	draw_call.vao->unbind();

@@ -38,12 +38,14 @@ bool PBRMaterial::validate() const
 {
 	if (!albedo_texture || !albedo_texture->validate())
 	{
+		printf("Invalid albedo texture\n");
 		return false;
 	}
 
 	if (!ambient_metallic_roughness_texture ||
 		!ambient_metallic_roughness_texture->validate())
 	{
+		printf("Invalid ambient metallic roughness texture\n");
 		return false;
 	}
 
@@ -51,12 +53,14 @@ bool PBRMaterial::validate() const
 	{
 		if (!normal_texture->validate())
 		{
+			printf("Invalid normal texture\n");
 			return false;
 		}
 	}
 
 	if (!shader->validate())
 	{
+		printf("Invalid shader\n");
 		return false;
 	}
 
@@ -80,12 +84,9 @@ uint32_t PBRMaterial::get_flags() const
 	return flags;
 }
 
-void PBRMaterial::bind(uint32_t extra_flags)
+void PBRMaterial::bind(const ShaderSettings& settings)
 {
-	ShaderSettings settings; //TODO: lights
-	settings.flags = get_flags() | extra_flags;
 	auto shader_variant = shader->compile(settings);
-	printf("B: %p\n", shader_variant.get());
 
 	shader_variant->bind();
 

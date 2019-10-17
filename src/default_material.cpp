@@ -73,10 +73,8 @@ uint32_t DefaultMaterial::get_flags() const
 	return flags;
 }
 
-void DefaultMaterial::bind(uint32_t extra_flags)
+void DefaultMaterial::bind(const ShaderSettings& settings)
 {
-	ShaderSettings settings; //TODO: lights
-	settings.flags = get_flags() | extra_flags;
 	auto shader_variant = shader->compile(settings);
 	shader_variant->bind();
 
