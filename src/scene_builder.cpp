@@ -513,7 +513,6 @@ static void parse_materials(const aiScene* assimp_scene, SceneRef& result)
 	}
 }
 
-
 static void parse_scene(const aiScene* assimp_scene, SceneRef& result)
 {
 	parse_meshes(assimp_scene, result);
