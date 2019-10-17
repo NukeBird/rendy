@@ -404,12 +404,121 @@ static void parse_nodes(const aiScene* assimp_scene, SceneRef& result)
 	result->root_node = parse_node(assimp_scene->mRootNode);
 }
 
+static int to_index(aiString str)
+{
+	if (str.data[0] == '*')
+	{
+		str.data[0] = ' ';
+		std::string sss(str.data, str.length);
+		return std::stoi(sss);
+	}
+
+	return -1;
+}
+
+static AbstractTextureRef parse_texture(const aiMaterial* material,
+	std::vector<AbstractTextureRef>& texture_list,
+	const aiTextureType& type, uint32_t assimp_index = 0)
+{
+	AbstractTextureRef result;
+
+	aiString path;
+	if (material->GetTexture(type, assimp_index, &path))
+	{
+		if (path.length > 0)
+		{
+			auto index = to_index(path);
+
+			if (index >= 0 && index < texture_list.size())
+			{
+				result = texture_list[index];
+			}
+		}
+	}
+
+	return result;
+}
+
+static AbstractMaterialRef parse_default_material(const aiMaterial* material,
+	std::vector<AbstractTextureRef>& texture_list)
+{
+	auto& mat = *material;
+
+	std::shared_ptr<AbstractTexture> diffuse;
+	std::shared_ptr<AbstractTexture> normalmap;
+
+	diffuse = parse_texture(material, texture_list,
+		aiTextureType_DIFFUSE);
+
+	normalmap = parse_texture(material, texture_list,
+		aiTextureType_NORMALS);
+
+	return std::make_shared<DefaultMaterial>(diffuse, normalmap);
+}
+
+static AbstractMaterialRef parse_pbr_material(const aiMaterial* material,
+	std::vector<AbstractTextureRef>& texture_list)
+{
+	auto& mat = *material;
+
+	std::shared_ptr<AbstractTexture> albedo;
+	std::shared_ptr<AbstractTexture> ao_metallic_roughness;
+	std::shared_ptr<AbstractTexture> normalmap;
+
+	albedo = parse_texture(material, texture_list,
+		AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_TEXTURE); 
+
+	if (!albedo)
+	{
+		return nullptr;
+	}
+	
+	ao_metallic_roughness = parse_texture(material, texture_list,
+		AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLICROUGHNESS_TEXTURE);
+
+	if (!ao_metallic_roughness)
+	{
+		return nullptr;
+	}
+
+	normalmap = parse_texture(material, texture_list,
+		aiTextureType_NORMALS);
+
+	return std::make_shared<PBRMaterial>(albedo, ao_metallic_roughness, normalmap);
+}
+
+static AbstractMaterialRef parse_material(const aiMaterial* material, 
+	std::vector<AbstractTextureRef>& texture_list)
+{
+	AbstractMaterialRef result;
+	
+	result = parse_pbr_material(material, texture_list);
+
+	if (!result)
+	{
+		result = parse_default_material(material, texture_list);
+	}
+
+	return result;
+}
+
+static void parse_materials(const aiScene* assimp_scene, SceneRef& result)
+{
+	result->material_list.reserve(static_cast<size_t>(assimp_scene->mNumMaterials));
+
+	for (unsigned i = 0; i < assimp_scene->mNumMaterials; ++i)
+	{
+		result->material_list.emplace_back(parse_material(
+			assimp_scene->mMaterials[i], result->texture_list));
+	}
+}
+
 
 static void parse_scene(const aiScene* assimp_scene, SceneRef& result)
 {
 	parse_meshes(assimp_scene, result);
 	parse_textures(assimp_scene, result);
-	//TODO: parse_materials
+	parse_materials(assimp_scene, result);
 	parse_nodes(assimp_scene, result);
 	//TODO: parse_animations
 	parse_cameras(assimp_scene, result);
