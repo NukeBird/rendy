@@ -8,7 +8,7 @@ std::string ShaderSettings::generate_definitions() const
 	if (flags & USE_DIRECT_LIGHTS)
 	{
 		definitions += "#define DIRECT_LIGHT_COUNT " + 
-			std::to_string(glm::min(properties[DIRECT_LIGHT_COUNT], 1U))
+			std::to_string(glm::max(properties[DIRECT_LIGHT_COUNT], 1U))
 			+ "\n";
 	}
 

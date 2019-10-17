@@ -85,6 +85,8 @@ void PBRMaterial::bind(uint32_t extra_flags)
 	ShaderSettings settings; //TODO: lights
 	settings.flags = get_flags() | extra_flags;
 	auto shader_variant = shader->compile(settings);
+	printf("B: %p\n", shader_variant.get());
+
 	shader_variant->bind();
 
 	if (albedo_texture)

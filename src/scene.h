@@ -67,6 +67,18 @@ struct NodeS //TODO: rename
 	std::vector<NodeRef> child_list;
 };
 
+struct DirectLightS
+{
+	DirectLightS(const glm::vec3& color, const glm::vec3& direction)
+	{
+		this->color = color;
+		this->direction = direction;
+	}
+
+	glm::vec3 color;
+	glm::vec3 direction;
+};
+
 struct Scene //TODO: struct?
 {
 	std::vector<MeshS> mesh_list;
@@ -74,6 +86,7 @@ struct Scene //TODO: struct?
 	std::vector<AbstractMaterialRef> material_list;
 	std::vector<CameraS> camera_list;
 	std::vector<AnimationS> animation_list;
+	std::vector<DirectLightS> direct_light_list;
 	std::unordered_map<std::string, NodeS::NodeRef> node_map;
 	NodeS::NodeRef root_node;
 };

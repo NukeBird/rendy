@@ -7,6 +7,7 @@
 #include <glm/gtx/transform.hpp>
 #include <chrono>
 #include <thread>
+#include <random>
 
 #ifdef _WIN32
 	#include <gl/glew.h>
@@ -28,6 +29,7 @@
 #include "scene_builder.h"
 #include "generic_shader_sources.hpp"
 #include <regex>
+#include "es2/es2_engine.h"
 
 int main(int argc, char** argv) 
 {
@@ -77,12 +79,41 @@ int main(int argc, char** argv)
 		SDL_GL_SetSwapInterval(0);
 	#endif // _WIN32
 
-	SceneBuilder::build("assets/shoes.glb");
+	auto scene = SceneBuilder::build("assets/shoes.glb");
 
-	auto model = ModelBuilder::build("assets/shoes.glb");
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::mt19937 generator(seed);
+	std::uniform_real_distribution<float> uniform01(0.0, 1.0);
+
+	const uint32_t light_count = 16;
+
+	for (uint32_t i = 0; i < light_count; ++i)
+	{
+		float theta = 2 * M_PI * uniform01(generator);
+		float phi = acos(1 - 2 * uniform01(generator));
+
+		glm::vec3 direction
+		{
+			sin(phi) * cos(theta),
+			sin(phi) * sin(theta),
+			cos(phi)
+		};
+
+		glm::vec3 color
+		{
+			uniform01(generator)*10,
+			uniform01(generator)*10,
+			uniform01(generator)*10
+		};
+
+		scene->direct_light_list.emplace_back(color, direction);
+	}
+
+
+	/*auto model = ModelBuilder::build("assets/shoes.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
-	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
+	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;*/
 
 	std::cout << "GENERIC SHADER STATUS: "
 		<< ShaderFactory::get_instance()->get_generic_shader()->validate()
@@ -91,32 +122,11 @@ int main(int argc, char** argv)
 	//ShaderManager::get_instance()->reload();
 	//VertexArrayManager::get_instance()->reload();
 
-	std::cout << "MODEL STATUS: " << model->validate() << std::endl;
-
-	float verts[] =
-	{
-		-0.5f,  0.5f,  -1.0f,
-		 0.5f,  0.5f,  -1.0f,
-		 0.5f, -0.5f,  -1.0f,
-		-0.5f, -0.5f,  -1.0f
-	};
-
-	uint16_t indices[] =
-	{
-		0, 1, 2,
-		0, 2, 3
-	};
+	//std::cout << "MODEL STATUS: " << model->validate() << std::endl;
 
 	GLuint fucking_vao; //should be active at least one _REAL_ vao
 	glGenVertexArrays(1, &fucking_vao);
 	glBindVertexArray(fucking_vao);
-
-	/*auto layout = std::make_shared<BufferLayout>(std::initializer_list<BufferElement>{{ShaderDataType::Float3, "aPos"} });
-
-	auto vao = VertexArrayManager::get_instance()->make(verts, 12 * sizeof(float),
-		indices, 6 * sizeof(uint16_t), layout);
-
-	std::cout << "VAO status: " << vao->validate() << std::endl;*/
 
 	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_DEPTH_TEST);
@@ -139,11 +149,13 @@ int main(int argc, char** argv)
 		s = m.suffix().str();
 	}
 
+	ES2Engine quack;
+
 	SDL_Event event;
 	bool is_running = true;
 	while (is_running)
 	{
-		static float cam_fov(40.0f);
+		static float cam_fov(50.0f);
 		static float cam_aspect = width / static_cast<float>(height);
 		static glm::vec3 cam_pos(0.0, 0.0, 2.6);
 		static glm::vec3 cam_target(0.0, 0.0, 1.3);
@@ -167,7 +179,7 @@ int main(int argc, char** argv)
 
 		glm::mat4 transform = glm::translate(cam_target) * 
 			glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
-			glm::scale(glm::vec3{ 0.4f });
+			glm::scale(glm::vec3{ 0.2f });
 
 		while (SDL_PollEvent(&event))
 		{
@@ -183,7 +195,7 @@ int main(int argc, char** argv)
 			glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			model->draw(transform, view, proj);
+			quack.render(scene, transform, view, proj);
 		}
 		SDL_GL_SwapWindow(window);
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));

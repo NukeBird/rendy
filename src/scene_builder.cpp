@@ -423,7 +423,7 @@ static AbstractTextureRef parse_texture(const aiMaterial* material,
 	AbstractTextureRef result;
 
 	aiString path;
-	if (material->GetTexture(type, assimp_index, &path))
+	if (material->GetTexture(type, assimp_index, &path) == AI_SUCCESS)
 	{
 		if (path.length > 0)
 		{

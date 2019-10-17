@@ -122,6 +122,12 @@ void ES2::ShaderVariant::unbind()
 int ES2::ShaderVariant::get_uniform_location(const std::string& name) const
 {
 	int location = glGetUniformLocation(program_id, name.c_str()); //TODO: optimize (map locations once)
+	
+	if (location < 0)
+	{
+		//printf("location %d for %s\n", location, name.c_str()); //TODO
+	}
+
 	return location;
 }
 
