@@ -32,15 +32,21 @@ find_package(glm REQUIRED)
 set(PROJECT_LIBS SDL2::SDL2main SDL2::SDL2 stb::stb
     Assimp::assimp glm)
 
+
 if(WIN32)
     hunter_add_package(glew)
     find_package(glew CONFIG REQUIRED)
+
     set(PROJECT_LIBS ${PROJECT_LIBS} glew::glew)
 
     add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_FILES})
     file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
 else()
+    #TODO: OPTICK_ENABLED=OFF
     add_library(${PROJECT_NAME} ${PROJECT_SOURCE_FILES})
 endif()
+
+add_subdirectory(dep)
+set(PROJECT_LIBS ${PROJECT_LIBS} OptickCore)
 
 target_link_libraries(${PROJECT_NAME} ${PROJECT_LIBS})

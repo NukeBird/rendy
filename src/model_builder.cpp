@@ -16,8 +16,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <optick.h>
+
 const unsigned get_import_flags()
 {
+	OPTICK_EVENT();
 	return //aiProcessPreset_TargetRealtime_MaxQuality |
 		aiProcess_GenNormals |
 		aiProcess_GenSmoothNormals |
@@ -43,6 +46,7 @@ const unsigned get_import_flags()
 
 uint32_t parse_mesh_flags(const aiMesh* mesh)
 {
+	OPTICK_EVENT();
 	uint32_t flags = 0;
 
 	if (mesh->HasPositions())
@@ -96,6 +100,7 @@ uint32_t parse_mesh_flags(const aiMesh* mesh)
 
 uint32_t parse_mesh_size(uint32_t flags)
 {
+	OPTICK_EVENT();
 	uint32_t element_count = 0; 
 
 	if (flags & USE_VERTEX_POSITION)
@@ -138,6 +143,7 @@ uint32_t parse_mesh_size(uint32_t flags)
 
 BufferLayoutRef parse_buffer_layout(uint32_t flags)
 {
+	OPTICK_EVENT();
 	std::vector<BufferElement> buffer_elements;
 
 	//POSITION
@@ -181,6 +187,7 @@ BufferLayoutRef parse_buffer_layout(uint32_t flags)
 
 std::vector<Mesh> parse_meshes(const aiScene* scene)
 {
+	OPTICK_EVENT();
 	std::vector<Mesh> result;
 	result.reserve(static_cast<size_t>(scene->mNumMeshes));
 
@@ -293,11 +300,15 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 
 glm::mat4 parse_transform(const aiMatrix4x4& from) //TODO: legit?
 {
+	OPTICK_EVENT();
 	return glm::transpose(glm::make_mat4(&from.a1));
 }
 
 Node parse_node(const aiNode* node)
 {
+	OPTICK_EVENT();
+	OPTICK_TAG("mesh count", node->mNumMeshes);
+
 	Node result;
 	
 	result.name = std::string(node->mName.data, 
@@ -319,6 +330,7 @@ void link_nodes(std::vector<Node>& node_list,
 	std::unordered_map<uint32_t, const aiNode*>& index_to_node,
 	std::unordered_map<const aiNode*, uint32_t>& node_to_index)
 {
+	OPTICK_EVENT();
 	for (uint32_t index = 0; index < static_cast<uint32_t>(node_list.size()); 
 		++index)
 	{
@@ -344,7 +356,8 @@ void link_nodes(std::vector<Node>& node_list,
 }
 
 std::vector<Node> parse_nodes(const aiScene* scene)
-{ 
+{
+	OPTICK_EVENT();
 	std::vector<Node> result;
 
 	std::stack<const aiNode*> unhandled_nodes;
@@ -380,6 +393,7 @@ std::vector<Node> parse_nodes(const aiScene* scene)
 
 int to_index(aiString str)
 {
+	OPTICK_EVENT();
 	if (str.data[0] == '*')
 	{
 		str.data[0] = ' ';
@@ -392,6 +406,8 @@ int to_index(aiString str)
 
 std::shared_ptr<AbstractTexture> get_texture(const aiScene* scene, int index)
 {
+	OPTICK_EVENT();
+
 	if (index < 0)
 	{
 		return nullptr;
@@ -403,6 +419,8 @@ std::shared_ptr<AbstractTexture> get_texture(const aiScene* scene, int index)
 	}
 
 	auto assimp_texture = scene->mTextures[index];
+	OPTICK_TAG("width", assimp_texture->mWidth);
+	OPTICK_TAG("height", assimp_texture->mHeight);
 
 	const char* texture_ptr = 
 		reinterpret_cast<const char*>(assimp_texture->pcData);
@@ -420,6 +438,7 @@ std::shared_ptr<AbstractTexture> get_texture(const aiScene* scene, int index)
 AbstractMaterialRef parse_default_material(const aiScene* scene,
 	const aiMaterial* material)
 {
+	OPTICK_EVENT();
 	auto& mat = *material;
 
 	std::shared_ptr<AbstractTexture> diffuse;
@@ -455,6 +474,7 @@ AbstractMaterialRef parse_default_material(const aiScene* scene,
 AbstractMaterialRef parse_pbr_material(const aiScene* scene,
 	const aiMaterial* material)
 {
+	OPTICK_EVENT();
 	auto& mat = *material;
 
 	std::shared_ptr<AbstractTexture> albedo;
@@ -534,6 +554,7 @@ AbstractMaterialRef parse_pbr_material(const aiScene* scene,
 AbstractMaterialRef parse_material(const aiScene* scene,
 	const aiMaterial* material)
 {
+	OPTICK_EVENT();
 	AbstractMaterialRef result;
 	
 	result = parse_pbr_material(scene, material);
@@ -548,6 +569,9 @@ AbstractMaterialRef parse_material(const aiScene* scene,
 
 std::vector<AbstractMaterialRef> parse_materials(const aiScene* scene)
 {
+	OPTICK_EVENT();
+	OPTICK_TAG("material count", scene->mNumMaterials);
+
 	std::vector<AbstractMaterialRef> result;
 	result.reserve(static_cast<size_t>(scene->mNumMaterials));
 
@@ -562,6 +586,8 @@ std::vector<AbstractMaterialRef> parse_materials(const aiScene* scene)
 
 ModelRef ModelBuilder::build(const char* filename)
 {
+	OPTICK_EVENT();
+	OPTICK_TAG("filename", filename);
 	try
 	{
 		Assimp::Importer importer;	

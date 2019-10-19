@@ -31,8 +31,12 @@
 #include <regex>
 #include "es2/es2_engine.h"
 
+#include <optick.h>
+
 int main(int argc, char** argv) 
 {
+	OPTICK_APP("Rendy Sandbox");
+
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
 	{
 		std::cout << "Error while initializing SDL: " << SDL_GetError() << std::endl;
@@ -107,14 +111,14 @@ int main(int argc, char** argv)
 		scene->direct_light_list.emplace_back(color, glm::normalize(direction));
 	}*/
 
-	static glm::vec3 cam_pos(0.0, 0.0, 2.6);
+	static glm::vec3 cam_pos(0.0, 0.3, 2.6);
 	static glm::vec3 cam_target(0.0, 0.0, 1.3);
 
 	/*scene->direct_light_list.emplace_back(glm::vec3(1),
 		glm::normalize(cam_target - cam_pos));*/
 
 
-	auto model = ModelBuilder::build("assets/shoes.glb");
+	auto model = ModelBuilder::build("assets/momo.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
@@ -135,7 +139,7 @@ int main(int argc, char** argv)
 	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_DEPTH_TEST);
 	//glDepthFunc(GL_ALWAYS);
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND); 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -159,7 +163,7 @@ int main(int argc, char** argv)
 	bool is_running = true;
 	while (is_running)
 	{
-		static float cam_fov(60.0f);
+		static float cam_fov(50.0f);
 		static float cam_aspect = width / static_cast<float>(height);
 		static float near = 0.01f;
 		static float far = 30.0f;
@@ -181,7 +185,7 @@ int main(int argc, char** argv)
 
 		glm::mat4 transform = glm::translate(cam_target) * 
 			glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
-			glm::scale(glm::vec3{ 0.5f });
+			glm::scale(glm::vec3{ 5.0f });
 
 		while (SDL_PollEvent(&event))
 		{
