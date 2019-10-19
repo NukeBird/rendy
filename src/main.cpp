@@ -33,6 +33,21 @@
 
 #include <optick.h>
 
+void GLAPIENTRY MessageCallback(GLenum source,
+	GLenum type,
+	GLuint id,
+	GLenum severity,
+	GLsizei length,
+	const GLchar* message,
+	const void* userParam)
+{
+	//OPTICK_EVENT();
+	printf("GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+		(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
+		type, severity, message);
+}
+
+
 int main(int argc, char** argv) 
 {
 	OPTICK_APP("RendySandbox");
@@ -45,7 +60,7 @@ int main(int argc, char** argv)
 	}
 
 	#ifdef _WIN32
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
@@ -56,6 +71,7 @@ int main(int argc, char** argv)
 		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 		//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
 	#else
@@ -80,13 +96,16 @@ int main(int argc, char** argv)
 			std::cout << glewGetErrorString(glewInit()) << std::endl;
 		}
 
-		if (SDL_GL_SetSwapInterval(-1) == -1) //adaptive v-sync
+		//if (SDL_GL_SetSwapInterval(-1) == -1) //adaptive v-sync
 		{
 			SDL_GL_SetSwapInterval(1); //v-sync
 		}
+
+		//glEnable(GL_DEBUG_OUTPUT);
+		//glDebugMessageCallback(MessageCallback, 0);
 	#endif // _WIN32
 
-	auto model = ModelBuilder::build("assets/momo.glb");
+	auto model = ModelBuilder::build("assets/ainz.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
@@ -131,7 +150,7 @@ int main(int argc, char** argv)
 		//OPTICK_PUSH("Tick");
 		static float cam_fov(50.0f);
 		static float cam_aspect = width / static_cast<float>(height);
-		static glm::vec3 cam_pos(0.0, 0.3, 2.6);
+		static glm::vec3 cam_pos(0.0, 0.5, 2.8);
 		static glm::vec3 cam_target(0.0, 0.0, 1.3);
 		static float near = 0.01f;
 		static float far = 30.0f;
@@ -153,7 +172,7 @@ int main(int argc, char** argv)
 
 		glm::mat4 transform = glm::translate(cam_target) * 
 			glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
-			glm::scale(glm::vec3{ 5.0f });
+			glm::scale(glm::vec3{ 4.5f });
 
 		OPTICK_PUSH("SDL_PollEvent");
 		while (SDL_PollEvent(&event))
