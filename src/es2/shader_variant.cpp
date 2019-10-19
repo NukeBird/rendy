@@ -134,11 +134,12 @@ int ES2::ShaderVariant::get_attribute_location(const std::string& name) const
 {
 	OPTICK_EVENT();
 
-	int location = glGetAttribLocation(program_id, name.c_str());
+	int location = -1;
+	auto it = attribute_cache.find(name);
 
-	if (location < 0)
+	if (it != attribute_cache.end())
 	{
-		//printf("UwU %s\n", name.c_str());
+		return (*it).second;
 	}
 
 	OPTICK_TAG("name", name.c_str());
@@ -167,17 +168,66 @@ int ES2::ShaderVariant::get_uniform_location(const std::string& name) const
 {
 	OPTICK_EVENT();
 
-	int location = glGetUniformLocation(program_id, name.c_str()); //TODO: optimize (map locations once)
+	int location = -1;
+	auto it = uniform_cache.find(name);
+
+	if (it != uniform_cache.end())
+	{
+		return (*it).second;
+	}
 
 	OPTICK_TAG("name", name.c_str());
 	OPTICK_TAG("location", location);
-	
-	if (location < 0)
-	{
-		//printf("location %d for %s\n", location, name.c_str()); //TODO
-	}
 
 	return location;
+}
+
+void ES2::ShaderVariant::cache_attribute_locations()
+{
+	OPTICK_EVENT();
+
+	assert(program_id > 0);
+
+	int count = 0;
+	glGetProgramiv(program_id, GL_ACTIVE_ATTRIBUTES, &count);
+
+	GLint size;
+	GLenum type;
+	const GLsizei buffer_size = 32;
+	GLchar name[buffer_size];
+	GLsizei length;
+
+	for (int i = 0; i < count; ++i)
+	{
+		glGetActiveAttrib(program_id, (GLuint)i, buffer_size, &length, &size, &type, name);
+
+		int location = glGetAttribLocation(program_id, name);
+		attribute_cache[std::string(name, length)] = location;
+	}
+}
+
+void ES2::ShaderVariant::cache_uniform_locations()
+{
+	OPTICK_EVENT();
+
+	assert(program_id > 0);
+
+	int count = 0;
+	glGetProgramiv(program_id, GL_ACTIVE_UNIFORMS, &count);
+
+	GLint size;
+	GLenum type;
+	const GLsizei buffer_size = 32;
+	GLchar name[buffer_size];
+	GLsizei length;
+
+	for (int i = 0; i < count; ++i)
+	{
+		glGetActiveUniform(program_id, (GLuint)i, buffer_size, &length, &size, &type, name);
+
+		int location = glGetUniformLocation(program_id, name);
+		uniform_cache[std::string(name, length)] = location;
+	}
 }
 
 void ES2::ShaderVariant::compile_shader()
@@ -201,6 +251,9 @@ void ES2::ShaderVariant::compile_shader()
 
 	glDeleteShader(vtx_id);
 	glDeleteShader(frg_id);
+
+	cache_attribute_locations();
+	cache_uniform_locations();
 
 	OPTICK_TAG("id", program_id);
 }

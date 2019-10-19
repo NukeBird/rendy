@@ -1,5 +1,6 @@
 #pragma once
 #include "../abstract_shader_variant.h"
+#include <unordered_map>
 #include <string>
 
 namespace ES2
@@ -21,11 +22,16 @@ namespace ES2
 		virtual void unbind() override;
 	private:
 		int get_uniform_location(const std::string& name) const;
+		void cache_attribute_locations();
+		void cache_uniform_locations();
 		void compile_shader();
 		void reset();
 
 		std::string vertex_source; //TODO: remove
 		std::string fragment_source; //TODO: remove
 		uint32_t program_id = 0;
+
+		std::unordered_map<std::string, int> attribute_cache;
+		std::unordered_map<std::string, int> uniform_cache;
 	};
 };
