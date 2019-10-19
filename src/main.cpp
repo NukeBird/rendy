@@ -80,7 +80,10 @@ int main(int argc, char** argv)
 			std::cout << glewGetErrorString(glewInit()) << std::endl;
 		}
 
-		SDL_GL_SetSwapInterval(1);
+		if (SDL_GL_SetSwapInterval(-1) == -1) //adaptive v-sync
+		{
+			SDL_GL_SetSwapInterval(1); //v-sync
+		}
 	#endif // _WIN32
 
 	auto model = ModelBuilder::build("assets/momo.glb");
@@ -168,9 +171,9 @@ int main(int argc, char** argv)
 		model->draw(transform, view, proj);
 		//quack.render(scene, transform, view, proj);
 
-		OPTICK_PUSH("glFinish");
+		/*OPTICK_PUSH("glFinish");
 		glFinish();
-		OPTICK_POP();
+		OPTICK_POP();*/
 
 		OPTICK_PUSH("SwapWindow");
 		SDL_GL_SwapWindow(window);
