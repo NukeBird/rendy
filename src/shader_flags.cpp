@@ -1,14 +1,19 @@
 #include "shader_flags.h"
 #include <limits>
+#include <optick.h>
 
 uint32_t get_all_shader_flags()
 {
+	OPTICK_EVENT();
+
 	constexpr uint32_t flags = std::numeric_limits<uint32_t>::max();
 	return flags;
 }
 
 std::string shader_flags_to_defines(uint32_t flags)
 {
+	OPTICK_EVENT();
+
 	if (flags == NOTHING)
 	{
 		return "";

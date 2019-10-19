@@ -1,9 +1,11 @@
 #include "es2_engine.h"
 #include <memory>
+#include <optick.h>
 
 void ES2Engine::render(const SceneRef& scene, const glm::mat4& model, const glm::mat4& view,
 	const glm::mat4& proj)
 {
+	OPTICK_EVENT();
 	auto draw_calls = form_draw_calls(scene, model, view, proj);
 
 	glm::mat3 view_rotation(view);
@@ -18,6 +20,7 @@ void ES2Engine::render(const SceneRef& scene, const glm::mat4& model, const glm:
 std::vector<DrawCall> ES2Engine::form_draw_calls(const SceneRef& scene, const glm::mat4& model,
 	const glm::mat4& view, const glm::mat4& proj)
 {
+	OPTICK_EVENT();
 	std::vector<DrawCall> draw_calls;
 
 	form_draw_calls(scene, scene->root_node, model, 
@@ -30,6 +33,7 @@ void ES2Engine::form_draw_calls(const SceneRef& scene, const NodeS::NodeRef& nod
 	const glm::mat4 & model, const glm::mat4& view, const glm::mat4& proj, 
 	std::vector<DrawCall>& draw_calls)
 {
+	OPTICK_EVENT();
 	if (!node)
 	{
 		return;
@@ -64,6 +68,7 @@ void ES2Engine::form_draw_calls(const SceneRef& scene, const NodeS::NodeRef& nod
 void ES2Engine::render(const DrawCall& draw_call,
 	const SceneRef& scene, const glm::vec3& camera_position)
 {
+	OPTICK_EVENT();
 	auto material = draw_call.material;
 
 	auto shader = material->get_shader();

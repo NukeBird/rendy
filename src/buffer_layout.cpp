@@ -1,18 +1,23 @@
 #include "buffer_layout.h"
+#include <optick.h>
 
 BufferLayout::BufferLayout(const std::vector<BufferElement>& elements)
 {
+	OPTICK_EVENT();
 	this->elements = elements;
 	calculate();
 }
 
 uint32_t BufferLayout::get_stride() const
 {
+	OPTICK_EVENT();
+	OPTICK_TAG("stride", stride);
 	return stride;
 }
 
 const std::vector<BufferElement>& BufferLayout::get_elements() const
 {
+	OPTICK_EVENT();
 	return elements;
 }
 
@@ -38,6 +43,7 @@ std::vector<BufferElement>::const_iterator BufferLayout::end() const
 
 void BufferLayout::calculate()
 {
+	OPTICK_EVENT();
 	uint32_t offset = 0;
 	stride = 0;
 
@@ -47,18 +53,27 @@ void BufferLayout::calculate()
 		offset += element.size;
 		stride += element.size;
 	}
+
+	OPTICK_TAG("offset", offset);
+	OPTICK_TAG("stride", stride);
 }
 
 BufferElement::BufferElement(ShaderDataType type, const std::string& name)
 {
+	OPTICK_EVENT();
 	this->name = name;
 	this->type = type;
 	this->size = get_shader_data_type_size(type);
 	this->offset = 0;
+
+	OPTICK_TAG("name", name.c_str());
+	OPTICK_TAG("type", to_string(type).c_str());
+	OPTICK_TAG("size", size);
 }
 
 uint32_t BufferElement::get_component_count() const
 {
+	OPTICK_EVENT();
 	switch (type)
 	{
 		case ShaderDataType::Float:   return 1;

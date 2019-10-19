@@ -3,10 +3,14 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 #include <mutex> //call_once
+#include <optick.h>
 
 ES2::Texture::Texture(const char* memory, uint32_t length)
 {
+	OPTICK_EVENT();
 	glGenTextures(1, &id);
+	OPTICK_TAG("id", id);
+	OPTICK_TAG("size", length);
 
 	this->length = length;
 
@@ -18,11 +22,13 @@ ES2::Texture::Texture(const char* memory, uint32_t length)
 
 ES2::Texture::~Texture()
 {
+	OPTICK_EVENT();
 	reset();
 }
 
 void ES2::Texture::reload()
 {
+	OPTICK_EVENT();
 	if (!validate())
 	{
 		if (!load_from_memory(static_cast<const char*>(data), length))
@@ -34,6 +40,7 @@ void ES2::Texture::reload()
 
 bool ES2::Texture::validate() const
 {
+	OPTICK_EVENT();
 	if (!data)
 	{
 		return false;
@@ -74,6 +81,10 @@ bool ES2::Texture::validate() const
 
 void ES2::Texture::bind(uint32_t slot)
 {
+	OPTICK_EVENT();
+	OPTICK_TAG("id", id);
+	OPTICK_TAG("slot", slot);
+
 	assert(slot < 8);
 	glActiveTexture(GL_TEXTURE0 + slot);
 	glBindTexture(GL_TEXTURE_2D, id);
@@ -98,6 +109,10 @@ void ES2::Texture::bind(uint32_t slot)
 
 void ES2::Texture::unbind(uint32_t slot)
 {
+	OPTICK_EVENT();
+	OPTICK_TAG("id", id);
+	OPTICK_TAG("slot", slot);
+
 	assert(slot < 8);
 	glActiveTexture(GL_TEXTURE0 + slot);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -105,21 +120,25 @@ void ES2::Texture::unbind(uint32_t slot)
 
 glm::uvec3 ES2::Texture::get_size() const
 {
+	OPTICK_EVENT();
 	return size;
 }
 
 TextureFormat ES2::Texture::get_format() const
 {
+	OPTICK_EVENT();
 	return format;
 }
 
 TextureType ES2::Texture::get_type() const
 {
+	OPTICK_EVENT();
 	return type;
 }
 
 bool ES2::Texture::load_from_memory(const char* memory, uint32_t length)
 {
+	OPTICK_EVENT();
 	int w, h, c;
 
 	data = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(memory),
@@ -129,6 +148,13 @@ bool ES2::Texture::load_from_memory(const char* memory, uint32_t length)
 	size.y = static_cast<unsigned int>(h);
 	type = TextureType::UnsignedByte; //TODO
 	format = parse_format(c);
+
+
+	OPTICK_TAG("id", id);
+	OPTICK_TAG("width", size.x);
+	OPTICK_TAG("height", size.y);
+	OPTICK_TAG("type", to_string(type).c_str());
+	OPTICK_TAG("format", to_string(format).c_str());
 
 	if (w <= 0 || h <= 0 || !data || format == TextureFormat::Invalid)
 	{
@@ -153,6 +179,7 @@ bool ES2::Texture::load_from_memory(const char* memory, uint32_t length)
 
 TextureFormat ES2::Texture::parse_format(int c) const
 {
+	OPTICK_EVENT();
 	switch (c)
 	{
 		case 3: return TextureFormat::RGB;
@@ -164,6 +191,7 @@ TextureFormat ES2::Texture::parse_format(int c) const
 
 void ES2::Texture::reset()
 {
+	OPTICK_EVENT();
 	STBI_FREE(data);
 	data = nullptr;
 	length = 0;

@@ -295,6 +295,16 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 	printf("MIN %f %f %f\n", min.x, min.y, min.z);
 	printf("MAX %f %f %f\n", max.x, max.y, max.z);
 
+	uint32_t size = 0;
+
+	for (auto& mesh : result)
+	{
+		size += mesh.vao->get_index_buffer()->get_size();
+		size += mesh.vao->get_vertex_buffer()->get_size();
+	}
+
+	OPTICK_TAG("total size", size);
+
 	return result;
 }
 
@@ -597,9 +607,12 @@ ModelRef ModelBuilder::build(const char* filename)
 		importer.SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE, 80.0f);
 		importer.SetPropertyInteger(AI_CONFIG_PP_SBP_REMOVE, aiPrimitiveType_LINE | aiPrimitiveType_POINT);
 
-		printf("NANI");
-		auto scene = importer.ReadFile(filename, get_import_flags());
-		printf("NANI");
+		const aiScene* scene = nullptr;
+
+		{
+			//OPTICK_EVENT("assimp's importer.ReadFile");
+			scene = importer.ReadFile(filename, get_import_flags()); 
+		}
 
 		if (!scene)
 		{

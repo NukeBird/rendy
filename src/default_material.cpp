@@ -1,9 +1,12 @@
 #include "default_material.h"
 #include "shader_factory.h"
+#include <optick.h>
 
 DefaultMaterial::DefaultMaterial(const AbstractTextureRef& diffuse_texture,
 	const AbstractTextureRef& normal_texture)
 {
+	OPTICK_EVENT();
+
 	auto shader_manager = ShaderFactory::get_instance();
 	shader = shader_manager->get_generic_shader();
 	this->diffuse_texture = diffuse_texture;
@@ -12,6 +15,8 @@ DefaultMaterial::DefaultMaterial(const AbstractTextureRef& diffuse_texture,
 
 void DefaultMaterial::reload()
 {
+	OPTICK_EVENT();
+
 	shader->reload();
 
 	if (diffuse_texture)
@@ -27,6 +32,8 @@ void DefaultMaterial::reload()
 
 bool DefaultMaterial::validate() const
 {
+	OPTICK_EVENT();
+
 	if (diffuse_texture)
 	{
 		if (!diffuse_texture->validate())
@@ -53,11 +60,14 @@ bool DefaultMaterial::validate() const
 
 AbstractShaderRef DefaultMaterial::get_shader()
 {
+	OPTICK_EVENT();
 	return shader;
 }
 
 uint32_t DefaultMaterial::get_flags() const
 {
+	OPTICK_EVENT();
+
 	uint32_t flags = 0;
 	
 	if (diffuse_texture)
@@ -75,6 +85,8 @@ uint32_t DefaultMaterial::get_flags() const
 
 void DefaultMaterial::bind(const ShaderSettings& settings)
 {
+	OPTICK_EVENT();
+
 	auto shader_variant = shader->compile(settings);
 	shader_variant->bind();
 
@@ -91,6 +103,8 @@ void DefaultMaterial::bind(const ShaderSettings& settings)
 
 void DefaultMaterial::unbind(uint32_t extra_flags)
 {
+	OPTICK_EVENT();
+
 	ShaderSettings settings; //TODO: lights
 	settings.flags = get_flags() | extra_flags;
 	auto shader_variant = shader->compile(settings);

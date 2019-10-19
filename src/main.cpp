@@ -35,7 +35,7 @@
 
 int main(int argc, char** argv) 
 {
-	OPTICK_APP("Rendy Sandbox");
+	OPTICK_START_CAPTURE();
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
 	{
@@ -163,6 +163,8 @@ int main(int argc, char** argv)
 	bool is_running = true;
 	while (is_running)
 	{
+		OPTICK_FRAME("MainLoop");
+
 		static float cam_fov(50.0f);
 		static float cam_aspect = width / static_cast<float>(height);
 		static float near = 0.01f;
@@ -203,12 +205,15 @@ int main(int argc, char** argv)
 
 			model->draw(transform, view, proj);
 			//quack.render(scene, transform, view, proj);
+			glFinish();
 		}
 		SDL_GL_SwapWindow(window);
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 
 	SDL_GL_DeleteContext(glcontext);
+
+	OPTICK_SAVE_CAPTURE("capture.opt");
 
 	return 0;
 }

@@ -1,8 +1,11 @@
 #include "shader_settings.h"
 #include <glm/glm.hpp>
+#include <optick.h>
 
 std::string ShaderSettings::generate_definitions() const
 {
+	OPTICK_EVENT();
+
 	std::string definitions = shader_flags_to_defines(flags);
 	
 	if (flags & USE_DIRECT_LIGHTS)

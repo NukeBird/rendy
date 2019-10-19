@@ -1,10 +1,13 @@
 #include "pbr_material.h"
 #include "shader_factory.h"
+#include <optick.h>
 
 PBRMaterial::PBRMaterial(const AbstractTextureRef& albedo_texture,
 	const AbstractTextureRef& ambient_metallic_roughness_texture, 
 	const AbstractTextureRef& normal_texture)
 {
+	OPTICK_EVENT();
+
 	auto shader_manager = ShaderFactory::get_instance();
 	shader = shader_manager->get_generic_shader();
 
@@ -16,6 +19,8 @@ PBRMaterial::PBRMaterial(const AbstractTextureRef& albedo_texture,
 
 void PBRMaterial::reload()
 {
+	OPTICK_EVENT();
+
 	shader->reload();
 
 	if (albedo_texture)
@@ -36,6 +41,8 @@ void PBRMaterial::reload()
 
 bool PBRMaterial::validate() const
 {
+	OPTICK_EVENT();
+
 	if (!albedo_texture || !albedo_texture->validate())
 	{
 		printf("Invalid albedo texture\n");
@@ -69,11 +76,14 @@ bool PBRMaterial::validate() const
 
 AbstractShaderRef PBRMaterial::get_shader()
 {
+	OPTICK_EVENT();
 	return shader;
 }
 
 uint32_t PBRMaterial::get_flags() const
 {
+	OPTICK_EVENT();
+
 	uint32_t flags = USE_COLOR_TEXTURE | USE_METALLIC_ROUGHNESS_TEXTURE;
 
 	if (normal_texture)
@@ -86,6 +96,8 @@ uint32_t PBRMaterial::get_flags() const
 
 void PBRMaterial::bind(const ShaderSettings& settings)
 {
+	OPTICK_EVENT();
+
 	auto shader_variant = shader->compile(settings);
 
 	shader_variant->bind();
@@ -111,6 +123,8 @@ void PBRMaterial::bind(const ShaderSettings& settings)
 
 void PBRMaterial::unbind(uint32_t extra_flags)
 {
+	OPTICK_EVENT();
+
 	ShaderSettings settings; //TODO: lights
 	settings.flags = get_flags() | extra_flags;
 	auto shader_variant = shader->compile(settings);

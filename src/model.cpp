@@ -1,8 +1,11 @@
 #include "model.h"
 #include <stack>
+#include <optick.h>
 
 void Mesh::reload()
 {
+	OPTICK_EVENT();
+
 	if (vao)
 	{
 		vao->reload();
@@ -11,6 +14,8 @@ void Mesh::reload()
 
 bool Mesh::validate() const
 {
+	OPTICK_EVENT();
+
 	if (vao)
 	{
 		return vao->validate();
@@ -21,21 +26,25 @@ bool Mesh::validate() const
 
 uint32_t Model::get_material_count() const
 {
+	OPTICK_EVENT();
 	return static_cast<uint32_t>(materials.size());
 }
 
 uint32_t Model::get_mesh_count() const
 {
+	OPTICK_EVENT();
 	return static_cast<uint32_t>(meshes.size());
 }
 
 uint32_t Model::get_node_count() const
 {
+	OPTICK_EVENT();
 	return static_cast<uint32_t>(nodes.size());
 }
 
 void Model::reload()
 {
+	OPTICK_EVENT();
 	for (auto& material: materials)
 	{
 		material->reload();
@@ -49,6 +58,7 @@ void Model::reload()
 
 bool Model::validate() const
 {
+	OPTICK_EVENT();
 	for (auto& material: materials)
 	{
 		if (!material->validate())
@@ -73,6 +83,7 @@ bool Model::validate() const
 DrawCallList Model::generate_draw_calls(const glm::mat4& model, const glm::mat4& view, 
 	const glm::mat4& proj)
 {
+	OPTICK_EVENT();
 	DrawCallList calls;
 	if (get_node_count() > 0)
 	{
@@ -86,6 +97,7 @@ DrawCallList Model::generate_draw_calls(const glm::mat4& model, const glm::mat4&
 
 void Model::draw(const glm::mat4& transform, const glm::mat4& view, const glm::mat4& proj)
 {
+	OPTICK_EVENT();
 	auto calls = generate_draw_calls(transform, view, proj);
 
 	glm::mat3 view_rotation(view);
@@ -140,6 +152,7 @@ void Model::draw(const glm::mat4& transform, const glm::mat4& view, const glm::m
 void Model::draw_node(uint32_t node_id,
 	const glm::mat4& base_transform, const glm::mat4& view, const glm::mat4& proj)
 {
+	OPTICK_EVENT();
 	assert(node_id < get_node_count());
 	auto& node = nodes[node_id];
 
@@ -185,6 +198,7 @@ void Model::draw_node(uint32_t node_id,
 void Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_transform, 
 	const glm::mat4& view, const glm::mat4& proj, DrawCallList& calls)
 {
+	OPTICK_EVENT();
 	auto& node = nodes[node_id];
 
 	auto transform = base_transform * node.transform;

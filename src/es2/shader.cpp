@@ -1,9 +1,12 @@
 #include "shader.h"
 #include "shader_variant.h"
 #include <GL/glew.h> //TODO
+#include <optick.h>
 
 ES2::Shader::Shader(const std::string& vertex_source, const std::string& fragment_source)
 {
+	OPTICK_EVENT();
+
 	this->vertex_source = vertex_source;
 	this->fragment_source = fragment_source;
 
@@ -15,6 +18,8 @@ ES2::Shader::Shader(const std::string& vertex_source, const std::string& fragmen
 
 void ES2::Shader::reload()
 {
+	OPTICK_EVENT();
+
 	for (auto& v : variants)
 	{
 		v.second->reload();
@@ -23,6 +28,8 @@ void ES2::Shader::reload()
 
 ShaderVariantRef ES2::Shader::compile(const ShaderSettings& settings)
 {
+	OPTICK_EVENT();
+
 	auto it = variants.find(settings);
 
 	if (it == variants.end())
@@ -43,6 +50,8 @@ ShaderVariantRef ES2::Shader::compile(const ShaderSettings& settings)
 
 bool ES2::Shader::validate() const
 {
+	OPTICK_EVENT();
+
 	for (auto& v : variants)
 	{
 		if (!v.second->validate())
@@ -56,5 +65,7 @@ bool ES2::Shader::validate() const
 
 uint32_t ES2::Shader::get_variant_count() const
 {
+	OPTICK_EVENT();
+
 	return static_cast<uint32_t>(variants.size());
 }

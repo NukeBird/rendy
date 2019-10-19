@@ -1,8 +1,11 @@
 #include "vertex_array.h"
+#include <optick.h>
 
 ES2::VertexArray::VertexArray(AbstractBufferRef vbo, 
 	AbstractBufferRef ibo, const BufferLayoutRef& layout)
 {
+	OPTICK_EVENT();
+
 	this->vbo = vbo;
 	this->ibo = ibo;
 	this->layout = layout;
@@ -10,6 +13,8 @@ ES2::VertexArray::VertexArray(AbstractBufferRef vbo,
 
 void ES2::VertexArray::reload()
 {
+	OPTICK_EVENT();
+
 	//won't do anything if vbo/ibo valid
 	vbo->reload();
 	ibo->reload();
@@ -17,6 +22,8 @@ void ES2::VertexArray::reload()
 
 bool ES2::VertexArray::validate() const
 {
+	OPTICK_EVENT();
+
 	bool is_valid = (vbo != nullptr);
 
 	if(vbo)
@@ -36,6 +43,8 @@ bool ES2::VertexArray::validate() const
 
 void ES2::VertexArray::bind(const ShaderVariantRef& shader)
 {
+	OPTICK_EVENT();
+
 	if (vbo)
 	{
 		vbo->bind();
@@ -51,6 +60,8 @@ void ES2::VertexArray::bind(const ShaderVariantRef& shader)
 
 void ES2::VertexArray::draw()
 {
+	OPTICK_EVENT();
+
 	//bind();
 
 	if (ibo)
@@ -68,6 +79,8 @@ void ES2::VertexArray::draw()
 
 void ES2::VertexArray::unbind()
 {
+	OPTICK_EVENT();
+
 	if (vbo)
 	{
 		vbo->unbind();
@@ -81,24 +94,31 @@ void ES2::VertexArray::unbind()
 
 BufferLayoutRef ES2::VertexArray::get_layout() const
 {
+	OPTICK_EVENT();
 	return layout;
 }
 
 AbstractBufferRef ES2::VertexArray::get_vertex_buffer()
 {
+	OPTICK_EVENT();
 	return vbo;
 }
 
 AbstractBufferRef ES2::VertexArray::get_index_buffer()
 {
+	OPTICK_EVENT();
 	return ibo;
 }
 
 void ES2::VertexArray::bind_layout(const ShaderVariantRef& shader)
 {
+	OPTICK_EVENT();
+
 	for (const auto& e : (*layout))
 	{
 		const int index = shader->get_attribute_location(e.name);
+		OPTICK_TAG(e.name.c_str(), index);
+
 		glEnableVertexAttribArray(index);
 		glVertexAttribPointer(index, e.get_component_count(), get_gl_type(e), 
 			false, layout->get_stride(), reinterpret_cast<const void*>(e.offset)); //TODO warning C4312:  'reinterpret_cast': 
@@ -108,6 +128,8 @@ void ES2::VertexArray::bind_layout(const ShaderVariantRef& shader)
 
 GLenum ES2::VertexArray::get_gl_type(const BufferElement& element)
 {
+	OPTICK_EVENT();
+
 	switch (element.type)
 	{
 		case ShaderDataType::Float:

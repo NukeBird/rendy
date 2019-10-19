@@ -1,20 +1,29 @@
 #include "shader_variant.h"
 #include <GL/glew.h> //TODO
+#include <optick.h>
 
 ES2::ShaderVariant::ShaderVariant(const std::string& vtx, const std::string& frg)
 {
+	OPTICK_EVENT();
+
 	this->vertex_source = vtx;
 	this->fragment_source = frg;
 	compile_shader();
+
+	OPTICK_TAG("id", program_id);
 }
 
 ES2::ShaderVariant::~ShaderVariant()
 {
+	OPTICK_EVENT();
+
 	reset();
 }
 
 void ES2::ShaderVariant::reload()
 {
+	OPTICK_EVENT();
+
 	if (!validate())
 	{
 		compile_shader();
@@ -23,6 +32,8 @@ void ES2::ShaderVariant::reload()
 
 bool ES2::ShaderVariant::validate() const
 {
+	OPTICK_EVENT();
+
 	if (glIsProgram(program_id))
 	{
 		int link_status;
@@ -36,6 +47,9 @@ bool ES2::ShaderVariant::validate() const
 
 void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::vec3& vec)
 {
+	OPTICK_EVENT();
+	OPTICK_TAG("name", name.c_str());
+
 	auto location = get_uniform_location(name);
 
 	if (location == -1)
@@ -50,6 +64,9 @@ void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::vec3& v
 
 void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::mat4& mat)
 {
+	OPTICK_EVENT();
+	OPTICK_TAG("name", name.c_str());
+
 	auto location = get_uniform_location(name);
 
 	if (location == -1)
@@ -64,6 +81,9 @@ void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::mat4& m
 
 void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::mat3& mat)
 {
+	OPTICK_EVENT();
+	OPTICK_TAG("name", name.c_str());
+
 	auto location = get_uniform_location(name);
 
 	if (location == -1)
@@ -78,6 +98,9 @@ void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::mat3& m
 
 void ES2::ShaderVariant::set_uniform(const std::string& name, const float number)
 {
+	OPTICK_EVENT();
+	OPTICK_TAG("name", name.c_str());
+
 	auto location = get_uniform_location(name);
 
 	if (location == -1)
@@ -92,6 +115,9 @@ void ES2::ShaderVariant::set_uniform(const std::string& name, const float number
 
 void ES2::ShaderVariant::set_uniform(const std::string& name, const int number)
 {
+	OPTICK_EVENT();
+	OPTICK_TAG("name", name.c_str());
+
 	auto location = get_uniform_location(name);
 
 	if (location == -1)
@@ -106,22 +132,36 @@ void ES2::ShaderVariant::set_uniform(const std::string& name, const int number)
 
 int ES2::ShaderVariant::get_attribute_location(const std::string& name) const
 {
+	OPTICK_EVENT();
+	OPTICK_TAG("name", name.c_str());
+
 	return glGetAttribLocation(program_id, name.c_str());
 }
 
 void ES2::ShaderVariant::bind()
 {
+	OPTICK_EVENT();
+	OPTICK_TAG("id", program_id);
+
 	glUseProgram(program_id);
 }
 
 void ES2::ShaderVariant::unbind()
 {
+	OPTICK_EVENT();
+	OPTICK_TAG("id", program_id);
+
 	glUseProgram(0);
 }
 
 int ES2::ShaderVariant::get_uniform_location(const std::string& name) const
 {
+	OPTICK_EVENT();
+
 	int location = glGetUniformLocation(program_id, name.c_str()); //TODO: optimize (map locations once)
+
+	OPTICK_TAG("name", name.c_str());
+	OPTICK_TAG("location", location);
 	
 	if (location < 0)
 	{
@@ -133,6 +173,8 @@ int ES2::ShaderVariant::get_uniform_location(const std::string& name) const
 
 void ES2::ShaderVariant::compile_shader()
 {
+	OPTICK_EVENT();
+
 	reset();
 	uint32_t vtx_id = glCreateShader(GL_VERTEX_SHADER);
 	const char* vtx_str = vertex_source.c_str();
@@ -150,10 +192,15 @@ void ES2::ShaderVariant::compile_shader()
 
 	glDeleteShader(vtx_id);
 	glDeleteShader(frg_id);
+
+	OPTICK_TAG("id", program_id);
 }
 
 void ES2::ShaderVariant::reset()
 {
+	OPTICK_EVENT();
+	OPTICK_TAG("id", program_id);
+
 	glDeleteProgram(program_id);
 	program_id = 0;
 }
