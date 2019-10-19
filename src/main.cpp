@@ -35,7 +35,7 @@
 
 int main(int argc, char** argv) 
 {
-	OPTICK_START_CAPTURE();
+	OPTICK_APP("RendySandbox");
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
 	{
@@ -80,43 +80,8 @@ int main(int argc, char** argv)
 			std::cout << glewGetErrorString(glewInit()) << std::endl;
 		}
 
-		SDL_GL_SetSwapInterval(0);
+		SDL_GL_SetSwapInterval(1);
 	#endif // _WIN32
-
-	//auto scene = SceneBuilder::build("assets/matball.glb");
-
-	/*unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-	std::mt19937 generator(seed);
-	std::uniform_real_distribution<float> uniform01(0.0, 1.0);
-
-	const uint32_t light_count = 16;
-
-	for (uint32_t i = 0; i < light_count; ++i)
-	{
-		float theta = 2 * M_PI * uniform01(generator);
-		float phi = acos(1 - 2 * uniform01(generator));
-
-		glm::vec3 direction
-		{
-			sin(phi) * cos(theta),
-			sin(phi) * sin(theta),
-			cos(phi)
-		};
-
-		glm::vec3 color
-		{
-			glm::max(0.75f, uniform01(generator) * 5.0f)
-		};
-
-		scene->direct_light_list.emplace_back(color, glm::normalize(direction));
-	}*/
-
-	static glm::vec3 cam_pos(0.0, 0.3, 2.6);
-	static glm::vec3 cam_target(0.0, 0.0, 1.3);
-
-	/*scene->direct_light_list.emplace_back(glm::vec3(1),
-		glm::normalize(cam_target - cam_pos));*/
-
 
 	auto model = ModelBuilder::build("assets/momo.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
@@ -126,11 +91,6 @@ int main(int argc, char** argv)
 	std::cout << "GENERIC SHADER STATUS: "
 		<< ShaderFactory::get_instance()->get_generic_shader()->validate()
 		<< std::endl;
-
-	//ShaderManager::get_instance()->reload();
-	//VertexArrayManager::get_instance()->reload();
-
-	//std::cout << "MODEL STATUS: " << model->validate() << std::endl;
 
 	GLuint fucking_vao; //should be active at least one _REAL_ vao
 	glGenVertexArrays(1, &fucking_vao);
@@ -144,9 +104,8 @@ int main(int argc, char** argv)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	auto last = std::chrono::steady_clock::now();
-	auto last_render = last;
 
-	std::smatch m;
+	/*std::smatch m;
 	std::regex rgx("#ifdef (\\w+)[^ ]*\\n");
 
 	auto s = generic_vertex_shader;
@@ -155,18 +114,22 @@ int main(int argc, char** argv)
 	{
 		std::cout << m[1].str() << std::endl;
 		s = m.suffix().str();
-	}
+	}*/
 
 	ES2Engine quack;
+	glFinish();
 
 	SDL_Event event;
 	bool is_running = true;
 	while (is_running)
 	{
-		OPTICK_FRAME("MainLoop");
+		OPTICK_FRAME("Frame");
 
+		//OPTICK_PUSH("Tick");
 		static float cam_fov(50.0f);
 		static float cam_aspect = width / static_cast<float>(height);
+		static glm::vec3 cam_pos(0.0, 0.3, 2.6);
+		static glm::vec3 cam_target(0.0, 0.0, 1.3);
 		static float near = 0.01f;
 		static float far = 30.0f;
 
@@ -189,6 +152,7 @@ int main(int argc, char** argv)
 			glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
 			glm::scale(glm::vec3{ 5.0f });
 
+		OPTICK_PUSH("SDL_PollEvent");
 		while (SDL_PollEvent(&event))
 		{
 			if (event.type == SDL_QUIT)
@@ -196,24 +160,26 @@ int main(int argc, char** argv)
 				is_running = false;
 			}
 		}
+		OPTICK_POP();
 
-		if (std::chrono::duration<float>(now - last_render).count() >= 1.0f / 60.0f)
-		{
-			last_render = now;
-			glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			model->draw(transform, view, proj);
-			//quack.render(scene, transform, view, proj);
-			glFinish();
-		}
+		model->draw(transform, view, proj);
+		//quack.render(scene, transform, view, proj);
+
+		OPTICK_PUSH("glFinish");
+		glFinish();
+		OPTICK_POP();
+
+		OPTICK_PUSH("SwapWindow");
 		SDL_GL_SwapWindow(window);
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		OPTICK_POP();
 	}
 
 	SDL_GL_DeleteContext(glcontext);
 
-	OPTICK_SAVE_CAPTURE("capture.opt");
+	//OPTICK_SAVE_CAPTURE("capture.opt");
 
 	return 0;
 }

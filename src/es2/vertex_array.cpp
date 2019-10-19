@@ -119,10 +119,15 @@ void ES2::VertexArray::bind_layout(const ShaderVariantRef& shader)
 		const int index = shader->get_attribute_location(e.name);
 		OPTICK_TAG(e.name.c_str(), index);
 
-		glEnableVertexAttribArray(index);
-		glVertexAttribPointer(index, e.get_component_count(), get_gl_type(e), 
-			false, layout->get_stride(), reinterpret_cast<const void*>(e.offset)); //TODO warning C4312:  'reinterpret_cast': 
-													//conversion from 'const uint32_t' to 'const void *' of greater size
+		if (index >= 0)
+		{
+			//printf("(%p) %s : %d\n", this, e.name.c_str(), index);
+
+			glEnableVertexAttribArray(index);
+			glVertexAttribPointer(index, e.get_component_count(), get_gl_type(e), 
+				false, layout->get_stride(), reinterpret_cast<const void*>(e.offset)); //TODO warning C4312:  'reinterpret_cast': 
+														//conversion from 'const uint32_t' to 'const void *' of greater size
+		}
 	}
 }
 

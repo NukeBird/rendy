@@ -133,9 +133,18 @@ void ES2::ShaderVariant::set_uniform(const std::string& name, const int number)
 int ES2::ShaderVariant::get_attribute_location(const std::string& name) const
 {
 	OPTICK_EVENT();
-	OPTICK_TAG("name", name.c_str());
 
-	return glGetAttribLocation(program_id, name.c_str());
+	int location = glGetAttribLocation(program_id, name.c_str());
+
+	if (location < 0)
+	{
+		//printf("UwU %s\n", name.c_str());
+	}
+
+	OPTICK_TAG("name", name.c_str());
+	OPTICK_TAG("location", location);
+
+	return location;
 }
 
 void ES2::ShaderVariant::bind()
