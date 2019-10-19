@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <string>
 
 enum class ShaderDataType
 {
@@ -15,5 +16,7 @@ enum class ShaderDataType
 	Int4,
 	Bool
 };
+
+std::string to_string(ShaderDataType type);
 
 uint32_t get_shader_data_type_size(ShaderDataType type);
