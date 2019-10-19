@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 enum class TextureFormat
 {
@@ -6,3 +7,5 @@ enum class TextureFormat
 	RGBA,
 	Invalid
 };
+
+std::string to_string(TextureFormat format);
