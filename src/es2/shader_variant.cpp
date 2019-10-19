@@ -139,7 +139,7 @@ int ES2::ShaderVariant::get_attribute_location(const std::string& name) const
 
 	if (it != attribute_cache.end())
 	{
-		return (*it).second;
+		location = (*it).second;
 	}
 
 	OPTICK_TAG("name", name.c_str());
@@ -173,7 +173,7 @@ int ES2::ShaderVariant::get_uniform_location(const std::string& name) const
 
 	if (it != uniform_cache.end())
 	{
-		return (*it).second;
+		location = (*it).second;
 	}
 
 	OPTICK_TAG("name", name.c_str());
