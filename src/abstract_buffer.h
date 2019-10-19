@@ -1,6 +1,7 @@
 #pragma once
 #include "abstract_resource.h"
 #include <memory>
+#include <string>
 
 enum class BufferTarget
 {
@@ -8,6 +9,8 @@ enum class BufferTarget
 	IBO,
 	Invalid
 };
+
+std::string to_string(BufferTarget target);
 
 struct AbstractBuffer: public AbstractResource
 {
