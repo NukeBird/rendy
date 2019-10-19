@@ -478,6 +478,9 @@ AbstractMaterialRef parse_default_material(const aiScene* scene,
 		}
 	}
 
+	printf("DEFAULT MATERIAL\n diffuse %p \n normalmap %p \n",
+		diffuse.get(), normalmap.get()); //TODO: invalid shader when both textures is nullptr 
+
 	return std::make_shared<DefaultMaterial>(diffuse, normalmap);
 }
 
