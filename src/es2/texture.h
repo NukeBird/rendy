@@ -6,7 +6,7 @@ namespace ES2
 	class Texture final: public AbstractTexture2D
 	{
 	public:
-		Texture(const char* memory, uint32_t length);
+		Texture(Image2DRef image);
 		~Texture();
 		virtual void reload() override;
 		virtual bool validate() const override;
@@ -16,13 +16,11 @@ namespace ES2
 		virtual TextureFormat get_format() const override;
 		virtual TextureType get_type() const override;
 	private:
-		bool load_from_memory(const char* memory, uint32_t length);
+		bool load_from_image();
 		TextureFormat parse_format(int c) const;
 		void reset();
 
-		void* data = nullptr;
-		uint32_t length = 0;
-		glm::uvec2 size = { 0, 0 };
+		Image2DRef image;
 		TextureFormat format = TextureFormat::Invalid;
 		TextureType type = TextureType::Invalid;
 		uint32_t id = 0;

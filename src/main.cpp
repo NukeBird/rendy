@@ -25,11 +25,8 @@
 #include "vertex_array_factory.h"
 #include "vertex_buffer_factory.h"
 #include "index_buffer_factory.h"
-#include "scene.h"
-#include "scene_builder.h"
 #include "generic_shader_sources.hpp"
 #include <regex>
-#include "es2/es2_engine.h"
 
 #include <optick.h>
 
@@ -98,7 +95,7 @@ int main(int argc, char** argv)
 
 		//if (SDL_GL_SetSwapInterval(-1) == -1) //adaptive v-sync
 		{
-			SDL_GL_SetSwapInterval(1); //v-sync
+			SDL_GL_SetSwapInterval(0); //disable v-sync
 		}
 
 		//glEnable(GL_DEBUG_OUTPUT);
@@ -138,7 +135,6 @@ int main(int argc, char** argv)
 		s = m.suffix().str();
 	}*/
 
-	ES2Engine quack;
 	glFinish();
 
 	SDL_Event event;
@@ -152,8 +148,8 @@ int main(int argc, char** argv)
 		static float cam_aspect = width / static_cast<float>(height);
 		static glm::vec3 cam_pos(0.0, 0.5, 2.8);
 		static glm::vec3 cam_target(0.0, 0.0, 1.3);
-		static float near = 0.01f;
-		static float far = 30.0f;
+		static float near = 0.1f;
+		static float far = 15.0f;
 
 		auto now = std::chrono::steady_clock::now();
 		std::chrono::duration<float> d = now - last;
@@ -188,7 +184,6 @@ int main(int argc, char** argv)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		model->draw(transform, view, proj);
-		//quack.render(scene, transform, view, proj);
 
 		/*OPTICK_PUSH("glFinish");
 		glFinish();
