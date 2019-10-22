@@ -444,8 +444,8 @@ static AbstractMaterialRef parse_default_material(const aiMaterial* material,
 {
 	auto& mat = *material;
 
-	std::shared_ptr<AbstractTexture> diffuse;
-	std::shared_ptr<AbstractTexture> normalmap;
+	std::shared_ptr<AbstractTexture2D> diffuse;
+	std::shared_ptr<AbstractTexture2D> normalmap;
 
 	diffuse = parse_texture(material, texture_list,
 		aiTextureType_DIFFUSE);
@@ -461,9 +461,9 @@ static AbstractMaterialRef parse_pbr_material(const aiMaterial* material,
 {
 	auto& mat = *material;
 
-	std::shared_ptr<AbstractTexture> albedo;
-	std::shared_ptr<AbstractTexture> ao_metallic_roughness;
-	std::shared_ptr<AbstractTexture> normalmap;
+	std::shared_ptr<AbstractTexture2D> albedo;
+	std::shared_ptr<AbstractTexture2D> ao_metallic_roughness;
+	std::shared_ptr<AbstractTexture2D> normalmap;
 
 	albedo = parse_texture(material, texture_list,
 		AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_TEXTURE); 

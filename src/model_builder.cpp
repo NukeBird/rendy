@@ -414,7 +414,7 @@ int to_index(aiString str)
 	return -1;
 }
 
-std::shared_ptr<AbstractTexture> get_texture(const aiScene* scene, int index)
+std::shared_ptr<AbstractTexture2D> get_texture(const aiScene* scene, int index)
 {
 	OPTICK_EVENT();
 
@@ -451,8 +451,8 @@ AbstractMaterialRef parse_default_material(const aiScene* scene,
 	OPTICK_EVENT();
 	auto& mat = *material;
 
-	std::shared_ptr<AbstractTexture> diffuse;
-	std::shared_ptr<AbstractTexture> normalmap;
+	std::shared_ptr<AbstractTexture2D> diffuse;
+	std::shared_ptr<AbstractTexture2D> normalmap;
 
 	//DIFFUSE
 	{
@@ -490,9 +490,9 @@ AbstractMaterialRef parse_pbr_material(const aiScene* scene,
 	OPTICK_EVENT();
 	auto& mat = *material;
 
-	std::shared_ptr<AbstractTexture> albedo;
-	std::shared_ptr<AbstractTexture> ao_metallic_roughness;
-	std::shared_ptr<AbstractTexture> normalmap;
+	std::shared_ptr<AbstractTexture2D> albedo;
+	std::shared_ptr<AbstractTexture2D> ao_metallic_roughness;
+	std::shared_ptr<AbstractTexture2D> normalmap;
 
 	//ALBEDO
 	{

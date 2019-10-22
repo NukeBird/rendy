@@ -1,5 +1,5 @@
 #pragma once
-#include "abstract_texture.h"
+#include "abstract_texture2d.h"
 #include "singleton.h"
 #include <vector>
 #include <memory>

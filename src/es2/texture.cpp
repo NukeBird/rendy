@@ -118,7 +118,7 @@ void ES2::Texture::unbind(uint32_t slot)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-glm::uvec3 ES2::Texture::get_size() const
+glm::uvec2 ES2::Texture::get_size() const
 {
 	OPTICK_EVENT();
 	return size;
@@ -195,7 +195,7 @@ void ES2::Texture::reset()
 	STBI_FREE(data);
 	data = nullptr;
 	length = 0;
-	size = { 0, 0, 0 };
+	size = { 0, 0 };
 	format = TextureFormat::Invalid;
 	type = TextureType::Invalid;
 

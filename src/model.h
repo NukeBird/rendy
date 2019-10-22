@@ -2,7 +2,7 @@
 #include "abstract_drawable.h"
 #include "abstract_material.h"
 #include "abstract_vertex_array.h"
-#include "abstract_texture.h"
+#include "abstract_texture2d.h"
 #include "abstract_shader.h"
 #include <memory>
 #include <vector>

@@ -1,6 +1,6 @@
 #pragma once
 #include "abstract_vertex_array.h"
-#include "abstract_texture.h"
+#include "abstract_texture2d.h"
 #include "abstract_material.h"
 #include <unordered_map>
 #include <glm/glm.hpp>
