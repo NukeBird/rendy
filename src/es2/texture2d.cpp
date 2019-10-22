@@ -143,17 +143,24 @@ bool ES2::Texture2D::load_from_image()
 	GLenum gl_format = (format == TextureFormat::RGB) ? GL_RGB : GL_RGBA; //TODO
 	GLenum gl_type = GL_UNSIGNED_BYTE; //TODO
 
-	glBindTexture(GL_TEXTURE_2D, id);
+	bind(0);
 
+	OPTICK_PUSH("glPixelStorei");
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); //TODO
+	OPTICK_POP();
+
+	OPTICK_PUSH("glTexImage2D");
 	glTexImage2D(GL_TEXTURE_2D, 0, gl_format, 
 		image->get_width(), image->get_height(), 
 		0, gl_format, gl_type, image->get_data());
+	OPTICK_POP();
 
+	OPTICK_PUSH("glGenerateMipmap");
 	glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
 	glGenerateMipmap(GL_TEXTURE_2D);
+	OPTICK_POP();
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+	unbind(0);
 
 	return true;
 }

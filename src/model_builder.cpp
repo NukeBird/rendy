@@ -11,7 +11,7 @@
 #include "image2d.h"
 #include "es2/texture2d.h"
 #include "pbr_material.h"
-#include <future>
+#include "thread_pool.h"
 #include <unordered_map>
 #include <stack>
 #include <glm/glm.hpp>
@@ -619,9 +619,11 @@ std::vector<Image2DRef> parse_images(const aiScene* scene)
 		std::vector<Image2DFuture> future_images;
 		future_images.reserve(static_cast<size_t>(scene->mNumTextures));
 
+		auto thread_pool = ThreadPool::get_instance();
+
 		for (uint32_t i = 0; i < scene->mNumTextures; ++i)
 		{
-			Image2DFuture future = std::async(std::launch::async, parse_image,
+			Image2DFuture future = thread_pool->enqueue(parse_image, 
 				scene->mTextures[i]);
 			future_images.emplace_back(future);
 		}
