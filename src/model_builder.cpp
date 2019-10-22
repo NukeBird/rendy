@@ -623,8 +623,14 @@ std::vector<Image2DRef> parse_images(const aiScene* scene)
 
 		for (uint32_t i = 0; i < scene->mNumTextures; ++i)
 		{
+			OPTICK_EVENT("enqueue parse_image task")
+			auto assimp_texture = scene->mTextures[i];
+			OPTICK_TAG("width", assimp_texture->mWidth);
+			OPTICK_TAG("height", assimp_texture->mHeight);
+			OPTICK_TAG("format hint", assimp_texture->achFormatHint);
+
 			Image2DFuture future = thread_pool->enqueue(parse_image, 
-				scene->mTextures[i]);
+				assimp_texture);
 			future_images.emplace_back(future);
 		}
 
