@@ -11,6 +11,7 @@
 #include "image2d.h"
 #include "es2/texture2d.h"
 #include "pbr_material.h"
+#include <future>
 #include <unordered_map>
 #include <stack>
 #include <glm/glm.hpp>
@@ -415,7 +416,8 @@ int to_index(aiString str)
 	return -1;
 }
 
-std::shared_ptr<AbstractTexture2D> get_texture(const aiScene* scene, int index)
+std::shared_ptr<AbstractTexture2D> get_texture(const aiScene* scene, int index, 
+	std::vector<Image2DRef>& images)
 {
 	OPTICK_EVENT();
 
@@ -429,27 +431,13 @@ std::shared_ptr<AbstractTexture2D> get_texture(const aiScene* scene, int index)
 		return nullptr;
 	}
 
-	auto assimp_texture = scene->mTextures[index];
-	OPTICK_TAG("width", assimp_texture->mWidth);
-	OPTICK_TAG("height", assimp_texture->mHeight);
-
-	const char* texture_ptr = 
-		reinterpret_cast<const char*>(assimp_texture->pcData);
-	uint32_t texture_size = assimp_texture->mWidth;
-
-	if (assimp_texture->mHeight > 0)
-	{
-		texture_size *= assimp_texture->mHeight;
-	}
-
-	Image2DRef image = std::make_shared<Image2D>(texture_ptr, texture_size);
-
+	Image2DRef image = images[index];
 
 	return std::make_shared<ES2::Texture2D>(image);
 }
 
 AbstractMaterialRef parse_default_material(const aiScene* scene,
-	const aiMaterial* material)
+	const aiMaterial* material, std::vector<Image2DRef>& images)
 {
 	OPTICK_EVENT();
 	auto& mat = *material;
@@ -464,7 +452,7 @@ AbstractMaterialRef parse_default_material(const aiScene* scene,
 		{
 			if (path.length > 0)
 			{
-				diffuse = get_texture(scene, to_index(path));
+				diffuse = get_texture(scene, to_index(path), images);
 			}
 		}
 	}
@@ -476,7 +464,7 @@ AbstractMaterialRef parse_default_material(const aiScene* scene,
 		{
 			if (path.length > 0)
 			{
-				normalmap = get_texture(scene, to_index(path));
+				normalmap = get_texture(scene, to_index(path), images);
 			}
 		}
 	}
@@ -488,7 +476,7 @@ AbstractMaterialRef parse_default_material(const aiScene* scene,
 }
 
 AbstractMaterialRef parse_pbr_material(const aiScene* scene,
-	const aiMaterial* material)
+	const aiMaterial* material, std::vector<Image2DRef>& images)
 {
 	OPTICK_EVENT();
 	auto& mat = *material;
@@ -511,7 +499,7 @@ AbstractMaterialRef parse_pbr_material(const aiScene* scene,
 			return nullptr;
 		}
 
-		albedo = get_texture(scene, to_index(path));
+		albedo = get_texture(scene, to_index(path), images);
 
 		if (!albedo)
 		{
@@ -533,7 +521,7 @@ AbstractMaterialRef parse_pbr_material(const aiScene* scene,
 			return nullptr;
 		}
 
-		ao_metallic_roughness = get_texture(scene, to_index(path));
+		ao_metallic_roughness = get_texture(scene, to_index(path), images);
 
 		if (!ao_metallic_roughness)
 		{
@@ -548,7 +536,7 @@ AbstractMaterialRef parse_pbr_material(const aiScene* scene,
 		{
 			if (path.length > 0)
 			{
-				normalmap = get_texture(scene, to_index(path));
+				normalmap = get_texture(scene, to_index(path), images);
 			}
 		}
 
@@ -558,7 +546,7 @@ AbstractMaterialRef parse_pbr_material(const aiScene* scene,
 			{
 				if (path.length > 0)
 				{
-					normalmap = get_texture(scene, to_index(path));
+					normalmap = get_texture(scene, to_index(path), images);
 				}
 			}
 		}
@@ -568,22 +556,23 @@ AbstractMaterialRef parse_pbr_material(const aiScene* scene,
 }
 
 AbstractMaterialRef parse_material(const aiScene* scene,
-	const aiMaterial* material)
+	const aiMaterial* material, std::vector<Image2DRef>& images)
 {
 	OPTICK_EVENT();
 	AbstractMaterialRef result;
 	
-	result = parse_pbr_material(scene, material);
+	result = parse_pbr_material(scene, material, images);
 
 	if (!result)
 	{
-		result = parse_default_material(scene, material);
+		result = parse_default_material(scene, material, images);
 	}
 
 	return result;
 }
 
-std::vector<AbstractMaterialRef> parse_materials(const aiScene* scene)
+std::vector<AbstractMaterialRef> parse_materials(const aiScene* scene, 
+	std::vector<Image2DRef>& images)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("material count", scene->mNumMaterials);
@@ -593,12 +582,58 @@ std::vector<AbstractMaterialRef> parse_materials(const aiScene* scene)
 
 	for (unsigned i = 0; i < scene->mNumMaterials; ++i)
 	{
-		result.emplace_back(parse_material(scene, scene->mMaterials[i]));
+		result.emplace_back(parse_material(scene, scene->mMaterials[i],
+			images));
 	}
 
 	return result;
 }
 
+Image2DRef parse_image(const aiTexture* assimp_texture)
+{
+	OPTICK_EVENT();
+	const char* texture_ptr =
+		reinterpret_cast<const char*>(assimp_texture->pcData);
+	uint32_t texture_size = assimp_texture->mWidth;
+
+	if (assimp_texture->mHeight > 0)
+	{
+		texture_size *= assimp_texture->mHeight;
+	}
+
+	OPTICK_TAG("texture_size", texture_size);
+
+	return std::make_shared<Image2D>(texture_ptr, texture_size);
+}
+
+std::vector<Image2DRef> parse_images(const aiScene* scene)
+{
+	OPTICK_EVENT();
+	OPTICK_TAG("image count", scene->mNumTextures);
+
+	std::vector<Image2DRef> result;
+	result.reserve(static_cast<size_t>(scene->mNumTextures));
+
+	{
+		using Image2DFuture = std::shared_future<Image2DRef>;
+		std::vector<Image2DFuture> future_images;
+		future_images.reserve(static_cast<size_t>(scene->mNumTextures));
+
+		for (uint32_t i = 0; i < scene->mNumTextures; ++i)
+		{
+			Image2DFuture future = std::async(std::launch::async, parse_image,
+				scene->mTextures[i]);
+			future_images.emplace_back(future);
+		}
+
+		for (auto& future_image : future_images)
+		{
+			result.emplace_back(future_image.get());
+		}
+	}
+
+	return std::move(result);
+}
 
 ModelRef ModelBuilder::build(const char* filename)
 {
@@ -632,8 +667,10 @@ ModelRef ModelBuilder::build(const char* filename)
 		model->meshes = std::move(parse_meshes(scene));
 		printf("NODES\n");
 		model->nodes = std::move(parse_nodes(scene));
+		printf("IMAGES\n");
+		model->images = std::move(parse_images(scene));
 		printf("MATERIALS\n");
-		model->materials = std::move(parse_materials(scene));
+		model->materials = std::move(parse_materials(scene, model->images));
 		printf("DONE\n");
 		//TODO
 

@@ -4,6 +4,7 @@
 #include "abstract_vertex_array.h"
 #include "abstract_texture2d.h"
 #include "abstract_shader.h"
+#include "image2d.h"
 #include <memory>
 #include <vector>
 #include <glm/glm.hpp>
@@ -57,6 +58,7 @@ private:
 		DrawCallList& calls);
 
 	std::vector<AbstractMaterialRef> materials;
+	std::vector<Image2DRef> images;
 	std::vector<Mesh> meshes;
 	std::vector<Node> nodes;
 
