@@ -9,7 +9,7 @@
 #include "vertex_array_factory.h"
 #include "default_material.h"
 #include "image2d.h"
-#include "es2/texture.h"
+#include "es2/texture2d.h"
 #include "pbr_material.h"
 #include <unordered_map>
 #include <stack>
@@ -445,7 +445,7 @@ std::shared_ptr<AbstractTexture2D> get_texture(const aiScene* scene, int index)
 	Image2DRef image = std::make_shared<Image2D>(texture_ptr, texture_size);
 
 
-	return std::make_shared<ES2::Texture>(image);
+	return std::make_shared<ES2::Texture2D>(image);
 }
 
 AbstractMaterialRef parse_default_material(const aiScene* scene,

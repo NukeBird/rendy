@@ -1,9 +1,9 @@
-#include "texture.h"
+#include "texture2d.h"
 #include <GL/glew.h> //TODO
 #include <mutex> //call_once
 #include <optick.h>
 
-ES2::Texture::Texture(Image2DRef image)
+ES2::Texture2D::Texture2D(Image2DRef image)
 {
 	OPTICK_EVENT();
 
@@ -17,13 +17,13 @@ ES2::Texture::Texture(Image2DRef image)
 	}
 }
 
-ES2::Texture::~Texture()
+ES2::Texture2D::~Texture2D()
 {
 	OPTICK_EVENT();
 	reset();
 }
 
-void ES2::Texture::reload()
+void ES2::Texture2D::reload()
 {
 	OPTICK_EVENT();
 	if (!validate())
@@ -35,7 +35,7 @@ void ES2::Texture::reload()
 	}
 }
 
-bool ES2::Texture::validate() const
+bool ES2::Texture2D::validate() const
 {
 	OPTICK_EVENT();
 	if (!image)
@@ -66,7 +66,7 @@ bool ES2::Texture::validate() const
 	return true;
 }
 
-void ES2::Texture::bind(uint32_t slot)
+void ES2::Texture2D::bind(uint32_t slot)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("id", id);
@@ -94,7 +94,7 @@ void ES2::Texture::bind(uint32_t slot)
 #endif
 }
 
-void ES2::Texture::unbind(uint32_t slot)
+void ES2::Texture2D::unbind(uint32_t slot)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("id", id);
@@ -105,25 +105,25 @@ void ES2::Texture::unbind(uint32_t slot)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-glm::uvec2 ES2::Texture::get_size() const
+glm::uvec2 ES2::Texture2D::get_size() const
 {
 	OPTICK_EVENT();
 	return image->get_size();
 }
 
-TextureFormat ES2::Texture::get_format() const
+TextureFormat ES2::Texture2D::get_format() const
 {
 	OPTICK_EVENT();
 	return format;
 }
 
-TextureType ES2::Texture::get_type() const
+TextureType ES2::Texture2D::get_type() const
 {
 	OPTICK_EVENT();
 	return type;
 }
 
-bool ES2::Texture::load_from_image()
+bool ES2::Texture2D::load_from_image()
 {
 	OPTICK_EVENT();
 	
@@ -158,7 +158,7 @@ bool ES2::Texture::load_from_image()
 	return true;
 }
 
-TextureFormat ES2::Texture::parse_format(int c) const
+TextureFormat ES2::Texture2D::parse_format(int c) const
 {
 	OPTICK_EVENT();
 	switch (c)
@@ -170,7 +170,7 @@ TextureFormat ES2::Texture::parse_format(int c) const
 	return TextureFormat::Invalid;
 }
 
-void ES2::Texture::reset()
+void ES2::Texture2D::reset()
 {
 	OPTICK_EVENT();
 	format = TextureFormat::Invalid;

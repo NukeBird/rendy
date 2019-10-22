@@ -3,11 +3,11 @@
 
 namespace ES2
 {
-	class Texture final: public AbstractTexture2D
+	class Texture2D final: public AbstractTexture2D
 	{
 	public:
-		Texture(Image2DRef image);
-		~Texture();
+		Texture2D(Image2DRef image);
+		~Texture2D();
 		virtual void reload() override;
 		virtual bool validate() const override;
 		virtual void bind(uint32_t slot) override;
