@@ -2,7 +2,7 @@
 #include "es2/texture.h"
 #include <optick.h>
 
-AbstractTextureRef TextureFactory::make(const char* memory, uint32_t length)
+AbstractTexture2DRef TextureFactory::make(const char* memory, uint32_t length)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("size", length);

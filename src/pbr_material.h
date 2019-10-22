@@ -6,9 +6,9 @@
 class PBRMaterial final: public AbstractMaterial
 {
 public:
-	PBRMaterial(const AbstractTextureRef& albedo_texture,
-		const AbstractTextureRef& ambient_metallic_roughness_texture,
-		const AbstractTextureRef& normal_texture = nullptr);
+	PBRMaterial(const AbstractTexture2DRef& albedo_texture,
+		const AbstractTexture2DRef& ambient_metallic_roughness_texture,
+		const AbstractTexture2DRef& normal_texture = nullptr);
 	virtual void reload() override;
 	virtual bool validate() const override;
 	virtual AbstractShaderRef get_shader() override;
@@ -16,8 +16,8 @@ public:
 	virtual void bind(const ShaderSettings& settings) override;
 	virtual void unbind(uint32_t extra_flags) override;
 private:
-	AbstractTextureRef albedo_texture;
-	AbstractTextureRef ambient_metallic_roughness_texture;
-	AbstractTextureRef normal_texture;
+	AbstractTexture2DRef albedo_texture;
+	AbstractTexture2DRef ambient_metallic_roughness_texture;
+	AbstractTexture2DRef normal_texture;
 	AbstractShaderRef shader;
 };

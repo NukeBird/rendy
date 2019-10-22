@@ -6,8 +6,8 @@
 class DefaultMaterial final: public AbstractMaterial
 {
 public:
-	DefaultMaterial(const AbstractTextureRef& diffuse_texture,
-		const AbstractTextureRef& normal_texture = nullptr);
+	DefaultMaterial(const AbstractTexture2DRef& diffuse_texture,
+		const AbstractTexture2DRef& normal_texture = nullptr);
 	virtual void reload() override;
 	virtual bool validate() const override;
 	virtual AbstractShaderRef get_shader() override;
@@ -15,7 +15,7 @@ public:
 	virtual void bind(const ShaderSettings& settings) override;
 	virtual void unbind(uint32_t extra_flags) override;
 private:
-	AbstractTextureRef diffuse_texture;
-	AbstractTextureRef normal_texture;
+	AbstractTexture2DRef diffuse_texture;
+	AbstractTexture2DRef normal_texture;
 	AbstractShaderRef shader;
 };

@@ -346,7 +346,7 @@ static void parse_cameras(const aiScene* assimp_scene, SceneRef& result)
 	}
 }
 
-static AbstractTextureRef parse_texture(const aiTexture* assimp_texture)
+static AbstractTexture2DRef parse_texture(const aiTexture* assimp_texture)
 {
 	const char* texture_ptr =
 		reinterpret_cast<const char*>(assimp_texture->pcData);
@@ -416,11 +416,11 @@ static int to_index(aiString str)
 	return -1;
 }
 
-static AbstractTextureRef parse_texture(const aiMaterial* material,
-	std::vector<AbstractTextureRef>& texture_list,
+static AbstractTexture2DRef parse_texture(const aiMaterial* material,
+	std::vector<AbstractTexture2DRef>& texture_list,
 	const aiTextureType& type, uint32_t assimp_index = 0)
 {
-	AbstractTextureRef result;
+	AbstractTexture2DRef result;
 
 	aiString path;
 	if (material->GetTexture(type, assimp_index, &path) == AI_SUCCESS)
@@ -440,7 +440,7 @@ static AbstractTextureRef parse_texture(const aiMaterial* material,
 }
 
 static AbstractMaterialRef parse_default_material(const aiMaterial* material,
-	std::vector<AbstractTextureRef>& texture_list)
+	std::vector<AbstractTexture2DRef>& texture_list)
 {
 	auto& mat = *material;
 
@@ -457,7 +457,7 @@ static AbstractMaterialRef parse_default_material(const aiMaterial* material,
 }
 
 static AbstractMaterialRef parse_pbr_material(const aiMaterial* material,
-	std::vector<AbstractTextureRef>& texture_list)
+	std::vector<AbstractTexture2DRef>& texture_list)
 {
 	auto& mat = *material;
 
@@ -488,7 +488,7 @@ static AbstractMaterialRef parse_pbr_material(const aiMaterial* material,
 }
 
 static AbstractMaterialRef parse_material(const aiMaterial* material, 
-	std::vector<AbstractTextureRef>& texture_list)
+	std::vector<AbstractTexture2DRef>& texture_list)
 {
 	AbstractMaterialRef result;
 	

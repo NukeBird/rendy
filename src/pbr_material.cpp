@@ -2,9 +2,9 @@
 #include "shader_factory.h"
 #include <optick.h>
 
-PBRMaterial::PBRMaterial(const AbstractTextureRef& albedo_texture,
-	const AbstractTextureRef& ambient_metallic_roughness_texture, 
-	const AbstractTextureRef& normal_texture)
+PBRMaterial::PBRMaterial(const AbstractTexture2DRef& albedo_texture,
+	const AbstractTexture2DRef& ambient_metallic_roughness_texture, 
+	const AbstractTexture2DRef& normal_texture)
 {
 	OPTICK_EVENT();
 

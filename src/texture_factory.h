@@ -8,5 +8,5 @@ class TextureFactory final: public Singleton<TextureFactory>
 {
 public:
 	//TODO: make from memory?
-	AbstractTextureRef make(const char* memory, uint32_t length);
+	AbstractTexture2DRef make(const char* memory, uint32_t length);
 };

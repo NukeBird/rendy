@@ -2,8 +2,8 @@
 #include "shader_factory.h"
 #include <optick.h>
 
-DefaultMaterial::DefaultMaterial(const AbstractTextureRef& diffuse_texture,
-	const AbstractTextureRef& normal_texture)
+DefaultMaterial::DefaultMaterial(const AbstractTexture2DRef& diffuse_texture,
+	const AbstractTexture2DRef& normal_texture)
 {
 	OPTICK_EVENT();
 

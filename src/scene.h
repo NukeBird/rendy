@@ -82,7 +82,7 @@ struct DirectLightS
 struct Scene //TODO: struct?
 {
 	std::vector<MeshS> mesh_list;
-	std::vector<AbstractTextureRef> texture_list;
+	std::vector<AbstractTexture2DRef> texture_list;
 	std::vector<AbstractMaterialRef> material_list;
 	std::vector<CameraS> camera_list;
 	std::vector<AnimationS> animation_list;
