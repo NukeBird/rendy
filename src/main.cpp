@@ -102,7 +102,7 @@ int main(int argc, char** argv)
 		//glDebugMessageCallback(MessageCallback, 0);
 	#endif // _WIN32
 
-	auto model = ModelBuilder::build("assets/ainz.glb");
+	auto model = ModelBuilder::build("assets/backpack.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
@@ -168,7 +168,7 @@ int main(int argc, char** argv)
 
 		glm::mat4 transform = glm::translate(cam_target) * 
 			glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
-			glm::scale(glm::vec3{ 4.5f });
+			glm::scale(glm::vec3{ 0.7f });
 
 		OPTICK_PUSH("SDL_PollEvent");
 		while (SDL_PollEvent(&event))

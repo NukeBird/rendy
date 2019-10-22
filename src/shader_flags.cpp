@@ -51,15 +51,15 @@ std::string shader_flags_to_defines(uint32_t flags)
 		result += "#define USE_VERTEX_BITANGENT\n";
 	}
 
-	if (flags & USE_VERTEX_TBN_MATRIX)
+	/*if (flags & USE_VERTEX_TBN_MATRIX)
 	{
 		result += "#define USE_VERTEX_TBN_MATRIX\n";
-	}
+	}*/
 
-	/*if (flags & USE_VERTEX_BONES)
+	if (flags & USE_VERTEX_BONES)
 	{
 		result += "#define USE_VERTEX_BONES\n";
-	}*/
+	}
 
 	if (flags & USE_COLOR_TEXTURE)
 	{
@@ -84,11 +84,6 @@ std::string shader_flags_to_defines(uint32_t flags)
 	if (flags & USE_METALLIC_ROUGHNESS_TEXTURE)
 	{
 		result += "#define USE_METALLIC_ROUGHNESS_TEXTURE\n";
-	}
-
-	if (flags & USE_DIRECT_LIGHTS)
-	{
-		result += "#define USE_DIRECT_LIGHTS\n";
 	}
 
 	return result;

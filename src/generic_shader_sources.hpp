@@ -35,6 +35,14 @@ precision highp float;
 	out vec3 v_bitangent;
 #endif
 
+#ifdef USE_VERTEX_NORMAL
+	#ifdef USE_VERTEX_TANGENT
+		#ifdef USE_VERTEX_BITANGENT
+			#define USE_VERTEX_TBN_MATRIX
+		#endif
+	#endif
+#endif
+
 #ifdef USE_VERTEX_TBN_MATRIX
 	out mat3 v_tbn;
 #endif
@@ -48,11 +56,10 @@ precision highp float;
 	{
 	#ifdef USE_VERTEX_POSITION
 		gl_Position = u_view_projection * u_transform * vec4(a_position, 1.0);
+		v_position = vec3(u_transform * vec4(a_position, 1.0));
 	#else
 		gl_Position = vec4(vec3(0.0, 0.0, 0.0), 1.0);
 	#endif
-
-	v_position = vec3(u_transform * vec4(a_position, 1.0));
 
 	#ifdef USE_VERTEX_COORD
 		v_coord = a_coord;
@@ -108,6 +115,14 @@ precision mediump float;
 	in vec3 v_bitangent;
 #endif
 
+#ifdef USE_VERTEX_NORMAL
+	#ifdef USE_VERTEX_TANGENT
+		#ifdef USE_VERTEX_BITANGENT
+			#define USE_VERTEX_TBN_MATRIX
+		#endif
+	#endif
+#endif
+
 #ifdef USE_VERTEX_TBN_MATRIX
 	in mat3 v_tbn;
 #endif
@@ -132,10 +147,6 @@ precision mediump float;
 	#define MODEL_COOK_TORRANCE
 #endif
 
-#ifdef USE_DIRECT_LIGHTS
-	uniform vec3 direct_lights[DIRECT_LIGHT_COUNT];
-#endif
-
 	uniform vec3 u_camera_position;
 
 	out vec4 output_color;
@@ -155,11 +166,15 @@ precision mediump float;
 	vec3 get_normal()
 	{	
 		#ifndef USE_NORMAL_TEXTURE
-			return v_normal;
+			#ifdef USE_VERTEX_NORMAL
+				return v_normal;
+			#endif
 		#else
 			#ifdef USE_VERTEX_COORD
 				#ifndef USE_VERTEX_TBN_MATRIX
-					return v_normal; 
+					#ifdef USE_VERTEX_NORMAL
+						return v_normal; 
+					#endif
 				#else
 					vec3 f_normal = read_texture(normal_texture, v_coord).rgb;
 					//f_normal *= vec3(vec2(0.85), 1.0); //TODO
@@ -171,7 +186,7 @@ precision mediump float;
 			#endif
 		#endif
 
-		return v_normal;
+		return vec3(1.0);
 	}
 
 	vec4 get_diffuse()
@@ -187,10 +202,11 @@ precision mediump float;
 				vec4 diffuse_texture_value = read_texture(color_texture, v_coord);
 				diffuse_texture_value.rgb = pow(diffuse_texture_value.rgb, vec3(gamma)); 
 				diffuse *= diffuse_texture_value;
+				return diffuse;
 			#endif
 		#endif
 
-		return diffuse;
+		return vec4(0.0);
 	}
 
 	vec3 get_ao()
@@ -287,7 +303,7 @@ precision mediump float;
 
 		float distance    = length(light_pos - v_position);
         float attenuation = 1.0 / max(distance * distance, 0.001);
-        vec3 radiance     = vec3(1.0, 0.839, 0.66) * vec3(350.5) * vec3(attenuation);        
+        vec3 radiance     = vec3(1.0, 0.839, 0.66) * vec3(75.5) * vec3(attenuation);        
 
 		float f_ndf = distribution_ggx(f_normal, f_h, f_roughness);  
 		float f_g   = geometry_smith(f_normal, f_v, f_l, f_roughness);  
@@ -316,12 +332,16 @@ precision mediump float;
 
 	void main()
 	{
-		vec4 result = calculate_direct_light() * vec4(get_ao(), 1.0);//vec4(f_normal*0.5 + 0.5, 1.0);
+		#ifdef MODEL_COOK_TORRANCE
+			vec4 result = calculate_direct_light() * vec4(get_ao(), 1.0);
 
-		//result.rgb = result.rgb / (result.rgb + vec3(1.0));
-		result.rgb = vec3(1.0) - exp(-result.rgb);
-		result.rgb = pow(result.rgb, vec3(1.0/gamma));
+			//result.rgb = result.rgb / (result.rgb + vec3(1.0));
+			result.rgb = vec3(1.0) - exp(-result.rgb);
+			result.rgb = pow(result.rgb, vec3(1.0/gamma));
 
-		output_color = result;
+			output_color = result;
+		#else
+			output_color = get_diffuse();
+		#endif
 	} 
 )";

@@ -83,13 +83,13 @@ uint32_t parse_mesh_flags(const aiMesh* mesh)
 		printf("USE_VERTEX_BITANGENT\n");
 	}
 
-	if ((flags & USE_VERTEX_TANGENT) && 
+	/*if ((flags & USE_VERTEX_TANGENT) && 
 		(flags & USE_VERTEX_BITANGENT) &&
 		(flags & USE_VERTEX_NORMAL))
 	{
 		flags |= USE_VERTEX_TBN_MATRIX;
 		printf("USE_VERTEX_TBN_MATRIX\n");
-	}
+	}*/
 	/*if (mesh->HasBones())
 	{
 		flags |= USE_VERTEX_BONES; //TODO
@@ -654,7 +654,9 @@ ModelRef ModelBuilder::build(const char* filename)
 
 		{
 			//OPTICK_EVENT("assimp's importer.ReadFile");
+			OPTICK_PUSH("importer.ReadFile");
 			scene = importer.ReadFile(filename, get_import_flags()); 
+			OPTICK_POP();
 		}
 
 		if (!scene)
