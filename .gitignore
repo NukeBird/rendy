@@ -33,3 +33,4 @@
 
 #Ignore build folder
 build/
+.vs/
