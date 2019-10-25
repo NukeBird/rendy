@@ -147,6 +147,8 @@ precision mediump float;
 	#define MODEL_COOK_TORRANCE
 #endif
 
+	uniform samplerCube u_cubemap;
+
 	uniform vec3 u_camera_position;
 
 	out vec4 output_color;
@@ -283,6 +285,11 @@ precision mediump float;
 		return ggx1 * ggx2;
 	}
 
+	vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
+	{
+		return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(1.0 - cosTheta, 5.0);
+	}   
+
 	vec4 calculate_direct_light()
 	{	
 		vec3 light_pos = vec3(0, 3.8, 5.6);
@@ -303,13 +310,13 @@ precision mediump float;
 
 		float distance    = length(light_pos - v_position);
         float attenuation = 1.0 / max(distance * distance, 0.001);
-        vec3 radiance     = vec3(1.0, 0.839, 0.66) * vec3(75.5) * vec3(attenuation);        
+        vec3 radiance     = vec3(1.0, 0.839, 0.66) * vec3(128.0) * vec3(attenuation);        
 
 		float f_ndf = distribution_ggx(f_normal, f_h, f_roughness);  
 		float f_g   = geometry_smith(f_normal, f_v, f_l, f_roughness);  
 		vec3 f_f = fresnel_schlick(max(dot(f_h, f_v), 0.0), f_f0);
 
-		vec3 f_s = f_f;
+		vec3 f_s = min(max(f_f, vec3(0.0)), vec3(1.0));
         vec3 f_d = vec3(1.0) - f_s;
         f_d *= 1.0 - f_metallic;	  
         
@@ -320,9 +327,17 @@ precision mediump float;
         // add to outgoing radiance Lo
         float NdotL = max(dot(f_normal, f_l), 0.0);   
 
-		vec4 result = f_albedo;
-        result.rgb = (f_d * f_albedo.rgb / PI + specular) * radiance * NdotL; 
+		vec3 f_f2 = fresnelSchlickRoughness(max(dot(f_normal, f_v), 0.0), f_f0,
+			f_roughness);
+		f_f2 = min(max(f_f2, vec3(0.0)), vec3(1.0));
+		vec3 f_d2 = vec3(1.0) - f_f2;
+		f_d2 *= 1.0 - f_metallic;
 
+		vec4 result = f_albedo;
+		result.rgb *= f_d2 * texture(u_cubemap, f_normal).rgb;
+        result.rgb += (f_d * f_albedo.rgb / PI + specular) * 
+			(radiance * NdotL);
+		
 		//vec3 ambient = vec3(0.03) * f_albedo.rgb;
 		//result.rgb += ambient;
 

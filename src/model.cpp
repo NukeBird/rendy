@@ -2,6 +2,8 @@
 #include <stack>
 #include <optick.h>
 
+#include "es2/texture_cube.h"
+
 void Mesh::reload()
 {
 	OPTICK_EVENT();
@@ -123,7 +125,15 @@ void Model::draw(const glm::mat4& transform, const glm::mat4& view, const glm::m
 				glm::distance(translation_b + glm::normalize(translation_b - camera_position) * scale_b, camera_position);
 		});*/
 
-	for (auto& draw_call : calls)
+
+	static AbstractTextureCubeRef cubemap;
+
+	if (!cubemap)
+	{
+		cubemap = std::make_shared<ES2::TextureCube>("cube.dds");
+	}
+
+	for (auto& draw_call: calls)
 	{
 		auto material = draw_call.material;
 
@@ -142,10 +152,14 @@ void Model::draw(const glm::mat4& transform, const glm::mat4& view, const glm::m
 			draw_call.view);
 		shader_variant->set_uniform("u_transform", draw_call.model);
 		shader_variant->set_uniform("u_camera_position", camera_position);
+		shader_variant->set_uniform("u_cubemap", 6);
+
+		cubemap->bind(6);
 
 		draw_call.vao->draw();
 		draw_call.vao->unbind();
 		material->unbind(draw_call.extra_flags);
+		//system("PAUSE");
 	}
 }
 

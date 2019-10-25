@@ -43,7 +43,6 @@ void GLAPIENTRY MessageCallback(GLenum source,
 		type, severity, message);
 }
 
-
 int main(int argc, char** argv) 
 {
 	//OPTICK_APP("RendySandbox");
@@ -97,11 +96,11 @@ int main(int argc, char** argv)
 			SDL_GL_SetSwapInterval(0); //disable v-sync
 		}
 
-		//glEnable(GL_DEBUG_OUTPUT);
-		//glDebugMessageCallback(MessageCallback, 0);
+		glEnable(GL_DEBUG_OUTPUT);
+		glDebugMessageCallback(MessageCallback, 0);
 	#endif // _WIN32
 
-	auto model = ModelBuilder::build("assets/backpack.glb");
+	auto model = ModelBuilder::build("assets/ainz.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
@@ -134,6 +133,8 @@ int main(int argc, char** argv)
 		s = m.suffix().str();
 	}*/
 
+	//ES2::TextureCube cube("cube.dds");
+	//std::cout << "cubemap status: " << cube.validate() << std::endl;
 	glFinish();
 
 	SDL_Event event;
@@ -167,7 +168,7 @@ int main(int argc, char** argv)
 
 		glm::mat4 transform = glm::translate(cam_target) * 
 			glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
-			glm::scale(glm::vec3{ 0.7f });
+			glm::scale(glm::vec3{ 5.2f });
 
 		OPTICK_PUSH("SDL_PollEvent");
 		while (SDL_PollEvent(&event))
