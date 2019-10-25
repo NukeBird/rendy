@@ -18,7 +18,6 @@
 	#include <GLES/glplatform.h>
 #endif
 
-#include "texture_factory.h"
 #include "shader_factory.h"
 #include "es2/vertex_array.h"
 #include "model_builder.h"
@@ -47,7 +46,7 @@ void GLAPIENTRY MessageCallback(GLenum source,
 
 int main(int argc, char** argv) 
 {
-	OPTICK_APP("RendySandbox");
+	//OPTICK_APP("RendySandbox");
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
 	{

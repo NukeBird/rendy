@@ -9,8 +9,6 @@ HunterGate(
 
 project(Rendy)
 
-set(CMAKE_CXX_STANDARD 14)
-
 file(GLOB_RECURSE PROJECT_SOURCE_FILES
     "src/*.h"
     "src/*.hpp"
@@ -29,9 +27,9 @@ find_package(Assimp CONFIG REQUIRED)
 hunter_add_package(glm)
 find_package(glm REQUIRED)
 
+add_subdirectory(dep)
 set(PROJECT_LIBS SDL2::SDL2main SDL2::SDL2 stb::stb
-    Assimp::assimp glm)
-
+    Assimp::assimp glm gli)
 
 if(WIN32)
     hunter_add_package(glew)
@@ -46,7 +44,6 @@ else()
     add_library(${PROJECT_NAME} ${PROJECT_SOURCE_FILES})
 endif()
 
-add_subdirectory(dep)
 set(PROJECT_LIBS ${PROJECT_LIBS} OptickCore)
 
 target_link_libraries(${PROJECT_NAME} ${PROJECT_LIBS})
