@@ -8,6 +8,7 @@
 #include <chrono>
 #include <thread>
 #include <random>
+#include "vfs.h"
 
 #ifdef _WIN32
 	#include <gl/glew.h>
@@ -48,6 +49,32 @@ void GLAPIENTRY MessageCallback(GLenum source,
 int main(int argc, char** argv) 
 {
 	//OPTICK_APP("RendySandbox");
+
+	/*
+		auto https_models	= make_https_fs("model");
+		auto https_textures	= make_https_fs("texture");
+		auto https_markers	= make_https_fs("marker");
+
+		auto native_models = make_native_fs("res/models");
+		auto native_textures = make_native_fs("res/textures");
+		auto native_markers = make_native_fs("res/markers");
+
+		auto vfs = make_vfs();
+		vfs->mount("models", native_models);
+		vfs->mount("models", https_models);
+
+		vfs->mount("textures", native_textures);
+		vfs->mount("textures", https_textures);
+
+		vfs->mount("markers", native_markers);
+		vfs->mount("markers", https_markers);
+	*/
+
+	VFS vfs;
+
+	vfs.open_file("kek");
+	vfs.open_file("super_kek/kek");
+	vfs.open_file("./keek");
 
 	NativeFS assets("assets");
 
