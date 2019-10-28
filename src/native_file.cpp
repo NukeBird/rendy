@@ -46,6 +46,11 @@ bool NativeFile::is_read_only() const
 	return mode == FileMode::Read;
 }
 
+bool NativeFile::is_open() const
+{
+	return stream.is_open();
+}
+
 bool NativeFile::validate()
 {
 	return stream.good();

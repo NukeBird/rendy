@@ -8,7 +8,8 @@ class NativeFile final: public AbstractFile
 public:
 	NativeFile(const std::string& path, FileMode mode);
 	virtual uint64_t get_size() const override;
-	virtual bool is_read_only() const override;
+	virtual bool is_read_only() const override; 
+	virtual bool is_open() const override;
 	virtual bool validate() override;
 	virtual uint64_t seek(uint64_t offset, SeekOrigin origin = Begin) override;
 	virtual uint64_t tell() override;

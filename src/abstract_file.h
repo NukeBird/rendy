@@ -21,6 +21,7 @@ struct AbstractFile
 
 	virtual uint64_t get_size() const = 0;
 	virtual bool is_read_only() const = 0;
+	virtual bool is_open() const = 0;
 	virtual bool validate() = 0;
 	virtual uint64_t seek(uint64_t offset, SeekOrigin origin = Begin) = 0;
 	virtual uint64_t tell() = 0;

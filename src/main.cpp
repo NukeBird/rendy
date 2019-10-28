@@ -71,16 +71,12 @@ int main(int argc, char** argv)
 	*/
 
 	VFS vfs;
+	auto nfs = std::make_shared<NativeFS>("assets");
+	vfs.mount("test_alias", nfs);
 
-	vfs.open_file("kek");
-	vfs.open_file("super_kek/kek");
-	vfs.open_file("./keek");
+	std::cout << "NativeFS status: " << nfs->validate() << std::endl;
 
-	NativeFS assets("assets");
-
-	std::cout << "NativeFS status: " << assets.validate() << std::endl;
-
-	auto file = assets.open_file("test.txt", FileMode::Read);
+	auto file = vfs.open_file("test_alias/test.txt", FileMode::Read);
 
 	std::cout << "File status: " << file->validate() << std::endl;
 	std::cout << "File size: " << file->get_size() << std::endl;

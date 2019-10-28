@@ -19,8 +19,8 @@ FileRef NativeFS::open_file(const std::string& path, FileMode mode)
 
 bool NativeFS::has_file(const std::string& path)
 {
-	auto file = open_file(base_path + path, FileMode::Read);
-	return file->validate();
+	auto file = open_file(path, FileMode::Read);
+	return file->is_open();
 }
 
 void NativeFS::normalize_base_path()
