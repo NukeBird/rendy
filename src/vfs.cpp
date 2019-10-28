@@ -1,6 +1,12 @@
 #include "vfs.h"
-#include "native_fs.h"
 #include <iostream>
+
+VFS::VFS(FSRef default_fs)
+{
+	this->default_fs = default_fs;
+	mount("", default_fs);
+	mount(".", default_fs);
+}
 
 void VFS::mount(const std::string& alias, FSRef filesystem)
 {
@@ -24,7 +30,7 @@ FSRef VFS::get_filesystem(const std::string& alias)
 		}
 	}
 
-	return nullptr;
+	return default_fs;
 }
 
 FileRef VFS::open_file(const std::string& path, FileMode mode)
@@ -47,7 +53,7 @@ FileRef VFS::open_file(const std::string& path, FileMode mode)
 		return default_fs.open_file(path); //(not a fs_path but path)
 	*/
 
-	return 0;//get_filesystem(alias)->open_file(fs_path, mode);
+	return get_filesystem(alias)->open_file(fs_path, mode);
 }
 
 std::string VFS::get_alias(const std::string& text) const
