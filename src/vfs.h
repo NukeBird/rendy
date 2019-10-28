@@ -5,7 +5,7 @@
 #include <memory>
 #include <string>
 
-class VFS: public AbstractVFS
+class VFS final: public AbstractVFS
 {
 public:
 	virtual void mount(const std::string& alias, FSRef filesystem) override;
