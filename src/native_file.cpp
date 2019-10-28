@@ -3,6 +3,7 @@
 NativeFile::NativeFile(const std::string& path, FileMode mode)
 {
 	this->mode = mode;
+	this->size = 0;
 
 	unsigned stream_mode = 0;
 	
@@ -50,7 +51,7 @@ bool NativeFile::validate()
 	return stream.good();
 }
 
-uint64_t NativeFile::seek(uint64_t offset, SeekOrigin origin = Begin)
+uint64_t NativeFile::seek(uint64_t offset, SeekOrigin origin)
 {
 	std::ios_base::seekdir way = std::ios_base::beg;
 
