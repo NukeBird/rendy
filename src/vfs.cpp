@@ -18,19 +18,26 @@ void VFS::mount(const std::string& alias, FSRef filesystem)
 
 FSRef VFS::get_filesystem(const std::string& alias)
 {
+	auto fs_list = get_filesystem_list(alias);
+
+	if (!fs_list.empty())
+	{
+		return fs_list[0];
+	}
+
+	return default_fs;
+}
+
+std::vector<FSRef> VFS::get_filesystem_list(const std::string& alias)
+{
 	auto it = filesystem_map.find(alias);
 
 	if (it != filesystem_map.end())
 	{
-		auto& filesystem_list = it->second;
-
-		if (!filesystem_list.empty())
-		{
-			return filesystem_list[0];
-		}
+		return it->second; //TODO: unnecessary copy here?
 	}
 
-	return default_fs;
+	return std::vector<FSRef>();
 }
 
 FileRef VFS::open_file(const std::string& path, FileMode mode)
@@ -53,7 +60,7 @@ FileRef VFS::open_file(const std::string& path, FileMode mode)
 		return default_fs.open_file(path); //(not a fs_path but path)
 	*/
 
-	return get_filesystem(alias)->open_file(fs_path, mode);
+	return default_fs->open_file(path, mode);
 }
 
 std::string VFS::get_alias(const std::string& text) const
