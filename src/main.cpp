@@ -43,9 +43,26 @@ void GLAPIENTRY MessageCallback(GLenum source,
 		type, severity, message);
 }
 
+#include "native_fs.h"
+
 int main(int argc, char** argv) 
 {
 	//OPTICK_APP("RendySandbox");
+
+	NativeFS assets("assets");
+
+	std::cout << "NativeFS status: " << assets.validate() << std::endl;
+
+	auto file = assets.open_file("test.txt", FileMode::Read);
+
+	std::cout << "File status: " << file->validate() << std::endl;
+	std::cout << "File size: " << file->get_size() << std::endl;
+	
+	std::string text;
+	text.resize(file->get_size());
+	file->read(&text[0], text.size());
+
+	std::cout << text << std::endl << std::endl;
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
 	{
