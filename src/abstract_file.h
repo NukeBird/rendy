@@ -23,7 +23,7 @@ struct AbstractFile
 	virtual bool is_read_only() const = 0;
 	virtual bool validate() = 0;
 	virtual uint64_t seek(uint64_t offset, SeekOrigin origin = Begin) = 0;
-	virtual uint64_t tell(uint64_t offset) = 0;
+	virtual uint64_t tell() = 0;
 	virtual uint64_t read(void* buffer, uint64_t size) = 0;
 	virtual uint64_t write(void* buffer, uint64_t size) = 0;
 };
