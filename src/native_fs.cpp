@@ -17,6 +17,12 @@ FileRef NativeFS::open_file(const std::string& path, FileMode mode)
 	return std::make_shared<NativeFile>(base_path + path, mode);
 }
 
+bool NativeFS::has_file(const std::string& path)
+{
+	auto file = open_file(base_path + path, FileMode::Read);
+	return file->validate();
+}
+
 void NativeFS::normalize_base_path()
 {
 	if (validate())

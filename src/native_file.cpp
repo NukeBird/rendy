@@ -27,7 +27,7 @@ NativeFile::NativeFile(const std::string& path, FileMode mode)
 	}
 
 	stream_mode |= std::ios::binary;
-
+	
 	stream.open(path, stream_mode);
 
 	if (validate())

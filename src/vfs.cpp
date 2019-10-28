@@ -60,6 +60,14 @@ FileRef VFS::open_file(const std::string& path, FileMode mode)
 		return default_fs.open_file(path); //(not a fs_path but path)
 	*/
 
+	for (auto fs: get_filesystem_list(alias))
+	{
+		if (fs->has_file(fs_path))
+		{
+			return fs->open_file(fs_path, mode);
+		}
+	}
+
 	return default_fs->open_file(path, mode);
 }
 

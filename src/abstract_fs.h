@@ -7,11 +7,11 @@ struct AbstractFS
 {
 	virtual bool validate() = 0;
 	virtual FileRef open_file(const std::string& path, FileMode mode) = 0;
+	virtual bool has_file(const std::string& path) = 0;
 	//create_file
 	//remove_file
 	//copy_file
 	//rename_file
-	//is_file_exists
 	//is_file
 	//is_directory
 };
