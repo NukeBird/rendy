@@ -4,11 +4,27 @@
 
 void VFS::mount(const std::string& alias, FSRef filesystem)
 {
+	if (filesystem->validate())
+	{
+		filesystem_map[alias].push_back(filesystem);
+	}
 }
 
 FSRef VFS::get_filesystem(const std::string& alias)
 {
-	return std::make_shared<NativeFS>(alias);
+	auto it = filesystem_map.find(alias);
+
+	if (it != filesystem_map.end())
+	{
+		auto& filesystem_list = it->second;
+
+		if (!filesystem_list.empty())
+		{
+			return filesystem_list[0];
+		}
+	}
+
+	return nullptr;
 }
 
 FileRef VFS::open_file(const std::string& path, FileMode mode)
@@ -31,7 +47,7 @@ FileRef VFS::open_file(const std::string& path, FileMode mode)
 		return default_fs.open_file(path); //(not a fs_path but path)
 	*/
 
-	return get_filesystem(alias)->open_file(fs_path, mode);
+	return 0;//get_filesystem(alias)->open_file(fs_path, mode);
 }
 
 std::string VFS::get_alias(const std::string& text) const

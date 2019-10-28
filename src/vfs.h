@@ -13,4 +13,6 @@ public:
 	virtual FileRef open_file(const std::string& path, FileMode mode = FileMode::ReadWrite) override;
 private:
 	std::string get_alias(const std::string& text) const;
+
+	std::unordered_map<std::string, std::vector<FSRef>> filesystem_map;
 };
