@@ -1,5 +1,6 @@
 #pragma once
 #include "abstract_vertex_array.h"
+#include "abstract_command.h"
 #include "abstract_material.h"
 #include <glm/glm.hpp>
 
