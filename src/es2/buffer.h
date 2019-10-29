@@ -1,7 +1,7 @@
 #pragma once
 #include "../abstract_buffer.h"
 #include <vector>
-#include <GL/glew.h> //TODO
+#include "../common.h"
 
 namespace ES2
 {

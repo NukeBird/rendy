@@ -1,5 +1,5 @@
 #include "texture2d.h"
-#include <GL/glew.h> //TODO
+#include "../common.h"
 #include <mutex> //call_once
 #include <optick.h>
 

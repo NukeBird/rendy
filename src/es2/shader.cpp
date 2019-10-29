@@ -1,6 +1,6 @@
 #include "shader.h"
 #include "shader_variant.h"
-#include <GL/glew.h> //TODO
+#include "../common.h"
 #include <optick.h>
 
 ES2::Shader::Shader(const std::string& vertex_source, const std::string& fragment_source)

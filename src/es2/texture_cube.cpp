@@ -1,5 +1,5 @@
 #include "texture_cube.h"
-#include <GL/glew.h> //TODO
+#include "../common.h"
 #include <optick.h>
 
 ES2::TextureCube::TextureCube(const std::string& filename)

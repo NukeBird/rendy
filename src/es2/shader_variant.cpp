@@ -1,5 +1,5 @@
 #include "shader_variant.h"
-#include <GL/glew.h> //TODO
+#include "../common.h"
 #include <optick.h>
 
 ES2::ShaderVariant::ShaderVariant(const std::string& vtx, const std::string& frg)

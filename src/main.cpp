@@ -10,14 +10,7 @@
 #include <random>
 #include "vfs.h"
 
-#ifdef _WIN32
-	#include <gl/glew.h>
-#else
-	#include <EGL/egl.h>
-	#include <GLES/gl.h>
-	#include <GLES/glext.h>
-	#include <GLES/glplatform.h>
-#endif
+#include "common.h"
 
 #include "shader_factory.h"
 #include "es2/vertex_array.h"
@@ -30,7 +23,7 @@
 
 #include <optick.h>
 
-void GLAPIENTRY MessageCallback(GLenum source,
+void GLAPIENTRY message_callback(GLenum source,
 	GLenum type,
 	GLuint id,
 	GLenum severity,
@@ -38,10 +31,21 @@ void GLAPIENTRY MessageCallback(GLenum source,
 	const GLchar* message,
 	const void* userParam)
 {
-	//OPTICK_EVENT();
-	printf("GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+	std::string message_string;
+
+	if (type == GL_DEBUG_TYPE_ERROR)
+	{
+		message_string = "(OpenGL error)" + std::string(message);
+	}
+	else
+	{
+		message_string = "(OpenGL other)" + std::string(message);
+	}
+
+	/*printf("GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
 		(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
-		type, severity, message);
+		type, severity, message);*/
+	std::cout << message_string << std::endl;
 }
 
 #include "native_fs.h"
@@ -137,7 +141,8 @@ int main(int argc, char** argv)
 		}
 
 		glEnable(GL_DEBUG_OUTPUT);
-		glDebugMessageCallback(MessageCallback, 0);
+		glDebugMessageCallback(message_callback, 0);
+		glBindTexture(-24, -3);
 	#endif // _WIN32
 
 	auto model = ModelBuilder::build("assets/ainz.glb");

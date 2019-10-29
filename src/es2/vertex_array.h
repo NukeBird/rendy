@@ -1,6 +1,6 @@
 #pragma once
 #include "../abstract_vertex_array.h"
-#include <GL/glew.h> //TODO
+#include "../common.h"
 
 namespace ES2
 {
