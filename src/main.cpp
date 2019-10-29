@@ -1,25 +1,8 @@
 #include <iostream>
 #include <SDL.h>
-#define GLM_FORCE_RADIANS 
-#define GLM_ENABLE_EXPERIMENTAL
-//#define GLM_FORCE_DEPTH_ZERO_TO_ONE //TODO: ???
-#include <glm/gtc/matrix_transform.hpp> 
-#include <glm/gtx/transform.hpp>
-#include <chrono>
-#include <thread>
-#include <random>
-#include "vfs.h"
-
-#include "common.h"
-
-#include "shader_factory.h"
-#include "es2/vertex_array.h"
-#include "model_builder.h"
-#include "vertex_array_factory.h"
-#include "vertex_buffer_factory.h"
-#include "index_buffer_factory.h"
-#include "generic_shader_sources.hpp"
+#include "rendy.h"
 #include <regex>
+#include <chrono>
 
 #include <optick.h>
 
@@ -42,13 +25,8 @@ void GLAPIENTRY message_callback(GLenum source,
 		message_string = "(OpenGL other)" + std::string(message);
 	}
 
-	/*printf("GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
-		(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
-		type, severity, message);*/
 	std::cout << message_string << std::endl;
 }
-
-#include "native_fs.h"
 
 int main(int argc, char** argv) 
 {
@@ -74,7 +52,7 @@ int main(int argc, char** argv)
 		vfs->mount("markers", https_markers);
 	*/
 
-	VFS vfs;
+	/*VFS vfs;
 	auto nfs = std::make_shared<NativeFS>("assets");
 	vfs.mount("test_alias", nfs);
 
@@ -89,7 +67,7 @@ int main(int argc, char** argv)
 	text.resize(file->get_size());
 	file->read(&text[0], text.size());
 
-	std::cout << text << std::endl << std::endl;
+	std::cout << text << std::endl << std::endl;*/
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
 	{
@@ -142,7 +120,7 @@ int main(int argc, char** argv)
 
 		glEnable(GL_DEBUG_OUTPUT);
 		glDebugMessageCallback(message_callback, 0);
-		glBindTexture(-24, -3);
+		//glBindTexture(-24, -3);
 	#endif // _WIN32
 
 	auto model = ModelBuilder::build("assets/ainz.glb");

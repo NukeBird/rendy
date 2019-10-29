@@ -13,6 +13,9 @@
 	#include <GLES3/gl3platform.h>
 #endif
 
+#define GLM_FORCE_RADIANS 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
 #include <glm/gtx/transform.hpp>
