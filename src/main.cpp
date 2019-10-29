@@ -115,7 +115,7 @@ int main(int argc, char** argv)
 
 		//if (SDL_GL_SetSwapInterval(-1) == -1) //adaptive v-sync
 		{
-			SDL_GL_SetSwapInterval(0); //disable v-sync
+			SDL_GL_SetSwapInterval(1); //enable v-sync
 		}
 
 		glEnable(GL_DEBUG_OUTPUT);
