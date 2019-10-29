@@ -3,6 +3,7 @@
 #include "draw_call.h"
 #include <glm/glm.hpp>
 #include <vector>
+#include <memory>
 
 using DrawCallList = std::vector<DrawCall>;
 
@@ -15,3 +16,5 @@ struct AbstractDrawable: public AbstractResource
 		const glm::mat4& view = glm::mat4(1.0), 
 		const glm::mat4& proj = glm::mat4(1.0)) = 0;
 };
+
+using AbstractDrawableRef = std::shared_ptr<AbstractDrawable>;
