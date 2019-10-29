@@ -6,4 +6,4 @@ struct AbstractCommand
 	virtual void execute() = 0;
 };
 
-using CommandCallRef = std::shared_ptr<AbstractCommand>;
+using CommandRef = std::shared_ptr<AbstractCommand>;
