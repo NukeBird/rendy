@@ -8,6 +8,7 @@ namespace ES2
 	public:
 		virtual void push(DrawCallList draw_calls) override;
 		virtual void push(CommandList commands) override;
+		virtual void flush() override;
 		virtual void reload() override;
 	};
 };

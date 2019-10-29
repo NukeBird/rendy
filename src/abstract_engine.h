@@ -10,5 +10,6 @@ struct AbstractEngine
 {
 	virtual void push(DrawCallList draw_calls) = 0;
 	virtual void push(CommandList commands) = 0;
+	virtual void flush() = 0;
 	virtual void reload() = 0;
 };

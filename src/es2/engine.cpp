@@ -24,6 +24,11 @@ void ES2::Engine::push(CommandList commands)
 	}
 }
 
+void ES2::Engine::flush()
+{
+	//TODO
+}
+
 void ES2::Engine::reload()
 {
 	//TODO?
