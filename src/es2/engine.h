@@ -6,8 +6,8 @@ namespace ES2
 	class Engine: public AbstractEngine
 	{
 	public:
-		virtual void draw(DrawCallList draw_calls) override;
-		virtual void draw(CommandList commands) override;
+		virtual void push(DrawCallList draw_calls) override;
+		virtual void push(CommandList commands) override;
 		virtual void reload() override;
 	};
 };

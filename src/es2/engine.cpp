@@ -1,6 +1,6 @@
 #include "engine.h"
 
-void ES2::Engine::draw(DrawCallList draw_calls)
+void ES2::Engine::push(DrawCallList draw_calls)
 {
 	CommandList commands;
 
@@ -13,10 +13,10 @@ void ES2::Engine::draw(DrawCallList draw_calls)
 		commands.insert(commands.end(), cl.begin(), cl.end());
 	}
 
-	draw(commands);
+	push(commands);
 }
 
-void ES2::Engine::draw(CommandList commands)
+void ES2::Engine::push(CommandList commands)
 {
 	for (auto& c : commands)
 	{
