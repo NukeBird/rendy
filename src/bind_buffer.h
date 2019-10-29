@@ -10,3 +10,5 @@ public:
 private:
 	AbstractBufferRef buffer;
 };
+
+using BindBufferRef = std::shared_ptr<BindBufferRef>;
