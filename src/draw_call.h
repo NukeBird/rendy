@@ -3,6 +3,7 @@
 #include "abstract_command.h"
 #include "abstract_material.h"
 #include <glm/glm.hpp>
+#include <vector>
 
 struct DrawCall
 {
@@ -13,4 +14,6 @@ struct DrawCall
 	glm::mat4 model;
 	glm::mat4 view;
 	glm::mat4 proj;
+
+	std::vector<CommandRef> to_command_list();
 };

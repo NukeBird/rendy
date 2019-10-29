@@ -1,5 +1,8 @@
 #include "pbr_material.h"
 #include "shader_factory.h"
+#include "bind_shader.h"
+#include "bind_texture2d.h"
+#include "set_uniform.h"
 #include <optick.h>
 
 PBRMaterial::PBRMaterial(const AbstractTexture2DRef& albedo_texture,
@@ -92,6 +95,33 @@ uint32_t PBRMaterial::get_flags() const
 	}
 
 	return flags;
+}
+
+std::vector<CommandRef> PBRMaterial::to_command_list(uint32_t extra_flags)
+{
+	ShaderSettings settings;
+	settings.flags = extra_flags | get_flags();
+
+	auto shader_variant = shader->compile(settings);
+
+	std::vector<CommandRef> list;
+
+	list.emplace_back(std::make_shared<BindShader>(shader, settings));
+
+	list.emplace_back(std::make_shared<SetUniform<int>>(shader_variant,
+		"color_texture", 0));
+	list.emplace_back(std::make_shared<BindTexture2D>(albedo_texture, 0));
+
+	list.emplace_back(std::make_shared<SetUniform<int>>(shader_variant,
+		"normal_texture", 1));
+	list.emplace_back(std::make_shared<BindTexture2D>(normal_texture, 1));
+
+	list.emplace_back(std::make_shared<SetUniform<int>>(shader_variant,
+		"metallic_roughness_texture", 2));
+	list.emplace_back(std::make_shared<BindTexture2D>(
+		ambient_metallic_roughness_texture, 2));
+
+	return list;
 }
 
 void PBRMaterial::bind(const ShaderSettings& settings)
