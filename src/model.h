@@ -39,7 +39,7 @@ public:
 	virtual void reload() override;
 	virtual bool validate() const override;	
 	
-	virtual DrawCallList generate_draw_calls(const glm::mat4& model,
+	virtual BatchList generate_batch_list(const glm::mat4& model,
 		const glm::mat4& view, const glm::mat4& proj) override;
 
 	void draw(const glm::mat4& transform = glm::mat4(1.0),
@@ -55,7 +55,7 @@ private:
 		const glm::mat4& base_transform,
 		const glm::mat4& view,
 		const glm::mat4& proj,
-		DrawCallList& calls);
+		BatchList& calls);
 
 	std::vector<AbstractMaterialRef> materials;
 	std::vector<Image2DRef> images;

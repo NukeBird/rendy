@@ -82,11 +82,11 @@ bool Model::validate() const
 	return true;
 }
 
-DrawCallList Model::generate_draw_calls(const glm::mat4& model, const glm::mat4& view, 
+BatchList Model::generate_batch_list(const glm::mat4& model, const glm::mat4& view, 
 	const glm::mat4& proj)
 {
 	OPTICK_EVENT();
-	DrawCallList calls;
+	BatchList calls;
 	if (get_node_count() > 0)
 	{
 		generate_draw_calls(0, model, view, proj, calls);
@@ -100,7 +100,7 @@ DrawCallList Model::generate_draw_calls(const glm::mat4& model, const glm::mat4&
 void Model::draw(const glm::mat4& transform, const glm::mat4& view, const glm::mat4& proj)
 {
 	OPTICK_EVENT();
-	auto calls = generate_draw_calls(transform, view, proj);
+	auto calls = generate_batch_list(transform, view, proj);
 
 	glm::mat3 view_rotation(view);
 	glm::vec3 camera_position = -view[3] * view_rotation;
@@ -218,7 +218,7 @@ void Model::draw_node(uint32_t node_id,
 }
 
 void Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_transform, 
-	const glm::mat4& view, const glm::mat4& proj, DrawCallList& calls)
+	const glm::mat4& view, const glm::mat4& proj, BatchList& calls)
 {
 	OPTICK_EVENT();
 	auto& node = nodes[node_id];

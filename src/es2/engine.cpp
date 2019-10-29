@@ -1,6 +1,6 @@
 #include "engine.h"
 
-void ES2::Engine::push(DrawCallList draw_calls)
+void ES2::Engine::push(BatchList draw_calls)
 {
 	CommandList commands;
 
