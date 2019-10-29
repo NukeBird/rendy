@@ -104,8 +104,18 @@ uint32_t PBRMaterial::get_flags() const
 	return flags;
 }
 
+#include "es2/texture_cube.h"
+#include "bind_texture_cube.h"
+
 std::vector<CommandRef> PBRMaterial::to_command_list(uint32_t extra_flags)
 {
+	static AbstractTextureCubeRef cubemap;
+
+	if (!cubemap)
+	{
+		cubemap = std::make_shared<ES2::TextureCube>("cube.dds");
+	}
+
 	ShaderSettings settings;
 	settings.flags = extra_flags | get_flags();
 
@@ -127,6 +137,10 @@ std::vector<CommandRef> PBRMaterial::to_command_list(uint32_t extra_flags)
 		"metallic_roughness_texture", 2));
 	list.emplace_back(std::make_shared<BindTexture2D>(
 		ambient_metallic_roughness_texture, 2));
+
+	list.emplace_back(std::make_shared<SetUniform<int>>(shader_variant,
+		"u_cubemap", 6));
+	list.emplace_back(std::make_shared<BindTextureCube>(cubemap, 6));
 
 	return list;
 }

@@ -135,7 +135,7 @@ void Model::draw(const glm::mat4& transform, const glm::mat4& view, const glm::m
 
 	for (auto& draw_call: calls)
 	{
-		auto material = draw_call.material;
+		/*auto material = draw_call.material;
 
 		auto shader = material->get_shader();
 
@@ -159,7 +159,15 @@ void Model::draw(const glm::mat4& transform, const glm::mat4& view, const glm::m
 		draw_call.vao->draw();
 		draw_call.vao->unbind();
 		material->unbind(draw_call.extra_flags);
-		//system("PAUSE");
+		//system("PAUSE");*/
+		
+		auto cl = draw_call.to_command_list();
+
+		for (auto command : cl)
+		{
+			command->execute();
+		}
+		//printf("\n\n\n");
 	}
 }
 

@@ -42,9 +42,9 @@ public:
 	virtual DrawCallList generate_draw_calls(const glm::mat4& model,
 		const glm::mat4& view, const glm::mat4& proj) override;
 
-	virtual void draw(const glm::mat4& transform = glm::mat4(1.0),
+	void draw(const glm::mat4& transform = glm::mat4(1.0),
 		const glm::mat4& view = glm::mat4(1.0),
-		const glm::mat4& proj = glm::mat4(1.0)) override;
+		const glm::mat4& proj = glm::mat4(1.0));
 private:
 	void draw_node(uint32_t node_id, 
 		const glm::mat4& base_transform = glm::mat4(1.0),

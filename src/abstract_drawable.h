@@ -12,9 +12,6 @@ struct AbstractDrawable: public AbstractResource
 	virtual ~AbstractDrawable() = default;
 	virtual DrawCallList generate_draw_calls(const glm::mat4& model, 
 		const glm::mat4& view, const glm::mat4& proj) = 0;
-	virtual void draw(const glm::mat4& transform = glm::mat4(1.0),
-		const glm::mat4& view = glm::mat4(1.0), 
-		const glm::mat4& proj = glm::mat4(1.0)) = 0; //TODO: remove
 };
 
 using AbstractDrawableRef = std::shared_ptr<AbstractDrawable>;

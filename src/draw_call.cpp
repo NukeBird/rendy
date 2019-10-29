@@ -7,9 +7,10 @@
 
 std::vector<CommandRef> DrawCall::to_command_list()
 {
-	std::vector<CommandRef> list = material->to_command_list(extra_flags);
+	auto list = material->to_command_list(extra_flags);
 
 	auto shader_variant = material->get_shader_variant(extra_flags);
+	list.emplace_back(std::make_shared<BindVertexArray>(vao, shader_variant));
 	list.emplace_back(std::make_shared<SetUniform<glm::mat4>>(
 		shader_variant, "u_view", view));
 	list.emplace_back(std::make_shared<SetUniform<glm::mat4>>(
@@ -17,7 +18,7 @@ std::vector<CommandRef> DrawCall::to_command_list()
 	list.emplace_back(std::make_shared<SetUniform<glm::mat4>>(
 		shader_variant, "u_view_projection", proj * view));
 	list.emplace_back(std::make_shared<SetUniform<glm::mat4>>(
-		shader_variant, "transform", model));
+		shader_variant, "u_transform", model));
 
 	glm::mat3 view_rotation(view);
 	glm::vec3 camera_position = -view[3] * view_rotation;
