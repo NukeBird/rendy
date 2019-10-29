@@ -1,8 +1,8 @@
 #pragma once
 #include "abstract_vertex_array.h"
-#include "abstract_command_call.h"
+#include "abstract_command.h"
 
-class BindVertexArray: public AbstractCommandCall
+class BindVertexArray: public AbstractCommand
 {
 public:
 	BindVertexArray(AbstractVertexArrayRef vao, ShaderVariantRef shader_variant);
@@ -12,4 +12,4 @@ private:
 	ShaderVariantRef shader_variant;
 };
 
-using BindBufferRef = std::shared_ptr<BindBufferRef>;
+using BindVertexArrayRef = std::shared_ptr<BindVertexArray>;

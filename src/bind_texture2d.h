@@ -1,8 +1,8 @@
 #pragma once
 #include "abstract_texture2d.h"
-#include "abstract_command_call.h"
+#include "abstract_command.h"
 
-class BindTexture2D: public AbstractCommandCall
+class BindTexture2D: public AbstractCommand
 {
 public:
 	BindTexture2D(AbstractTexture2DRef texture, uint32_t slot);
