@@ -83,6 +83,13 @@ AbstractShaderRef PBRMaterial::get_shader()
 	return shader;
 }
 
+ShaderVariantRef PBRMaterial::get_shader_variant(uint32_t extra_flags)
+{
+	ShaderSettings settings;
+	settings.flags = extra_flags | get_flags();
+	return shader->compile(settings);
+}
+
 uint32_t PBRMaterial::get_flags() const
 {
 	OPTICK_EVENT();

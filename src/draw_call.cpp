@@ -1,16 +1,31 @@
 #include "draw_call.h"
 #include "bind_shader.h"
+#include "set_uniform.h"
+#include "bind_vertex_array.h"
+#include "draw.h"
 #include <memory>
 
 std::vector<CommandRef> DrawCall::to_command_list()
 {
-	auto shader = material->get_shader();
-	ShaderSettings settings;
-	settings.flags = extra_flags | material->get_flags();
+	std::vector<CommandRef> list = material->to_command_list(extra_flags);
 
-	std::vector<CommandRef> list;
+	auto shader_variant = material->get_shader_variant(extra_flags);
+	list.emplace_back(std::make_shared<SetUniform<glm::mat4>>(
+		shader_variant, "u_view", view));
+	list.emplace_back(std::make_shared<SetUniform<glm::mat4>>(
+		shader_variant, "u_projection", proj));
+	list.emplace_back(std::make_shared<SetUniform<glm::mat4>>(
+		shader_variant, "u_view_projection", proj * view));
+	list.emplace_back(std::make_shared<SetUniform<glm::mat4>>(
+		shader_variant, "transform", model));
 
-	list.emplace_back(std::make_shared<BindShader>(shader, settings));
+	glm::mat3 view_rotation(view);
+	glm::vec3 camera_position = -view[3] * view_rotation;
 
-	return std::vector<CommandRef>();
+	list.emplace_back(std::make_shared<SetUniform<glm::vec3>>(
+		shader_variant, "u_camera_position", camera_position));
+
+	list.emplace_back(std::make_shared<Draw>(vao));
+
+	return list;
 }

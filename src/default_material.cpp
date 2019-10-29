@@ -67,6 +67,13 @@ AbstractShaderRef DefaultMaterial::get_shader()
 	return shader;
 }
 
+ShaderVariantRef DefaultMaterial::get_shader_variant(uint32_t extra_flags)
+{
+	ShaderSettings settings;
+	settings.flags = extra_flags | get_flags();
+	return shader->compile(settings);
+}
+
 uint32_t DefaultMaterial::get_flags() const
 {
 	OPTICK_EVENT();
@@ -91,7 +98,7 @@ std::vector<CommandRef> DefaultMaterial::to_command_list(uint32_t extra_flags)
 	ShaderSettings settings;
 	settings.flags = extra_flags | get_flags();
 
-	auto shader_variant = shader->compile(settings);
+	auto shader_variant = get_shader_variant(extra_flags);
 
 	std::vector<CommandRef> list;
 

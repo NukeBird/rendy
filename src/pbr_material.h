@@ -12,6 +12,7 @@ public:
 	virtual void reload() override;
 	virtual bool validate() const override;
 	virtual AbstractShaderRef get_shader() override;
+	virtual ShaderVariantRef get_shader_variant(uint32_t extra_flags) override;
 	virtual uint32_t get_flags() const override;
 	virtual std::vector<CommandRef> to_command_list(uint32_t extra_flags) override;
 	virtual void bind(const ShaderSettings& settings) override;
