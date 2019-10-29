@@ -1,12 +1,12 @@
 #include "engine.h"
 
-void ES2::Engine::push(BatchList draw_calls)
+void ES2::Engine::push(BatchList batches)
 {
 	CommandList commands;
 
-	for (auto& dc : draw_calls)
+	for (auto& batch: batches)
 	{
-		auto cl = dc.to_command_list();
+		auto cl = batch.to_command_list();
 
 		//TODO: optimize command list!
 
@@ -20,7 +20,7 @@ void ES2::Engine::push(CommandList commands)
 {
 	for (auto& c : commands)
 	{
-		c->execute();
+		c->execute(); //TODO
 	}
 }
 
