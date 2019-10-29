@@ -8,7 +8,6 @@
 
 struct AbstractTexture2D: public AbstractResource
 {
-	virtual ~AbstractTexture2D() = default; //TODO: = 0?
 	virtual void bind(uint32_t slot) = 0;
 	virtual void unbind(uint32_t slot) = 0;
 	virtual glm::uvec2 get_size() const = 0;

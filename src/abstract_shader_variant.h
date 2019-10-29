@@ -6,7 +6,6 @@
 
 struct AbstractShaderVariant: public AbstractResource
 {
-	virtual ~AbstractShaderVariant() = default; //TODO: = 0?
 	virtual void set_uniform(const std::string& name, const glm::vec3& vec) = 0;
 	virtual void set_uniform(const std::string& name, const glm::mat4& mat) = 0;
 	virtual void set_uniform(const std::string& name, const glm::mat3& mat) = 0;

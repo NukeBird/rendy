@@ -7,7 +7,6 @@
 
 struct AbstractMaterial: public AbstractResource
 {
-	virtual ~AbstractMaterial() = default; //TODO: = 0?
 	virtual AbstractShaderRef get_shader() = 0;
 	virtual ShaderVariantRef get_shader_variant(uint32_t extra_flags) = 0;
 	virtual uint32_t get_flags() const = 0;

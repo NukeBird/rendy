@@ -6,7 +6,6 @@
 
 struct AbstractVertexArray: public AbstractResource
 {
-	virtual ~AbstractVertexArray() = default;
 	virtual void bind(const ShaderVariantRef& shader) = 0;
 	virtual void draw() = 0;
 	virtual void unbind() = 0;

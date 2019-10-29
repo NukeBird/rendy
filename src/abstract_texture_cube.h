@@ -7,7 +7,6 @@
 
 struct AbstractTextureCube: public AbstractResource
 {
-	virtual ~AbstractTextureCube() = default; //TODO: = 0?
 	virtual void bind(uint32_t slot) = 0;
 	virtual void unbind(uint32_t slot) = 0;
 	virtual glm::uvec3 get_size() const = 0;

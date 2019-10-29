@@ -4,7 +4,6 @@
 
 struct AbstractCamera
 {
-	virtual ~AbstractCamera() = default;
 	virtual bool look_at(const glm::vec3& position) = 0;
 	virtual void translate(const glm::vec3& translation) = 0;
 	virtual void rotate(const glm::vec3& rotation) = 0;

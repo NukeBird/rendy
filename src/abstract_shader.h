@@ -8,7 +8,6 @@
 
 struct AbstractShader: public AbstractResource
 {
-	virtual ~AbstractShader() = default; //TODO: = 0?
 	virtual ShaderVariantRef compile(const ShaderSettings& settings) = 0;
 	virtual uint32_t get_variant_count() const = 0;
 };
