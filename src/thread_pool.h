@@ -10,11 +10,10 @@
 #include <stdexcept>
 #include <optick.h>
 #include <glm/glm.hpp>
-#include "singleton.h"
 
 namespace Rendy
 {
-	class ThreadPool : public Singleton<ThreadPool>
+	class ThreadPool
 	{
 	public:
 		ThreadPool(size_t threads = glm::max(std::thread::hardware_concurrency(), 4U));
