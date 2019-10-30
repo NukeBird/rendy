@@ -54,3 +54,17 @@ Rendy::AbstractBufferRef Rendy::ES2::Engine::make_vbo(uint32_t size, const void*
 	auto vbo = std::make_shared<ES2::Buffer>(BufferTarget::VBO, size, ptr);
 	return vbo;
 }
+
+Rendy::AbstractBufferRef Rendy::ES2::Engine::make_ibo(uint32_t size, const void* ptr)
+{
+	OPTICK_EVENT();
+	OPTICK_TAG("size", size);
+
+	if (size == 0 || ptr == nullptr)
+	{
+		return nullptr;
+	}
+
+	auto ibo = std::make_shared<ES2::Buffer>(BufferTarget::IBO, size, ptr);
+	return ibo;
+}

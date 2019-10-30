@@ -17,5 +17,6 @@ namespace Rendy
 		virtual void reload() = 0;
 
 		virtual AbstractBufferRef make_vbo(uint32_t size, const void* ptr) = 0;
+		virtual AbstractBufferRef make_ibo(uint32_t size, const void* ptr) = 0;
 	};
 };
