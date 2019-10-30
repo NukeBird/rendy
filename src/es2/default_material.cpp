@@ -1,19 +1,17 @@
 #include "default_material.h"
-#include "../shader_factory.h"
 #include "../bind_shader.h"
 #include "../bind_texture2d.h"
 #include "../set_uniform.h"
 #include <optick.h>
 
-Rendy::ES2::DefaultMaterial::DefaultMaterial(const AbstractTexture2DRef& diffuse_texture,
-	const AbstractTexture2DRef& normal_texture)
+Rendy::ES2::DefaultMaterial::DefaultMaterial(AbstractTexture2DRef diffuse_texture,
+	AbstractTexture2DRef normal_texture, AbstractShaderRef shader)
 {
 	OPTICK_EVENT();
 
-	auto shader_manager = ShaderFactory::get_instance();
-	shader = shader_manager->get_generic_shader();
 	this->diffuse_texture = diffuse_texture;
 	this->normal_texture = normal_texture;
+	this->shader = shader;
 }
 
 void Rendy::ES2::DefaultMaterial::reload()

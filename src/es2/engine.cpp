@@ -26,6 +26,7 @@ Rendy::ES2::Engine::Engine(VFSRef vfs)
 	iem = make_texture_cube(static_cast<uint32_t>(iem_data.size()), iem_data.data());
 
 	generic_shader = make_shader(generic_vertex_shader, generic_fragment_shader);
+	printf("GENERIC SHADER STATUS: %d\n", generic_shader->validate());
 }
 
 void Rendy::ES2::Engine::push(BatchList batches)
@@ -97,11 +98,11 @@ Rendy::AbstractMaterialRef Rendy::ES2::Engine::make_material(ImageSetRef image_s
 	{
 		auto metallic_roughness = make_texture2d(image_set->metallic_roughness);
 
-		material = std::make_shared<PBRMaterial>(color, metallic_roughness, normal, iem);
+		material = std::make_shared<PBRMaterial>(color, metallic_roughness, normal, iem, generic_shader);
 	}
 	else
 	{
-		material = std::make_shared<DefaultMaterial>(color, normal);
+		material = std::make_shared<DefaultMaterial>(color, normal, generic_shader);
 	}
 
 	return material;

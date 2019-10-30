@@ -9,8 +9,9 @@ namespace Rendy
 		class DefaultMaterial final : public AbstractMaterial
 		{
 		public:
-			DefaultMaterial(const AbstractTexture2DRef& diffuse_texture,
-				const AbstractTexture2DRef& normal_texture = nullptr);
+			DefaultMaterial(AbstractTexture2DRef diffuse_texture,
+				AbstractTexture2DRef normal_texture,
+				AbstractShaderRef shader);
 			virtual void reload() override;
 			virtual bool validate() const override;
 			virtual AbstractShaderRef get_shader() override;

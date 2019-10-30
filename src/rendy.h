@@ -8,5 +8,4 @@
 #include "abstract_texture_cube.h"
 
 #include "model_factory.h"
-#include "shader_factory.h"
 #include "common.h"

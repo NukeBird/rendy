@@ -1,5 +1,4 @@
 #include "pbr_material.h"
-#include "../shader_factory.h"
 #include "../bind_shader.h"
 #include "../bind_texture2d.h"
 #include "../bind_texture_cube.h"
@@ -9,18 +8,17 @@
 Rendy::ES2::PBRMaterial::PBRMaterial(AbstractTexture2DRef albedo_texture,
 	AbstractTexture2DRef ambient_metallic_roughness_texture, 
 	AbstractTexture2DRef normal_texture,
-	AbstractTextureCubeRef iem)
+	AbstractTextureCubeRef iem,
+	AbstractShaderRef shader)
 {
 	OPTICK_EVENT();
-
-	auto shader_manager = ShaderFactory::get_instance();
-	shader = shader_manager->get_generic_shader();
 
 	this->albedo_texture = albedo_texture;
 	this->ambient_metallic_roughness_texture = 
 		ambient_metallic_roughness_texture;
 	this->normal_texture = normal_texture;
 	this->iem = iem;
+	this->shader = shader;
 }
 
 void Rendy::ES2::PBRMaterial::reload()

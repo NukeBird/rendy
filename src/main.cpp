@@ -136,10 +136,6 @@ int main(int argc, char** argv)
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
 
-	std::cout << "GENERIC SHADER STATUS: "
-		<< Rendy::ShaderFactory::get_instance()->get_generic_shader()->validate()
-		<< std::endl;
-
 	GLuint fucking_vao; //should be active at least one _REAL_ vao
 	glGenVertexArrays(1, &fucking_vao);
 	glBindVertexArray(fucking_vao);

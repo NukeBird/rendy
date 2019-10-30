@@ -13,7 +13,8 @@ namespace Rendy
 			PBRMaterial(AbstractTexture2DRef albedo_texture,
 				AbstractTexture2DRef ambient_metallic_roughness_texture,
 				AbstractTexture2DRef normal_texture,
-				AbstractTextureCubeRef iem);
+				AbstractTextureCubeRef iem,
+				AbstractShaderRef shader);
 			virtual void reload() override;
 			virtual bool validate() const override;
 			virtual AbstractShaderRef get_shader() override;
