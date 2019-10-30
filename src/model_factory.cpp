@@ -1,6 +1,5 @@
 #include "model_factory.h"
 #include "shader_flags.h"
-#include "vertex_array_factory.h"
 #include "es2/default_material.h"
 #include "image2d.h"
 #include "es2/texture2d.h"
