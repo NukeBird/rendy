@@ -201,7 +201,7 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 		mesh.name = std::string(assimp_mesh->mName.data, assimp_mesh->mName.length); //TODO: legit?
 
 		std::vector<float> verts;
-		verts.reserve(static_cast<size_t>(parse_mesh_size(mesh_flags) / sizeof(float)));
+		verts.reserve(static_cast<size_t>(parse_mesh_size(mesh_flags) / sizeof(float))); //TODO
 		
 
 		mmin = glm::min(mmin, glm::vec3
@@ -295,8 +295,9 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 
 		auto layout = parse_buffer_layout(mesh_flags);
 
-		auto vao = Rendy::VertexArrayFactory::get_instance()->make(verts,
-			indices, layout);
+		auto vbo = engine->make_vbo(static_cast<uint32_t>(verts.size() * sizeof(float)), verts.data());
+		auto ibo = engine->make_ibo(static_cast<uint32_t>(indices.size() * sizeof(uint16_t)), indices.data());
+		auto vao = engine->make_vao(vbo, ibo, layout);
 
 		mesh.vao = vao;
 	}
