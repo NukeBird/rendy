@@ -8,6 +8,8 @@ namespace Rendy
 		class Engine final: public AbstractEngine
 		{
 		public:
+			Engine();
+
 			virtual void push(BatchList batches) override;
 			virtual void push(CommandList commands) override;
 			virtual void flush() override;
@@ -15,11 +17,14 @@ namespace Rendy
 
 			virtual AbstractShaderRef make_shader(const std::string& vtx,
 				const std::string& frg) override;
+			virtual AbstractShaderRef get_generic_shader() override;
 			virtual AbstractVertexArrayRef make_vao(AbstractBufferRef vbo, AbstractBufferRef ibo,
 				BufferLayoutRef layout) override;
 			virtual AbstractBufferRef make_vbo(uint32_t size, const void* ptr) override;
 			virtual AbstractBufferRef make_ibo(uint32_t size, const void* ptr) override;
 			virtual IndexType get_index_type() const override;
+		private:
+			AbstractShaderRef generic_shader;
 		};
 	};
 };
