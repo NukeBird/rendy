@@ -2,6 +2,7 @@
 #include "abstract_buffer.h"
 #include "abstract_drawable.h"
 #include "abstract_command.h"
+#include "index_type.h"
 #include "batch.h"
 #include <vector>
 
@@ -18,5 +19,6 @@ namespace Rendy
 
 		virtual AbstractBufferRef make_vbo(uint32_t size, const void* ptr) = 0;
 		virtual AbstractBufferRef make_ibo(uint32_t size, const void* ptr) = 0;
+		virtual IndexType get_index_type() const = 0;
 	};
 };

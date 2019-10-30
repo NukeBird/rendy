@@ -68,3 +68,8 @@ Rendy::AbstractBufferRef Rendy::ES2::Engine::make_ibo(uint32_t size, const void*
 	auto ibo = std::make_shared<ES2::Buffer>(BufferTarget::IBO, size, ptr);
 	return ibo;
 }
+
+Rendy::IndexType Rendy::ES2::Engine::get_index_type() const
+{
+	return IndexType::UnsignedShort;
+}

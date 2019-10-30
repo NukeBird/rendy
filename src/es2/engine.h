@@ -15,6 +15,7 @@ namespace Rendy
 
 			virtual AbstractBufferRef make_vbo(uint32_t size, const void* ptr) override;
 			virtual AbstractBufferRef make_ibo(uint32_t size, const void* ptr) override;
+			virtual IndexType get_index_type() const override;
 		};
 	};
 };
