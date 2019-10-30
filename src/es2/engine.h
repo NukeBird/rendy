@@ -13,6 +13,8 @@ namespace Rendy
 			virtual void flush() override;
 			virtual void reload() override;
 
+			virtual AbstractShaderRef make_shader(const std::string& vtx,
+				const std::string& frg) override;
 			virtual AbstractVertexArrayRef make_vao(AbstractBufferRef vbo, AbstractBufferRef ibo,
 				BufferLayoutRef layout) override;
 			virtual AbstractBufferRef make_vbo(uint32_t size, const void* ptr) override;

@@ -1,6 +1,7 @@
 #include "engine.h"
 #include "buffer.h"
 #include "vertex_array.h"
+#include "shader.h"
 #include <optick.h>
 #include <cassert>
 
@@ -40,6 +41,11 @@ void Rendy::ES2::Engine::reload()
 {
 	OPTICK_EVENT();
 	//TODO?
+}
+
+Rendy::AbstractShaderRef Rendy::ES2::Engine::make_shader(const std::string& vtx, const std::string& frg)
+{
+	return std::make_shared<Shader>(vtx, frg);
 }
 
 Rendy::AbstractVertexArrayRef Rendy::ES2::Engine::make_vao(AbstractBufferRef vbo, AbstractBufferRef ibo,
