@@ -3,7 +3,6 @@
 #include "rendy.h"
 #include <regex>
 #include <chrono>
-
 #include <optick.h>
 
 void GLAPIENTRY message_callback(GLenum source,
@@ -29,6 +28,8 @@ void GLAPIENTRY message_callback(GLenum source,
 }
 
 //using namespace Rendy;
+
+#include "es2/engine.h"
 
 int main(int argc, char** argv) 
 {
@@ -125,7 +126,10 @@ int main(int argc, char** argv)
 		//glBindTexture(-24, -3);
 	#endif // _WIN32
 
-	auto model = Rendy::ModelFactory::build("assets/ainz.glb");
+	Rendy::AbstractEngineRef engine = std::make_shared<Rendy::ES2::Engine>();
+
+	Rendy::ModelFactory model_factory(engine);
+	auto model = model_factory.build("assets/ainz.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
