@@ -20,7 +20,7 @@
 
 #include <optick.h>
 
-const unsigned get_import_flags()
+static const unsigned get_import_flags()
 {
 	OPTICK_EVENT();
 	return //aiProcessPreset_TargetRealtime_MaxQuality |
@@ -46,7 +46,7 @@ const unsigned get_import_flags()
 		aiProcess_FlipUVs;
 }
 
-uint32_t parse_mesh_flags(const aiMesh* mesh)
+static uint32_t parse_mesh_flags(const aiMesh* mesh)
 {
 	OPTICK_EVENT();
 	uint32_t flags = 0;
@@ -100,7 +100,7 @@ uint32_t parse_mesh_flags(const aiMesh* mesh)
 	return flags;
 }
 
-uint32_t parse_mesh_size(uint32_t flags)
+static uint32_t parse_mesh_size(uint32_t flags)
 {
 	OPTICK_EVENT();
 	uint32_t element_count = 0; 
@@ -143,7 +143,7 @@ uint32_t parse_mesh_size(uint32_t flags)
 	return element_count * sizeof(float);
 }
 
-Rendy::BufferLayoutRef parse_buffer_layout(uint32_t flags)
+static Rendy::BufferLayoutRef parse_buffer_layout(uint32_t flags)
 {
 	OPTICK_EVENT();
 	std::vector<Rendy::BufferElement> buffer_elements;
@@ -187,7 +187,7 @@ Rendy::BufferLayoutRef parse_buffer_layout(uint32_t flags)
 	return std::make_shared<Rendy::BufferLayout>(buffer_elements);
 }
 
-std::vector<Rendy::Mesh> parse_meshes(const aiScene* scene)
+static std::vector<Rendy::Mesh> parse_meshes(const aiScene* scene)
 {
 	OPTICK_EVENT();
 	std::vector<Rendy::Mesh> result;
@@ -330,13 +330,13 @@ std::vector<Rendy::Mesh> parse_meshes(const aiScene* scene)
 	return result;
 }
 
-glm::mat4 parse_transform(const aiMatrix4x4& from) //TODO: legit?
+static glm::mat4 parse_transform(const aiMatrix4x4& from) //TODO: legit?
 {
 	OPTICK_EVENT();
 	return glm::transpose(glm::make_mat4(&from.a1));
 }
 
-Rendy::Node parse_node(const aiNode* node)
+static Rendy::Node parse_node(const aiNode* node)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("mesh count", node->mNumMeshes);
@@ -358,7 +358,7 @@ Rendy::Node parse_node(const aiNode* node)
 	return result;
 }
 
-void link_nodes(std::vector<Rendy::Node>& node_list,
+static void link_nodes(std::vector<Rendy::Node>& node_list,
 	std::unordered_map<uint32_t, const aiNode*>& index_to_node,
 	std::unordered_map<const aiNode*, uint32_t>& node_to_index)
 {
@@ -387,7 +387,7 @@ void link_nodes(std::vector<Rendy::Node>& node_list,
 	}
 }
 
-std::vector<Rendy::Node> parse_nodes(const aiScene* scene)
+static std::vector<Rendy::Node> parse_nodes(const aiScene* scene)
 {
 	OPTICK_EVENT();
 	std::vector<Rendy::Node> result;
@@ -423,7 +423,7 @@ std::vector<Rendy::Node> parse_nodes(const aiScene* scene)
 	return result;
 }
 
-int to_index(aiString str)
+static int to_index(aiString str)
 {
 	OPTICK_EVENT();
 	if (str.data[0] == '*')
@@ -436,7 +436,7 @@ int to_index(aiString str)
 	return -1;
 }
 
-std::shared_ptr<Rendy::AbstractTexture2D> get_texture(const aiScene* scene, int index,
+static std::shared_ptr<Rendy::AbstractTexture2D> get_texture(const aiScene* scene, int index,
 	std::vector<Rendy::Image2DRef>& images)
 {
 	OPTICK_EVENT();
@@ -456,7 +456,7 @@ std::shared_ptr<Rendy::AbstractTexture2D> get_texture(const aiScene* scene, int 
 	return std::make_shared<Rendy::ES2::Texture2D>(image);
 }
 
-Rendy::AbstractMaterialRef parse_default_material(const aiScene* scene,
+static Rendy::AbstractMaterialRef parse_default_material(const aiScene* scene,
 	const aiMaterial* material, std::vector<Rendy::Image2DRef>& images)
 {
 	OPTICK_EVENT();
@@ -495,7 +495,7 @@ Rendy::AbstractMaterialRef parse_default_material(const aiScene* scene,
 	return std::make_shared<Rendy::DefaultMaterial>(diffuse, normalmap);
 }
 
-Rendy::AbstractMaterialRef parse_pbr_material(const aiScene* scene,
+static Rendy::AbstractMaterialRef parse_pbr_material(const aiScene* scene,
 	const aiMaterial* material, std::vector<Rendy::Image2DRef>& images)
 {
 	OPTICK_EVENT();
@@ -575,7 +575,7 @@ Rendy::AbstractMaterialRef parse_pbr_material(const aiScene* scene,
 	return std::make_shared<Rendy::PBRMaterial>(albedo, ao_metallic_roughness, normalmap);
 }
 
-Rendy::AbstractMaterialRef parse_material(const aiScene* scene,
+static Rendy::AbstractMaterialRef parse_material(const aiScene* scene,
 	const aiMaterial* material, std::vector<Rendy::Image2DRef>& images)
 {
 	OPTICK_EVENT();
@@ -591,7 +591,7 @@ Rendy::AbstractMaterialRef parse_material(const aiScene* scene,
 	return result;
 }
 
-std::vector<Rendy::AbstractMaterialRef> parse_materials(const aiScene* scene,
+static std::vector<Rendy::AbstractMaterialRef> parse_materials(const aiScene* scene,
 	std::vector<Rendy::Image2DRef>& images)
 {
 	OPTICK_EVENT();
@@ -609,7 +609,7 @@ std::vector<Rendy::AbstractMaterialRef> parse_materials(const aiScene* scene,
 	return result;
 }
 
-Rendy::Image2DRef parse_image(const aiTexture* assimp_texture)
+static Rendy::Image2DRef parse_image(const aiTexture* assimp_texture)
 {
 	OPTICK_EVENT();
 	const char* texture_ptr =
@@ -626,7 +626,7 @@ Rendy::Image2DRef parse_image(const aiTexture* assimp_texture)
 	return std::make_shared<Rendy::Image2D>(texture_ptr, texture_size);
 }
 
-std::vector<Rendy::Image2DRef> parse_images(const aiScene* scene)
+static std::vector<Rendy::Image2DRef> parse_images(const aiScene* scene)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("image count", scene->mNumTextures);
@@ -661,6 +661,12 @@ std::vector<Rendy::Image2DRef> parse_images(const aiScene* scene)
 	}
 
 	return std::move(result);
+}
+
+Rendy::ModelFactory::ModelFactory(AbstractEngineRef engine, ThreadPoolRef thread_pool)
+{
+	this->engine = engine;
+	this->thread_pool = thread_pool;
 }
 
 Rendy::ModelRef Rendy::ModelFactory::build(const char* filename)
