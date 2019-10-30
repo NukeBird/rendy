@@ -653,9 +653,10 @@ std::vector<Rendy::Image2DRef> Rendy::ModelFactory::parse_images(const aiScene* 
 	return std::move(result);
 }
 
-Rendy::ModelFactory::ModelFactory(AbstractEngineRef engine, ThreadPoolRef thread_pool)
+Rendy::ModelFactory::ModelFactory(AbstractEngineRef engine, VFSRef vfs, ThreadPoolRef thread_pool)
 {
 	this->engine = engine;
+	this->vfs = vfs;
 	this->thread_pool = thread_pool;
 }
 
@@ -663,9 +664,32 @@ Rendy::ModelRef Rendy::ModelFactory::build(const char* filename)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("filename", filename);
+
+	OPTICK_PUSH("read file");
+	auto file = vfs->open_file(filename, Rendy::FileMode::Read);
+	
+	if (!file->validate())
+	{
+		return nullptr;
+	}
+
+	std::vector<uint8_t> memory;
+	memory.resize(static_cast<size_t>(file->get_size()));
+	file->read(memory.data(), file->get_size());
+
+	printf("file size %d\n", file->get_size());
+	OPTICK_POP();
+
+	return build(memory.data(), static_cast<uint32_t>(memory.size()));
+}
+
+Rendy::ModelRef Rendy::ModelFactory::build(const void* memory, uint32_t size)
+{
+	OPTICK_EVENT();
+
 	try
 	{
-		Assimp::Importer importer;	
+		Assimp::Importer importer;
 		importer.SetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT, std::numeric_limits<unsigned short>::max());
 		importer.SetPropertyInteger(AI_CONFIG_IMPORT_TER_MAKE_UVS, 1);
 		importer.SetPropertyInteger(AI_CONFIG_PP_SBBC_MAX_BONES, 35);
@@ -676,8 +700,8 @@ Rendy::ModelRef Rendy::ModelFactory::build(const char* filename)
 
 		{
 			//OPTICK_EVENT("assimp's importer.ReadFile");
-			OPTICK_PUSH("importer.ReadFile");
-			scene = importer.ReadFile(filename, get_import_flags()); 
+			OPTICK_PUSH("importer.ReadFileFromMemory");
+			scene = importer.ReadFileFromMemory(memory, static_cast<size_t>(size), get_import_flags(), "glb"); //TODO: pass fbx hint too
 			OPTICK_POP();
 		}
 
@@ -702,7 +726,7 @@ Rendy::ModelRef Rendy::ModelFactory::build(const char* filename)
 
 		return model;
 	}
-	catch (const std::exception& e)
+	catch (const std::exception & e)
 	{
 		//TODO: error
 		return nullptr;

@@ -30,6 +30,7 @@ void GLAPIENTRY message_callback(GLenum source,
 //using namespace Rendy;
 
 #include "es2/engine.h"
+#include "vfs.h"
 
 int main(int argc, char** argv) 
 {
@@ -127,8 +128,9 @@ int main(int argc, char** argv)
 	#endif // _WIN32
 
 	Rendy::AbstractEngineRef engine = std::make_shared<Rendy::ES2::Engine>();
+	Rendy::VFSRef vfs = std::make_shared<Rendy::VFS>();
 
-	Rendy::ModelFactory model_factory(engine);
+	Rendy::ModelFactory model_factory(engine, vfs);
 	auto model = model_factory.build("assets/ainz.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;

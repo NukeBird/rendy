@@ -2,6 +2,7 @@
 #include "model.h"
 #include "thread_pool.h"
 #include "abstract_engine.h"
+#include "abstract_vfs.h"
 #include <assimp/Importer.hpp>
 #include <assimp/cimport.h>
 #include <assimp/config.h>
@@ -18,9 +19,10 @@ namespace Rendy
 	class ModelFactory
 	{
 	public:
-		ModelFactory(AbstractEngineRef engine, ThreadPoolRef thread_pool 
+		ModelFactory(AbstractEngineRef engine, VFSRef vfs, ThreadPoolRef thread_pool 
 			= std::make_shared<ThreadPool>());
 		ModelRef build(const char* filename);
+		ModelRef build(const void* memory, uint32_t size);
 	private:
 		unsigned get_import_flags() const;
 		uint32_t parse_mesh_flags(const aiMesh* mesh) const;
@@ -49,5 +51,6 @@ namespace Rendy
 
 		AbstractEngineRef engine;
 		ThreadPoolRef thread_pool;
+		VFSRef vfs;
 	};
 };
