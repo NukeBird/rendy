@@ -524,8 +524,19 @@ Rendy::ImageSetRef Rendy::ModelFactory::form_image_set(const aiScene* scene, con
 		{
 			if (path.length > 0)
 			{
-				printf("DIFFUSE\n");
 				image_set->color = get_image(to_index(path), images);
+			}
+		}
+
+		if (!image_set->color)
+		{
+			if (mat.GetTexture(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_TEXTURE, 
+				&path) == AI_SUCCESS)
+			{
+				if (path.length > 0)
+				{
+					image_set->color = get_image(to_index(path), images);
+				}
 			}
 		}
 	}
@@ -537,8 +548,18 @@ Rendy::ImageSetRef Rendy::ModelFactory::form_image_set(const aiScene* scene, con
 		{
 			if (path.length > 0)
 			{
-				printf("NORMAL\n");
 				image_set->normal = get_image(to_index(path), images);
+			}
+		}
+
+		if (!image_set->normal)
+		{
+			if (mat.GetTexture(aiTextureType_HEIGHT, 0, &path) == AI_SUCCESS)
+			{
+				if (path.length > 0)
+				{
+					image_set->normal = get_image(to_index(path), images);
+				}
 			}
 		}
 	}
@@ -551,7 +572,6 @@ Rendy::ImageSetRef Rendy::ModelFactory::form_image_set(const aiScene* scene, con
 		{
 			if (path.length > 0)
 			{
-				printf("METALLIC_ROUGHNESS\n");
 				image_set->metallic_roughness = get_image(to_index(path), images);
 			}
 		}
@@ -566,11 +586,8 @@ Rendy::Image2DRef Rendy::ModelFactory::get_image(int index, std::vector<Image2DR
 
 	if (index >= images.size() || index < 0)
 	{
-		printf("\t\t\tHELL NO\n");
 		return nullptr;
 	}
-
-	printf("\t\t\tOH YEAH\n");
 
 	return images[index];
 }

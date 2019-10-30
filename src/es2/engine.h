@@ -9,7 +9,7 @@ namespace Rendy
 		class Engine final: public AbstractEngine
 		{
 		public:
-			Engine();
+			Engine(VFSRef vfs);
 
 			virtual void push(BatchList batches) override;
 			virtual void push(CommandList commands) override;
@@ -28,6 +28,8 @@ namespace Rendy
 			virtual IndexType get_index_type() const override;
 		private:
 			AbstractShaderRef generic_shader;
+			AbstractTextureCubeRef iem;
+			VFSRef vfs;
 		};
 	};
 };

@@ -2,12 +2,14 @@
 #include "../shader_factory.h"
 #include "../bind_shader.h"
 #include "../bind_texture2d.h"
+#include "../bind_texture_cube.h"
 #include "../set_uniform.h"
 #include <optick.h>
 
-Rendy::ES2::PBRMaterial::PBRMaterial(const AbstractTexture2DRef& albedo_texture,
-	const AbstractTexture2DRef& ambient_metallic_roughness_texture, 
-	const AbstractTexture2DRef& normal_texture)
+Rendy::ES2::PBRMaterial::PBRMaterial(AbstractTexture2DRef albedo_texture,
+	AbstractTexture2DRef ambient_metallic_roughness_texture, 
+	AbstractTexture2DRef normal_texture,
+	AbstractTextureCubeRef iem)
 {
 	OPTICK_EVENT();
 
@@ -18,6 +20,7 @@ Rendy::ES2::PBRMaterial::PBRMaterial(const AbstractTexture2DRef& albedo_texture,
 	this->ambient_metallic_roughness_texture = 
 		ambient_metallic_roughness_texture;
 	this->normal_texture = normal_texture;
+	this->iem = iem;
 }
 
 void Rendy::ES2::PBRMaterial::reload()
@@ -104,18 +107,8 @@ uint32_t Rendy::ES2::PBRMaterial::get_flags() const
 	return flags;
 }
 
-#include "texture_cube.h"
-#include "../bind_texture_cube.h"
-
 std::vector<Rendy::CommandRef> Rendy::ES2::PBRMaterial::to_command_list(uint32_t extra_flags)
 {
-	static Rendy::AbstractTextureCubeRef cubemap;
-
-	if (!cubemap)
-	{
-		cubemap = std::make_shared<ES2::TextureCube>("cube.dds");
-	}
-
 	ShaderSettings settings;
 	settings.flags = extra_flags | get_flags();
 
@@ -139,8 +132,8 @@ std::vector<Rendy::CommandRef> Rendy::ES2::PBRMaterial::to_command_list(uint32_t
 		ambient_metallic_roughness_texture, 2));
 
 	list.emplace_back(std::make_shared<SetUniform<int>>(shader_variant,
-		"u_cubemap", 6));
-	list.emplace_back(std::make_shared<BindTextureCube>(cubemap, 6));
+		"u_iem", 6));
+	list.emplace_back(std::make_shared<BindTextureCube>(iem, 6));
 
 	return list;
 }

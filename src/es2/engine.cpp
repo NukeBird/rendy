@@ -8,11 +8,23 @@
 #include "pbr_material.h"
 #include <optick.h>
 #include <cassert>
+#include <vector>
 
 #include "../generic_shader_sources.hpp"
 
-Rendy::ES2::Engine::Engine()
+Rendy::ES2::Engine::Engine(VFSRef vfs)
 {
+	this->vfs = vfs;
+
+	auto iem_file = vfs->open_file("assets/iem_ldr.dds", FileMode::Read);
+	assert(iem_file);
+	assert(iem_file->validate());
+	std::vector<uint8_t> iem_data;
+	iem_data.resize(static_cast<size_t>(iem_file->get_size()));
+	iem_file->read(iem_data.data(), iem_file->get_size());
+
+	iem = make_texture_cube(static_cast<uint32_t>(iem_data.size()), iem_data.data());
+
 	generic_shader = make_shader(generic_vertex_shader, generic_fragment_shader);
 }
 
@@ -85,7 +97,7 @@ Rendy::AbstractMaterialRef Rendy::ES2::Engine::make_material(ImageSetRef image_s
 	{
 		auto metallic_roughness = make_texture2d(image_set->metallic_roughness);
 
-		material = std::make_shared<PBRMaterial>(color, metallic_roughness, normal);
+		material = std::make_shared<PBRMaterial>(color, metallic_roughness, normal, iem);
 	}
 	else
 	{

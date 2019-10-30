@@ -147,7 +147,7 @@ precision mediump float;
 	#define MODEL_COOK_TORRANCE
 #endif
 
-	uniform samplerCube u_cubemap;
+	uniform samplerCube u_iem;
 
 	uniform vec3 u_camera_position;
 
@@ -310,7 +310,7 @@ precision mediump float;
 
 		float distance    = length(light_pos - v_position);
         float attenuation = 1.0 / max(distance * distance, 0.001);
-        vec3 radiance     = vec3(1.0, 0.839, 0.66) * vec3(128.0) * vec3(attenuation);        
+        vec3 radiance     = vec3(1.0, 0.839, 0.66) * vec3(256.0) * vec3(attenuation);        
 
 		float f_ndf = distribution_ggx(f_normal, f_h, f_roughness);  
 		float f_g   = geometry_smith(f_normal, f_v, f_l, f_roughness);  
@@ -334,12 +334,12 @@ precision mediump float;
 		f_d2 *= 1.0 - f_metallic;
 
 		vec4 result = f_albedo;
-		result.rgb *= f_d2 * texture(u_cubemap, f_normal).rgb;
+		result.rgb *= f_d2*texture(u_iem, f_normal).rgb;
         result.rgb += (f_d * f_albedo.rgb / PI + specular) * 
 			(radiance * NdotL);
 		
-		//vec3 ambient = vec3(0.03) * f_albedo.rgb;
-		//result.rgb += ambient;
+		vec3 ambient = vec3(0.06) * f_albedo.rgb;
+		result.rgb += ambient;
 
 		return vec4(result);
 	}
@@ -349,14 +349,13 @@ precision mediump float;
 	{
 		#ifdef MODEL_COOK_TORRANCE
 			vec4 result = calculate_direct_light() * vec4(get_ao(), 1.0);
-
-			//result.rgb = result.rgb / (result.rgb + vec3(1.0));
-			result.rgb = vec3(1.0) - exp(-result.rgb);
-			result.rgb = pow(result.rgb, vec3(1.0/gamma));
-
-			output_color = result;
 		#else
-			output_color = get_diffuse();
+			vec4 result = get_diffuse();
 		#endif
+
+		result.rgb = result.rgb / (result.rgb + vec3(1.0));
+		//result.rgb = vec3(1.0) - exp(-result.rgb);
+		result.rgb = pow(result.rgb, vec3(1.0/gamma));
+		output_color = result;
 	} 
 )";
