@@ -660,7 +660,7 @@ Rendy::ModelFactory::ModelFactory(AbstractEngineRef engine, VFSRef vfs, ThreadPo
 	this->thread_pool = thread_pool;
 }
 
-Rendy::ModelRef Rendy::ModelFactory::build(const char* filename)
+Rendy::ModelRef Rendy::ModelFactory::make(const char* filename)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("filename", filename);
@@ -680,10 +680,10 @@ Rendy::ModelRef Rendy::ModelFactory::build(const char* filename)
 	printf("file size %d\n", file->get_size());
 	OPTICK_POP();
 
-	return build(memory.data(), static_cast<uint32_t>(memory.size()));
+	return make(memory.data(), static_cast<uint32_t>(memory.size()));
 }
 
-Rendy::ModelRef Rendy::ModelFactory::build(const void* memory, uint32_t size)
+Rendy::ModelRef Rendy::ModelFactory::make(const void* memory, uint32_t size)
 {
 	OPTICK_EVENT();
 

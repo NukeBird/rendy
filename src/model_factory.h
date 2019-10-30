@@ -21,8 +21,8 @@ namespace Rendy
 	public:
 		ModelFactory(AbstractEngineRef engine, VFSRef vfs, ThreadPoolRef thread_pool 
 			= std::make_shared<ThreadPool>());
-		ModelRef build(const char* filename);
-		ModelRef build(const void* memory, uint32_t size);
+		ModelRef make(const char* filename);
+		ModelRef make(const void* memory, uint32_t size);
 	private:
 		unsigned get_import_flags() const;
 		uint32_t parse_mesh_flags(const aiMesh* mesh) const;
