@@ -1,4 +1,4 @@
-#include "model_builder.h"
+#include "model_factory.h"
 #include "shader_flags.h"
 #include <assimp/Importer.hpp>
 #include <assimp/cimport.h>
@@ -663,7 +663,7 @@ std::vector<Rendy::Image2DRef> parse_images(const aiScene* scene)
 	return std::move(result);
 }
 
-Rendy::ModelRef Rendy::ModelBuilder::build(const char* filename)
+Rendy::ModelRef Rendy::ModelFactory::build(const char* filename)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("filename", filename);

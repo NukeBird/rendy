@@ -3,7 +3,7 @@
 
 namespace Rendy
 {
-	class ModelBuilder
+	class ModelFactory
 	{
 	public:
 		static ModelRef build(const char* filename);

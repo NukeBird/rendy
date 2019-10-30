@@ -7,6 +7,6 @@
 #include "abstract_texture2d.h"
 #include "abstract_texture_cube.h"
 
-#include "model_builder.h"
+#include "model_factory.h"
 #include "shader_factory.h"
 #include "common.h"

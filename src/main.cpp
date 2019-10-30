@@ -125,7 +125,7 @@ int main(int argc, char** argv)
 		//glBindTexture(-24, -3);
 	#endif // _WIN32
 
-	auto model = Rendy::ModelBuilder::build("assets/ainz.glb");
+	auto model = Rendy::ModelFactory::build("assets/ainz.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;

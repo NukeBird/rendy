@@ -64,7 +64,7 @@ namespace Rendy
 		std::vector<Mesh> meshes;
 		std::vector<Node> nodes;
 
-		friend class ModelBuilder;
+		friend class ModelFactory;
 	};
 
 	using ModelRef = std::shared_ptr<Model>;
