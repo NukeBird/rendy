@@ -6,7 +6,8 @@
 #include "abstract_shader.h"
 #include "abstract_texture2d.h"
 #include "abstract_texture_cube.h"
-#include "image2d.h"
+#include "abstract_material.h"
+#include "image_set.h"
 #include "index_type.h"
 #include "batch.h"
 #include <vector>
@@ -25,6 +26,7 @@ namespace Rendy
 		virtual void reload() = 0;
 
 		virtual AbstractShaderRef make_shader(const std::string& vtx, const std::string& frg) = 0;
+		virtual AbstractMaterialRef make_material(ImageSetRef image_set) = 0;
 		virtual AbstractTexture2DRef make_texture2d(Image2DRef image) = 0;
 		virtual AbstractTextureCubeRef make_texture_cube(uint32_t size, const void* ptr) = 0;
 		virtual AbstractVertexArrayRef make_vao(AbstractBufferRef vbo, AbstractBufferRef ibo,

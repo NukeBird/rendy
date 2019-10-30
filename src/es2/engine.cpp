@@ -4,12 +4,22 @@
 #include "shader.h"
 #include "texture2d.h"
 #include "texture_cube.h"
+#include "default_material.h"
+#include "pbr_material.h"
 #include <optick.h>
 #include <cassert>
+
+#include "../generic_shader_sources.hpp"
+
+Rendy::ES2::Engine::Engine()
+{
+	generic_shader = make_shader(generic_vertex_shader, generic_fragment_shader);
+}
 
 void Rendy::ES2::Engine::push(BatchList batches)
 {
 	OPTICK_EVENT();
+
 	CommandList commands;
 
 	for (auto& batch: batches)
@@ -27,6 +37,7 @@ void Rendy::ES2::Engine::push(BatchList batches)
 void Rendy::ES2::Engine::push(CommandList commands)
 {
 	OPTICK_EVENT();
+
 	for (auto& c : commands)
 	{
 		c->execute(); //TODO
@@ -47,22 +58,60 @@ void Rendy::ES2::Engine::reload()
 
 Rendy::AbstractShaderRef Rendy::ES2::Engine::make_shader(const std::string& vtx, const std::string& frg)
 {
+	OPTICK_EVENT();
 	return std::make_shared<Shader>(vtx, frg);
+}
+
+Rendy::AbstractMaterialRef Rendy::ES2::Engine::make_material(ImageSetRef image_set)
+{
+	OPTICK_EVENT();
+
+	AbstractMaterialRef material;
+
+	AbstractTexture2DRef color;
+	AbstractTexture2DRef normal;
+
+	if (image_set->color)
+	{
+		color = make_texture2d(image_set->color);
+	}
+
+	if (image_set->normal)
+	{
+		normal = make_texture2d(image_set->normal);
+	}
+
+	if (image_set->metallic_roughness && image_set->color)
+	{
+		auto metallic_roughness = make_texture2d(image_set->metallic_roughness);
+
+		material = std::make_shared<PBRMaterial>(color, metallic_roughness, normal);
+	}
+	else
+	{
+		material = std::make_shared<DefaultMaterial>(color, normal);
+	}
+
+	return material;
 }
 
 Rendy::AbstractTexture2DRef Rendy::ES2::Engine::make_texture2d(Image2DRef image)
 {
+	OPTICK_EVENT();
 	return std::make_shared<Texture2D>(image);
 }
 
 Rendy::AbstractTextureCubeRef Rendy::ES2::Engine::make_texture_cube(uint32_t size, const void* ptr)
 {
+	OPTICK_EVENT();
 	return std::make_shared<TextureCube>(ptr, size);
 }
 
 Rendy::AbstractVertexArrayRef Rendy::ES2::Engine::make_vao(AbstractBufferRef vbo, AbstractBufferRef ibo,
 	BufferLayoutRef layout)
 {
+	OPTICK_EVENT();
+
 	assert(vbo);
 	assert(vbo->get_target() == BufferTarget::VBO); //TODO
 
