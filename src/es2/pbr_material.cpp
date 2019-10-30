@@ -1,8 +1,8 @@
 #include "pbr_material.h"
-#include "shader_factory.h"
-#include "bind_shader.h"
-#include "bind_texture2d.h"
-#include "set_uniform.h"
+#include "../shader_factory.h"
+#include "../bind_shader.h"
+#include "../bind_texture2d.h"
+#include "../set_uniform.h"
 #include <optick.h>
 
 Rendy::PBRMaterial::PBRMaterial(const AbstractTexture2DRef& albedo_texture,
@@ -104,8 +104,8 @@ uint32_t Rendy::PBRMaterial::get_flags() const
 	return flags;
 }
 
-#include "es2/texture_cube.h"
-#include "bind_texture_cube.h"
+#include "texture_cube.h"
+#include "../bind_texture_cube.h"
 
 std::vector<Rendy::CommandRef> Rendy::PBRMaterial::to_command_list(uint32_t extra_flags)
 {

@@ -1,8 +1,8 @@
 #include "default_material.h"
-#include "shader_factory.h"
-#include "bind_shader.h"
-#include "bind_texture2d.h"
-#include "set_uniform.h"
+#include "../shader_factory.h"
+#include "../bind_shader.h"
+#include "../bind_texture2d.h"
+#include "../set_uniform.h"
 #include <optick.h>
 
 Rendy::DefaultMaterial::DefaultMaterial(const AbstractTexture2DRef& diffuse_texture,

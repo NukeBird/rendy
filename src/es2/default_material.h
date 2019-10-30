@@ -1,11 +1,10 @@
 #pragma once
-#include "abstract_material.h"
-#include "abstract_texture2d.h"
-#include "abstract_shader.h"
+#include "../abstract_material.h"
+#include "../abstract_texture2d.h"
 
 namespace Rendy
 {
-	class DefaultMaterial final : public AbstractMaterial
+	class DefaultMaterial final: public AbstractMaterial
 	{
 	public:
 		DefaultMaterial(const AbstractTexture2DRef& diffuse_texture,
