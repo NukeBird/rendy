@@ -6,18 +6,15 @@ Rendy::ES2::TextureCube::TextureCube(const std::string& filename)
 {
 	OPTICK_EVENT();
 	gli_tex = gli::load(filename);
+	process();
+}
 
-	if (!gli_tex.empty())
-	{
-		if (gli_tex.target() != gli::texture::target_type::TARGET_CUBE)
-		{
-			gli_tex.clear();
-			return;
-		}
-
-		//gli_tex = gli::convert(gli_tex, gli::format::FORMAT_RGB8_UINT_PACK8); //TODO: RGBA?
-		load();
-	}
+Rendy::ES2::TextureCube::TextureCube(const void* memory, uint32_t size)
+{
+	OPTICK_EVENT();
+	gli_tex = gli::load(reinterpret_cast<const char*>(memory), 
+		static_cast<size_t>(size));
+	process();
 }
 
 Rendy::ES2::TextureCube::~TextureCube()
@@ -179,4 +176,20 @@ void Rendy::ES2::TextureCube::reset()
 	}
 
 	id = 0;
+}
+
+void Rendy::ES2::TextureCube::process()
+{
+	OPTICK_EVENT();
+	if (!gli_tex.empty())
+	{
+		if (gli_tex.target() != gli::texture::target_type::TARGET_CUBE)
+		{
+			gli_tex.clear();
+			return;
+		}
+
+		//gli_tex = gli::convert(gli_tex, gli::format::FORMAT_RGB8_UINT_PACK8); //TODO: RGBA?
+		load();
+	}
 }

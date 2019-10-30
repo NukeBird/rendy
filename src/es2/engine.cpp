@@ -3,6 +3,7 @@
 #include "vertex_array.h"
 #include "shader.h"
 #include "texture2d.h"
+#include "texture_cube.h"
 #include <optick.h>
 #include <cassert>
 
@@ -52,6 +53,11 @@ Rendy::AbstractShaderRef Rendy::ES2::Engine::make_shader(const std::string& vtx,
 Rendy::AbstractTexture2DRef Rendy::ES2::Engine::make_texture2d(Image2DRef image)
 {
 	return std::make_shared<Texture2D>(image);
+}
+
+Rendy::AbstractTextureCubeRef Rendy::ES2::Engine::make_texture_cube(uint32_t size, const void* ptr)
+{
+	return std::make_shared<TextureCube>(ptr, size);
 }
 
 Rendy::AbstractVertexArrayRef Rendy::ES2::Engine::make_vao(AbstractBufferRef vbo, AbstractBufferRef ibo,

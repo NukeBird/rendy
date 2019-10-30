@@ -11,6 +11,7 @@ namespace Rendy
 		{
 		public:
 			TextureCube(const std::string& filename);
+			TextureCube(const void* memory, uint32_t size);
 			~TextureCube();
 			virtual void reload() override;
 			virtual bool validate() const override;
@@ -22,6 +23,7 @@ namespace Rendy
 		private:
 			bool load();
 			void reset();
+			void process();
 
 			gli::texture gli_tex;
 			uint32_t id = 0;
