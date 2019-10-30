@@ -484,7 +484,7 @@ Rendy::AbstractMaterialRef Rendy::ModelFactory::parse_default_material(const aiS
 	printf("DEFAULT MATERIAL\n diffuse %p \n normalmap %p \n",
 		diffuse.get(), normalmap.get()); //TODO: invalid shader when both textures is nullptr 
 
-	return std::make_shared<Rendy::DefaultMaterial>(diffuse, normalmap);
+	return std::make_shared<Rendy::ES2::DefaultMaterial>(diffuse, normalmap);
 }
 
 Rendy::AbstractMaterialRef Rendy::ModelFactory::parse_pbr_material(const aiScene* scene,
@@ -564,7 +564,7 @@ Rendy::AbstractMaterialRef Rendy::ModelFactory::parse_pbr_material(const aiScene
 		}
 	}
 
-	return std::make_shared<Rendy::PBRMaterial>(albedo, ao_metallic_roughness, normalmap);
+	return std::make_shared<Rendy::ES2::PBRMaterial>(albedo, ao_metallic_roughness, normalmap);
 }
 
 Rendy::AbstractMaterialRef Rendy::ModelFactory::parse_material(const aiScene* scene,
