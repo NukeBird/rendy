@@ -8,10 +8,11 @@
 #include "batch.h"
 #include <vector>
 #include <string>
+#include <memory>
 
 namespace Rendy
 {
-	using CommandList = std::vector<CommandRef>;
+	using CommandList = std::vector<CommandRef>; //TODO: move?
 
 	struct AbstractEngine
 	{
@@ -28,4 +29,6 @@ namespace Rendy
 		virtual AbstractBufferRef make_ibo(uint32_t size, const void* ptr) = 0;
 		virtual IndexType get_index_type() const = 0;
 	};
+
+	using AbstractEngineRef = std::shared_ptr<AbstractEngine>;
 };
