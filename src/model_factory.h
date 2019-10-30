@@ -3,6 +3,7 @@
 #include "thread_pool.h"
 #include "abstract_engine.h"
 #include "abstract_vfs.h"
+#include "image_set.h"
 #include <assimp/Importer.hpp>
 #include <assimp/cimport.h>
 #include <assimp/config.h>
@@ -36,18 +37,15 @@ namespace Rendy
 			std::unordered_map<const aiNode*, uint32_t>& node_to_index);
 		std::vector<Node> parse_nodes(const aiScene* scene);
 		int to_index(aiString str) const;
-		AbstractTexture2DRef get_texture(const aiScene* scene, int index,
-			std::vector<Image2DRef>& images);
-		AbstractMaterialRef parse_default_material(const aiScene* scene,
-			const aiMaterial* material, std::vector<Image2DRef>& images);
-		AbstractMaterialRef parse_pbr_material(const aiScene* scene,
-			const aiMaterial* material, std::vector<Image2DRef>& images);
 		AbstractMaterialRef parse_material(const aiScene* scene,
 			const aiMaterial* material, std::vector<Image2DRef>& images);
 		std::vector<AbstractMaterialRef> parse_materials(const aiScene* scene,
 			std::vector<Image2DRef>& images);
 		Image2DRef parse_image(const aiTexture* assimp_texture);
 		std::vector<Image2DRef> parse_images(const aiScene* scene);
+		ImageSetRef form_image_set(const aiScene* scene,
+			const aiMaterial* material, std::vector<Image2DRef>& images) const;
+		Image2DRef get_image(int index, std::vector<Image2DRef>& images) const;
 
 		AbstractEngineRef engine;
 		ThreadPoolRef thread_pool;

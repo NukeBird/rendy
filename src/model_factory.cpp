@@ -428,159 +428,14 @@ int Rendy::ModelFactory::to_index(aiString str) const
 	return -1;
 }
 
-Rendy::AbstractTexture2DRef Rendy::ModelFactory::get_texture(const aiScene* scene, int index,
-	std::vector<Rendy::Image2DRef>& images)
-{
-	OPTICK_EVENT();
-
-	if (index < 0)
-	{
-		return nullptr;
-	}
-
-	if (static_cast<unsigned>(index) >= scene->mNumTextures)
-	{
-		return nullptr;
-	}
-
-	Rendy::Image2DRef image = images[index];
-
-	return std::make_shared<Rendy::ES2::Texture2D>(image);
-}
-
-Rendy::AbstractMaterialRef Rendy::ModelFactory::parse_default_material(const aiScene* scene,
-	const aiMaterial* material, std::vector<Rendy::Image2DRef>& images)
-{
-	OPTICK_EVENT();
-	auto& mat = *material;
-
-	std::shared_ptr<Rendy::AbstractTexture2D> diffuse;
-	std::shared_ptr<Rendy::AbstractTexture2D> normalmap;
-
-	//DIFFUSE
-	{
-		aiString path;
-		if (mat.GetTexture(aiTextureType_DIFFUSE, 0, &path))
-		{
-			if (path.length > 0)
-			{
-				diffuse = get_texture(scene, to_index(path), images);
-			}
-		}
-	}
-
-	//NORMALMAP
-	{
-		aiString path;
-		if (mat.GetTexture(aiTextureType_NORMALS, 0, &path))
-		{
-			if (path.length > 0)
-			{
-				normalmap = get_texture(scene, to_index(path), images);
-			}
-		}
-	}
-
-	printf("DEFAULT MATERIAL\n diffuse %p \n normalmap %p \n",
-		diffuse.get(), normalmap.get()); //TODO: invalid shader when both textures is nullptr 
-
-	return std::make_shared<Rendy::ES2::DefaultMaterial>(diffuse, normalmap);
-}
-
-Rendy::AbstractMaterialRef Rendy::ModelFactory::parse_pbr_material(const aiScene* scene,
-	const aiMaterial* material, std::vector<Rendy::Image2DRef>& images)
-{
-	OPTICK_EVENT();
-	auto& mat = *material;
-
-	std::shared_ptr<Rendy::AbstractTexture2D> albedo;
-	std::shared_ptr<Rendy::AbstractTexture2D> ao_metallic_roughness;
-	std::shared_ptr<Rendy::AbstractTexture2D> normalmap;
-
-	//ALBEDO
-	{
-		aiString path;
-		if (mat.GetTexture(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_TEXTURE,
-			&path) != AI_SUCCESS)
-		{
-			return nullptr;
-		}
-
-		if (path.length == 0)
-		{
-			return nullptr;
-		}
-
-		albedo = get_texture(scene, to_index(path), images);
-
-		if (!albedo)
-		{
-			return nullptr;
-		}
-	}
-
-	//AO_METALLIC_ROUGHNESS
-	{
-		aiString path;
-		if(mat.GetTexture(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLICROUGHNESS_TEXTURE,
-			&path) != AI_SUCCESS)
-		{
-			return nullptr;
-		}
-
-		if (path.length == 0)
-		{
-			return nullptr;
-		}
-
-		ao_metallic_roughness = get_texture(scene, to_index(path), images);
-
-		if (!ao_metallic_roughness)
-		{
-			return nullptr;
-		}
-	}
-
-	//NORMALMAP
-	{
-		aiString path;
-		if (mat.GetTexture(aiTextureType_NORMALS, 0, &path))
-		{
-			if (path.length > 0)
-			{
-				normalmap = get_texture(scene, to_index(path), images);
-			}
-		}
-
-		if (!normalmap)
-		{
-			if (mat.GetTexture(aiTextureType_HEIGHT, 0, &path))
-			{
-				if (path.length > 0)
-				{
-					normalmap = get_texture(scene, to_index(path), images);
-				}
-			}
-		}
-	}
-
-	return std::make_shared<Rendy::ES2::PBRMaterial>(albedo, ao_metallic_roughness, normalmap);
-}
-
 Rendy::AbstractMaterialRef Rendy::ModelFactory::parse_material(const aiScene* scene,
 	const aiMaterial* material, std::vector<Rendy::Image2DRef>& images)
 {
 	OPTICK_EVENT();
-	Rendy::AbstractMaterialRef result;
-	
-	result = parse_pbr_material(scene, material, images);
 
-	if (!result)
-	{
-		result = parse_default_material(scene, material, images);
-	}
+	auto image_set = form_image_set(scene, material, images);
 
-	return result;
+	return engine->make_material(image_set);
 }
 
 std::vector<Rendy::AbstractMaterialRef> Rendy::ModelFactory::parse_materials(const aiScene* scene,
@@ -652,6 +507,72 @@ std::vector<Rendy::Image2DRef> Rendy::ModelFactory::parse_images(const aiScene* 
 	}
 
 	return std::move(result);
+}
+
+Rendy::ImageSetRef Rendy::ModelFactory::form_image_set(const aiScene* scene, const aiMaterial* material, std::vector<Image2DRef>& images) const
+{
+	OPTICK_EVENT();
+
+	auto image_set = std::make_shared<ImageSet>();
+
+	auto& mat = *material;
+
+	//DIFFUSE
+	{
+		aiString path;
+		if (mat.GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS)
+		{
+			if (path.length > 0)
+			{
+				printf("DIFFUSE\n");
+				image_set->color = get_image(to_index(path), images);
+			}
+		}
+	}
+
+	//NORMALMAP
+	{
+		aiString path;
+		if (mat.GetTexture(aiTextureType_NORMALS, 0, &path) == AI_SUCCESS)
+		{
+			if (path.length > 0)
+			{
+				printf("NORMAL\n");
+				image_set->normal = get_image(to_index(path), images);
+			}
+		}
+	}
+
+	//AO_METALLIC_ROUGHNESS
+	{
+		aiString path;
+		if (mat.GetTexture(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLICROUGHNESS_TEXTURE,
+			&path) == AI_SUCCESS)
+		{
+			if (path.length > 0)
+			{
+				printf("METALLIC_ROUGHNESS\n");
+				image_set->metallic_roughness = get_image(to_index(path), images);
+			}
+		}
+	}
+
+	return image_set;
+}
+
+Rendy::Image2DRef Rendy::ModelFactory::get_image(int index, std::vector<Image2DRef>& images) const
+{
+	OPTICK_EVENT();
+
+	if (index >= images.size() || index < 0)
+	{
+		printf("\t\t\tHELL NO\n");
+		return nullptr;
+	}
+
+	printf("\t\t\tOH YEAH\n");
+
+	return images[index];
 }
 
 Rendy::ModelFactory::ModelFactory(AbstractEngineRef engine, VFSRef vfs, ThreadPoolRef thread_pool)
