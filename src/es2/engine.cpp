@@ -1,6 +1,8 @@
 #include "engine.h"
 #include "buffer.h"
+#include "vertex_array.h"
 #include <optick.h>
+#include <cassert>
 
 void Rendy::ES2::Engine::push(BatchList batches)
 {
@@ -40,6 +42,20 @@ void Rendy::ES2::Engine::reload()
 	//TODO?
 }
 
+Rendy::AbstractVertexArrayRef Rendy::ES2::Engine::make_vao(AbstractBufferRef vbo, AbstractBufferRef ibo,
+	BufferLayoutRef layout)
+{
+	assert(vbo);
+	assert(vbo->get_target() == BufferTarget::VBO); //TODO
+
+	if (ibo)
+	{
+		assert(ibo->get_target() == BufferTarget::IBO); //TODO
+	}
+
+	return std::make_shared<VertexArray>(vbo, ibo, layout);
+}
+
 Rendy::AbstractBufferRef Rendy::ES2::Engine::make_vbo(uint32_t size, const void* ptr)
 {
 	OPTICK_EVENT();
@@ -71,5 +87,6 @@ Rendy::AbstractBufferRef Rendy::ES2::Engine::make_ibo(uint32_t size, const void*
 
 Rendy::IndexType Rendy::ES2::Engine::get_index_type() const
 {
+	OPTICK_EVENT();
 	return IndexType::UnsignedShort;
 }
