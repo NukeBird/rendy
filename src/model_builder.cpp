@@ -195,6 +195,8 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 
 	glm::vec3 min(9999), max(-9999);
 
+	glm::vec3 mmin(9999), mmax(-9999);
+
 	for (unsigned i = 0; i < scene->mNumMeshes; ++i)
 	{
 		result.emplace_back();
@@ -210,6 +212,21 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 		std::vector<float> verts;
 		verts.reserve(static_cast<size_t>(parse_mesh_size(mesh_flags) / sizeof(float)));
 		
+
+		mmin = glm::min(mmin, glm::vec3
+			{
+				assimp_mesh->mAABB.mMin.x,
+				assimp_mesh->mAABB.mMin.y,
+				assimp_mesh->mAABB.mMin.z
+			});
+
+		mmax = glm::max(mmax, glm::vec3
+			{
+				assimp_mesh->mAABB.mMax.x,
+				assimp_mesh->mAABB.mMax.y,
+				assimp_mesh->mAABB.mMax.z
+			});
+
 		for (unsigned j = 0; j < assimp_mesh->mNumVertices; ++j)
 		{
 			//POSITION
@@ -296,6 +313,9 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 
 	printf("MIN %f %f %f\n", min.x, min.y, min.z);
 	printf("MAX %f %f %f\n", max.x, max.y, max.z);
+
+	printf("MMIN %f %f %f\n", mmin.x, mmin.y, mmin.z);
+	printf("MMAX %f %f %f\n", mmax.x, mmax.y, mmax.z);
 
 	uint32_t size = 0;
 
