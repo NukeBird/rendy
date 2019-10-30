@@ -177,6 +177,24 @@ Rendy::BufferLayoutRef Rendy::ModelFactory::parse_buffer_layout(uint32_t flags) 
 	return std::make_shared<Rendy::BufferLayout>(buffer_elements);
 }
 
+template<class T>
+static Rendy::AbstractBufferRef parse_ibo(aiMesh* assimp_mesh, Rendy::AbstractEngineRef engine)
+{
+	std::vector<T> indices; //TODO: sometimes uint32_t?
+
+	for (unsigned j = 0; j < assimp_mesh->mNumFaces; ++j)
+	{
+		auto& face = assimp_mesh->mFaces[j];
+
+		for (unsigned k = 0; k < face.mNumIndices; ++k)
+		{
+			indices.emplace_back(static_cast<uint16_t>(face.mIndices[k]));
+		}
+	}
+
+	return engine->make_ibo(static_cast<uint32_t>(indices.size() * sizeof(T)), indices.data());
+}
+
 std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 {
 	OPTICK_EVENT();
@@ -280,22 +298,21 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 			}
 		}
 
-		std::vector<uint16_t> indices; //TODO: sometimes uint32_t?
-
-		for (unsigned j = 0; j < assimp_mesh->mNumFaces; ++j)
-		{
-			auto& face = assimp_mesh->mFaces[j];
-
-			for (unsigned k = 0; k < face.mNumIndices; ++k)
-			{
-				indices.emplace_back(static_cast<uint16_t>(face.mIndices[k]));
-			}
-		}
 
 		auto layout = parse_buffer_layout(mesh_flags);
 
 		auto vbo = engine->make_vbo(static_cast<uint32_t>(verts.size() * sizeof(float)), verts.data());
-		auto ibo = engine->make_ibo(static_cast<uint32_t>(indices.size() * sizeof(uint16_t)), indices.data());
+		AbstractBufferRef ibo;
+		
+		if (engine->get_index_type() == IndexType::UnsignedShort)
+		{
+			ibo = parse_ibo<uint16_t>(assimp_mesh, engine);
+		}
+		else
+		{
+			ibo = parse_ibo<uint32_t>(assimp_mesh, engine);
+		}
+
 		auto vao = engine->make_vao(vbo, ibo, layout);
 
 		mesh.vao = vao;
@@ -628,7 +645,11 @@ Rendy::ModelRef Rendy::ModelFactory::make(const void* memory, uint32_t size)
 	try
 	{
 		Assimp::Importer importer;
-		importer.SetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT, std::numeric_limits<unsigned short>::max());
+
+		if (engine->get_index_type() == IndexType::UnsignedShort)
+		{
+			importer.SetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT, std::numeric_limits<unsigned short>::max());
+		}
 		importer.SetPropertyInteger(AI_CONFIG_IMPORT_TER_MAKE_UVS, 1);
 		importer.SetPropertyInteger(AI_CONFIG_PP_SBBC_MAX_BONES, 35);
 		importer.SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE, 80.0f);
