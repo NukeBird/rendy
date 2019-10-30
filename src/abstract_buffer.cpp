@@ -1,6 +1,6 @@
 #include "abstract_buffer.h"
 
-std::string to_string(BufferTarget target)
+std::string Rendy::to_string(BufferTarget target)
 {
 	switch(target)
 	{

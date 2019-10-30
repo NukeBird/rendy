@@ -1,6 +1,6 @@
 #include "native_file.h"
 
-NativeFile::NativeFile(const std::string& path, FileMode mode)
+Rendy::NativeFile::NativeFile(const std::string& path, FileMode mode)
 {
 	this->mode = mode;
 	this->size = 0;
@@ -36,27 +36,27 @@ NativeFile::NativeFile(const std::string& path, FileMode mode)
 	}
 }
 
-uint64_t NativeFile::get_size() const
+uint64_t Rendy::NativeFile::get_size() const
 {
 	return size;
 }
 
-bool NativeFile::is_read_only() const
+bool Rendy::NativeFile::is_read_only() const
 {
 	return mode == FileMode::Read;
 }
 
-bool NativeFile::is_open() const
+bool Rendy::NativeFile::is_open() const
 {
 	return stream.is_open();
 }
 
-bool NativeFile::validate()
+bool Rendy::NativeFile::validate()
 {
 	return stream.good();
 }
 
-uint64_t NativeFile::seek(uint64_t offset, SeekOrigin origin)
+uint64_t Rendy::NativeFile::seek(uint64_t offset, SeekOrigin origin)
 {
 	std::ios_base::seekdir way = std::ios_base::beg;
 
@@ -85,12 +85,12 @@ uint64_t NativeFile::seek(uint64_t offset, SeekOrigin origin)
 	return tell();
 }
 
-uint64_t NativeFile::tell()
+uint64_t Rendy::NativeFile::tell()
 {
 	return static_cast<uint64_t>(stream.tellg());
 }
 
-uint64_t NativeFile::read(void* buffer, uint64_t size)
+uint64_t Rendy::NativeFile::read(void* buffer, uint64_t size)
 {
 	if (!validate())
 	{
@@ -108,7 +108,7 @@ uint64_t NativeFile::read(void* buffer, uint64_t size)
 	return static_cast<uint64_t>(stream.gcount());
 }
 
-uint64_t NativeFile::write(void* buffer, uint64_t size)
+uint64_t Rendy::NativeFile::write(void* buffer, uint64_t size)
 {
 	if (!validate())
 	{
@@ -130,7 +130,7 @@ uint64_t NativeFile::write(void* buffer, uint64_t size)
 	return result;
 }
 
-void NativeFile::calculate_size()
+void Rendy::NativeFile::calculate_size()
 {
 	seek(0, SeekOrigin::End);
 	size = tell();

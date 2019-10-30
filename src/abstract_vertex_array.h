@@ -4,14 +4,17 @@
 #include "abstract_shader_variant.h"
 #include "buffer_layout.h"
 
-struct AbstractVertexArray: public AbstractResource
+namespace Rendy
 {
-	virtual void bind(const ShaderVariantRef& shader) = 0;
-	virtual void draw() = 0;
-	virtual void unbind() = 0;
-	virtual BufferLayoutRef get_layout() const = 0;
-	virtual AbstractBufferRef get_vertex_buffer() = 0;
-	virtual AbstractBufferRef get_index_buffer() = 0;
-};
+	struct AbstractVertexArray : public AbstractResource
+	{
+		virtual void bind(const ShaderVariantRef& shader) = 0;
+		virtual void draw() = 0;
+		virtual void unbind() = 0;
+		virtual BufferLayoutRef get_layout() const = 0;
+		virtual AbstractBufferRef get_vertex_buffer() = 0;
+		virtual AbstractBufferRef get_index_buffer() = 0;
+	};
 
-using AbstractVertexArrayRef = std::shared_ptr<AbstractVertexArray>;
+	using AbstractVertexArrayRef = std::shared_ptr<AbstractVertexArray>;
+};

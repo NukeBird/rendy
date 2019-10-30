@@ -5,7 +5,7 @@
 #include "set_uniform.h"
 #include <optick.h>
 
-DefaultMaterial::DefaultMaterial(const AbstractTexture2DRef& diffuse_texture,
+Rendy::DefaultMaterial::DefaultMaterial(const AbstractTexture2DRef& diffuse_texture,
 	const AbstractTexture2DRef& normal_texture)
 {
 	OPTICK_EVENT();
@@ -16,7 +16,7 @@ DefaultMaterial::DefaultMaterial(const AbstractTexture2DRef& diffuse_texture,
 	this->normal_texture = normal_texture;
 }
 
-void DefaultMaterial::reload()
+void Rendy::DefaultMaterial::reload()
 {
 	OPTICK_EVENT();
 
@@ -33,7 +33,7 @@ void DefaultMaterial::reload()
 	}
 }
 
-bool DefaultMaterial::validate() const
+bool Rendy::DefaultMaterial::validate() const
 {
 	OPTICK_EVENT();
 
@@ -61,20 +61,20 @@ bool DefaultMaterial::validate() const
 	return true;
 }
 
-AbstractShaderRef DefaultMaterial::get_shader()
+Rendy::AbstractShaderRef Rendy::DefaultMaterial::get_shader()
 {
 	OPTICK_EVENT();
 	return shader;
 }
 
-ShaderVariantRef DefaultMaterial::get_shader_variant(uint32_t extra_flags)
+Rendy::ShaderVariantRef Rendy::DefaultMaterial::get_shader_variant(uint32_t extra_flags)
 {
 	ShaderSettings settings;
 	settings.flags = extra_flags | get_flags();
 	return shader->compile(settings);
 }
 
-uint32_t DefaultMaterial::get_flags() const
+uint32_t Rendy::DefaultMaterial::get_flags() const
 {
 	OPTICK_EVENT();
 
@@ -93,7 +93,7 @@ uint32_t DefaultMaterial::get_flags() const
 	return flags;
 }
 
-std::vector<CommandRef> DefaultMaterial::to_command_list(uint32_t extra_flags)
+std::vector<Rendy::CommandRef> Rendy::DefaultMaterial::to_command_list(uint32_t extra_flags)
 {
 	ShaderSettings settings;
 	settings.flags = extra_flags | get_flags();
@@ -115,7 +115,7 @@ std::vector<CommandRef> DefaultMaterial::to_command_list(uint32_t extra_flags)
 	return list;
 }
 
-void DefaultMaterial::bind(const ShaderSettings& settings)
+void Rendy::DefaultMaterial::bind(const ShaderSettings& settings)
 {
 	OPTICK_EVENT();
 
@@ -133,7 +133,7 @@ void DefaultMaterial::bind(const ShaderSettings& settings)
 	}
 }
 
-void DefaultMaterial::unbind(uint32_t extra_flags)
+void Rendy::DefaultMaterial::unbind(uint32_t extra_flags)
 {
 	OPTICK_EVENT();
 

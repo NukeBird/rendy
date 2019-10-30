@@ -3,8 +3,11 @@
 #include "abstract_buffer.h"
 #include <vector>
 
-class VertexBufferFactory: public Singleton<VertexBufferFactory>
+namespace Rendy
 {
-public:
-	AbstractBufferRef make(uint32_t size, const void* ptr);
+	class VertexBufferFactory : public Singleton<VertexBufferFactory>
+	{
+	public:
+		AbstractBufferRef make(uint32_t size, const void* ptr);
+	};
 };

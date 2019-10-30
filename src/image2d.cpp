@@ -3,7 +3,7 @@
 #include <stb/stb_image.h>
 #include <optick.h>
 
-Image2D::Image2D(const char* memory, uint32_t length)
+Rendy::Image2D::Image2D(const char* memory, uint32_t length)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("size", length);
@@ -11,7 +11,7 @@ Image2D::Image2D(const char* memory, uint32_t length)
 	load_image(memory, length);
 }
 
-Image2D::~Image2D()
+Rendy::Image2D::~Image2D()
 {
 	OPTICK_EVENT();
 
@@ -21,43 +21,43 @@ Image2D::~Image2D()
 	channel_count = 0;
 }
 
-void* Image2D::get_data()
+void* Rendy::Image2D::get_data()
 {
 	OPTICK_EVENT();
 	return data_ptr;
 }
 
-glm::uvec2 Image2D::get_size() const
+glm::uvec2 Rendy::Image2D::get_size() const
 {
 	OPTICK_EVENT();
 	return size;
 }
 
-uint32_t Image2D::get_width() const
+uint32_t Rendy::Image2D::get_width() const
 {
 	OPTICK_EVENT();
 	return get_size().x;
 }
 
-uint32_t Image2D::get_height() const
+uint32_t Rendy::Image2D::get_height() const
 {
 	OPTICK_EVENT();
 	return get_size().y;
 }
 
-uint32_t Image2D::get_channel_count() const
+uint32_t Rendy::Image2D::get_channel_count() const
 {
 	OPTICK_EVENT();
 	return channel_count;
 }
 
-void Image2D::reload()
+void Rendy::Image2D::reload()
 {
 	OPTICK_EVENT();
 	//do nothing?
 }
 
-bool Image2D::validate() const
+bool Rendy::Image2D::validate() const
 {
 	OPTICK_EVENT();
 	if (data_ptr == nullptr)
@@ -78,7 +78,7 @@ bool Image2D::validate() const
 	return true;
 }
 
-void Image2D::load_image(const char* memory, uint32_t length)
+void Rendy::Image2D::load_image(const char* memory, uint32_t length)
 {
 	OPTICK_EVENT();
 	int w, h, c;

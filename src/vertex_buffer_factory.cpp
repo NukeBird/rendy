@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <optick.h>
 
-AbstractBufferRef VertexBufferFactory::make(uint32_t size, const void* ptr)
+Rendy::AbstractBufferRef Rendy::VertexBufferFactory::make(uint32_t size, const void* ptr)
 {
 	OPTICK_EVENT();
 

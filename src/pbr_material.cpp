@@ -5,7 +5,7 @@
 #include "set_uniform.h"
 #include <optick.h>
 
-PBRMaterial::PBRMaterial(const AbstractTexture2DRef& albedo_texture,
+Rendy::PBRMaterial::PBRMaterial(const AbstractTexture2DRef& albedo_texture,
 	const AbstractTexture2DRef& ambient_metallic_roughness_texture, 
 	const AbstractTexture2DRef& normal_texture)
 {
@@ -20,7 +20,7 @@ PBRMaterial::PBRMaterial(const AbstractTexture2DRef& albedo_texture,
 	this->normal_texture = normal_texture;
 }
 
-void PBRMaterial::reload()
+void Rendy::PBRMaterial::reload()
 {
 	OPTICK_EVENT();
 
@@ -42,7 +42,7 @@ void PBRMaterial::reload()
 	}
 }
 
-bool PBRMaterial::validate() const
+bool Rendy::PBRMaterial::validate() const
 {
 	OPTICK_EVENT();
 
@@ -77,20 +77,20 @@ bool PBRMaterial::validate() const
 	return true;
 }
 
-AbstractShaderRef PBRMaterial::get_shader()
+Rendy::AbstractShaderRef Rendy::PBRMaterial::get_shader()
 {
 	OPTICK_EVENT();
 	return shader;
 }
 
-ShaderVariantRef PBRMaterial::get_shader_variant(uint32_t extra_flags)
+Rendy::ShaderVariantRef Rendy::PBRMaterial::get_shader_variant(uint32_t extra_flags)
 {
 	ShaderSettings settings;
 	settings.flags = extra_flags | get_flags();
 	return shader->compile(settings);
 }
 
-uint32_t PBRMaterial::get_flags() const
+uint32_t Rendy::PBRMaterial::get_flags() const
 {
 	OPTICK_EVENT();
 
@@ -107,9 +107,9 @@ uint32_t PBRMaterial::get_flags() const
 #include "es2/texture_cube.h"
 #include "bind_texture_cube.h"
 
-std::vector<CommandRef> PBRMaterial::to_command_list(uint32_t extra_flags)
+std::vector<Rendy::CommandRef> Rendy::PBRMaterial::to_command_list(uint32_t extra_flags)
 {
-	static AbstractTextureCubeRef cubemap;
+	static Rendy::AbstractTextureCubeRef cubemap;
 
 	if (!cubemap)
 	{
@@ -145,7 +145,7 @@ std::vector<CommandRef> PBRMaterial::to_command_list(uint32_t extra_flags)
 	return list;
 }
 
-void PBRMaterial::bind(const ShaderSettings& settings)
+void Rendy::PBRMaterial::bind(const ShaderSettings& settings)
 {
 	OPTICK_EVENT();
 
@@ -172,7 +172,7 @@ void PBRMaterial::bind(const ShaderSettings& settings)
 	}
 }
 
-void PBRMaterial::unbind(uint32_t extra_flags)
+void Rendy::PBRMaterial::unbind(uint32_t extra_flags)
 {
 	OPTICK_EVENT();
 

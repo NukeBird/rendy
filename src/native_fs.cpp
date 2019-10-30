@@ -1,29 +1,29 @@
 #include "native_fs.h"
 #include "native_file.h"
 
-NativeFS::NativeFS(const std::string& base_path)
+Rendy::NativeFS::NativeFS(const std::string& base_path)
 {
 	this->base_path = base_path;
 	normalize_base_path();
 }
 
-bool NativeFS::validate()
+bool Rendy::NativeFS::validate()
 {
 	return true; //TODO
 }
 
-FileRef NativeFS::open_file(const std::string& path, FileMode mode)
+Rendy::FileRef Rendy::NativeFS::open_file(const std::string& path, FileMode mode)
 {
 	return std::make_shared<NativeFile>(base_path + path, mode);
 }
 
-bool NativeFS::has_file(const std::string& path)
+bool Rendy::NativeFS::has_file(const std::string& path)
 {
 	auto file = open_file(path, FileMode::Read);
 	return file->is_open();
 }
 
-void NativeFS::normalize_base_path()
+void Rendy::NativeFS::normalize_base_path()
 {
 	if (validate())
 	{

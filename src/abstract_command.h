@@ -1,9 +1,12 @@
 #pragma once
 #include <memory>
 
-struct AbstractCommand
+namespace Rendy
 {
-	virtual void execute() = 0;
-};
+	struct AbstractCommand
+	{
+		virtual void execute() = 0;
+	};
 
-using CommandRef = std::shared_ptr<AbstractCommand>;
+	using CommandRef = std::shared_ptr<AbstractCommand>;
+};

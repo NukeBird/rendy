@@ -1,12 +1,12 @@
 #include "bind_shader.h"
 
-BindShader::BindShader(AbstractShaderRef shader, ShaderSettings settings)
+Rendy::BindShader::BindShader(AbstractShaderRef shader, ShaderSettings settings)
 {
 	this->shader = shader;
 	this->settings = settings;
 }
 
-void BindShader::execute()
+void Rendy::BindShader::execute()
 {
 	if (shader)
 	{

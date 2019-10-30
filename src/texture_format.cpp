@@ -1,6 +1,6 @@
 #include "texture_format.h"
 
-std::string to_string(TextureFormat format)
+std::string Rendy::to_string(TextureFormat format)
 {
 	switch (format)
 	{

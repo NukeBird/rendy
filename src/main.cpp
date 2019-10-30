@@ -28,6 +28,8 @@ void GLAPIENTRY message_callback(GLenum source,
 	std::cout << message_string << std::endl;
 }
 
+//using namespace Rendy;
+
 int main(int argc, char** argv) 
 {
 	//OPTICK_APP("RendySandbox");
@@ -123,13 +125,13 @@ int main(int argc, char** argv)
 		//glBindTexture(-24, -3);
 	#endif // _WIN32
 
-	auto model = ModelBuilder::build("assets/ainz.glb");
+	auto model = Rendy::ModelBuilder::build("assets/ainz.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
 
 	std::cout << "GENERIC SHADER STATUS: "
-		<< ShaderFactory::get_instance()->get_generic_shader()->validate()
+		<< Rendy::ShaderFactory::get_instance()->get_generic_shader()->validate()
 		<< std::endl;
 
 	GLuint fucking_vao; //should be active at least one _REAL_ vao

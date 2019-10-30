@@ -6,7 +6,7 @@
 #include <memory>
 #include <optick.h>
 
-AbstractVertexArrayRef VertexArrayFactory::make(const std::vector<float>& vbo_src,
+Rendy::AbstractVertexArrayRef Rendy::VertexArrayFactory::make(const std::vector<float>& vbo_src,
 	const std::vector<uint16_t>& ibo_src, const BufferLayoutRef & layout)
 {
 	OPTICK_EVENT();
@@ -23,7 +23,7 @@ AbstractVertexArrayRef VertexArrayFactory::make(const std::vector<float>& vbo_sr
 	return make(vbo_ptr, vbo_size, ibo_ptr, ibo_size, layout);
 }
 
-AbstractVertexArrayRef VertexArrayFactory::make(const void* vbo_ptr, uint32_t vbo_size,
+Rendy::AbstractVertexArrayRef Rendy::VertexArrayFactory::make(const void* vbo_ptr, uint32_t vbo_size,
 	const void* ibo_ptr, uint32_t ibo_size, const BufferLayoutRef& layout)
 {
 	OPTICK_EVENT();

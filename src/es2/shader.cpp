@@ -3,7 +3,7 @@
 #include "../common.h"
 #include <optick.h>
 
-ES2::Shader::Shader(const std::string& vertex_source, const std::string& fragment_source)
+Rendy::ES2::Shader::Shader(const std::string& vertex_source, const std::string& fragment_source)
 {
 	OPTICK_EVENT();
 
@@ -16,7 +16,7 @@ ES2::Shader::Shader(const std::string& vertex_source, const std::string& fragmen
 	compile(settings);
 }
 
-void ES2::Shader::reload()
+void Rendy::ES2::Shader::reload()
 {
 	OPTICK_EVENT();
 
@@ -26,7 +26,7 @@ void ES2::Shader::reload()
 	}
 }
 
-ShaderVariantRef ES2::Shader::compile(const ShaderSettings& settings)
+Rendy::ShaderVariantRef Rendy::ES2::Shader::compile(const ShaderSettings& settings)
 {
 	OPTICK_EVENT();
 
@@ -48,7 +48,7 @@ ShaderVariantRef ES2::Shader::compile(const ShaderSettings& settings)
 	return it->second;
 }
 
-bool ES2::Shader::validate() const
+bool Rendy::ES2::Shader::validate() const
 {
 	OPTICK_EVENT();
 
@@ -63,7 +63,7 @@ bool ES2::Shader::validate() const
 	return true;
 }
 
-uint32_t ES2::Shader::get_variant_count() const
+uint32_t Rendy::ES2::Shader::get_variant_count() const
 {
 	OPTICK_EVENT();
 

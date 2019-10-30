@@ -1,47 +1,47 @@
 #include "buffer_layout.h"
 #include <optick.h>
 
-BufferLayout::BufferLayout(const std::vector<BufferElement>& elements)
+Rendy::BufferLayout::BufferLayout(const std::vector<BufferElement>& elements)
 {
 	OPTICK_EVENT();
 	this->elements = elements;
 	calculate();
 }
 
-uint32_t BufferLayout::get_stride() const
+uint32_t Rendy::BufferLayout::get_stride() const
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("stride", stride);
 	return stride;
 }
 
-const std::vector<BufferElement>& BufferLayout::get_elements() const
+const std::vector<Rendy::BufferElement>& Rendy::BufferLayout::get_elements() const
 {
 	OPTICK_EVENT();
 	return elements;
 }
 
-std::vector<BufferElement>::iterator BufferLayout::begin()
+std::vector<Rendy::BufferElement>::iterator Rendy::BufferLayout::begin()
 {
 	return elements.begin();
 }
 
-std::vector<BufferElement>::iterator BufferLayout::end()
+std::vector<Rendy::BufferElement>::iterator Rendy::BufferLayout::end()
 {
 	return elements.end();
 }
 
-std::vector<BufferElement>::const_iterator BufferLayout::begin() const
+std::vector<Rendy::BufferElement>::const_iterator Rendy::BufferLayout::begin() const
 {
 	return elements.begin();
 }
 
-std::vector<BufferElement>::const_iterator BufferLayout::end() const
+std::vector<Rendy::BufferElement>::const_iterator Rendy::BufferLayout::end() const
 {
 	return elements.end();
 }
 
-void BufferLayout::calculate()
+void Rendy::BufferLayout::calculate()
 {
 	OPTICK_EVENT();
 	uint32_t offset = 0;
@@ -58,7 +58,7 @@ void BufferLayout::calculate()
 	OPTICK_TAG("stride", stride);
 }
 
-BufferElement::BufferElement(ShaderDataType type, const std::string& name)
+Rendy::BufferElement::BufferElement(ShaderDataType type, const std::string& name)
 {
 	OPTICK_EVENT();
 	this->name = name;
@@ -71,7 +71,7 @@ BufferElement::BufferElement(ShaderDataType type, const std::string& name)
 	OPTICK_TAG("size", size);
 }
 
-uint32_t BufferElement::get_component_count() const
+uint32_t Rendy::BufferElement::get_component_count() const
 {
 	OPTICK_EVENT();
 	switch (type)

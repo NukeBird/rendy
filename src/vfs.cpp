@@ -1,14 +1,14 @@
 #include "vfs.h"
 #include <iostream>
 
-VFS::VFS(FSRef default_fs)
+Rendy::VFS::VFS(FSRef default_fs)
 {
 	this->default_fs = default_fs;
 	mount("", default_fs);
 	mount(".", default_fs);
 }
 
-void VFS::mount(const std::string& alias, FSRef filesystem)
+void Rendy::VFS::mount(const std::string& alias, FSRef filesystem)
 {
 	if (filesystem->validate())
 	{
@@ -16,7 +16,7 @@ void VFS::mount(const std::string& alias, FSRef filesystem)
 	}
 }
 
-FSRef VFS::get_filesystem(const std::string& alias)
+Rendy::FSRef Rendy::VFS::get_filesystem(const std::string& alias)
 {
 	auto fs_list = get_filesystem_list(alias);
 
@@ -28,7 +28,7 @@ FSRef VFS::get_filesystem(const std::string& alias)
 	return default_fs;
 }
 
-std::vector<FSRef> VFS::get_filesystem_list(const std::string& alias)
+std::vector<Rendy::FSRef> Rendy::VFS::get_filesystem_list(const std::string& alias)
 {
 	auto it = filesystem_map.find(alias);
 
@@ -40,7 +40,7 @@ std::vector<FSRef> VFS::get_filesystem_list(const std::string& alias)
 	return std::vector<FSRef>();
 }
 
-FileRef VFS::open_file(const std::string& path, FileMode mode)
+Rendy::FileRef Rendy::VFS::open_file(const std::string& path, FileMode mode)
 {
 	auto alias = get_alias(path);
 	auto fs_path = path.substr(alias.size() + (alias.empty() ? 0 : 1));
@@ -59,7 +59,7 @@ FileRef VFS::open_file(const std::string& path, FileMode mode)
 	return default_fs->open_file(path, mode);
 }
 
-std::string VFS::get_alias(const std::string& text) const
+std::string Rendy::VFS::get_alias(const std::string& text) const
 {
 	auto slash_it = text.find_first_of("/");
 

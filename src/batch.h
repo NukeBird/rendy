@@ -5,15 +5,18 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-struct Batch
+namespace Rendy
 {
-	AbstractVertexArrayRef vao;
-	AbstractMaterialRef material;
+	struct Batch
+	{
+		AbstractVertexArrayRef vao;
+		AbstractMaterialRef material;
 
-	uint32_t extra_flags = 0;
-	glm::mat4 model;
-	glm::mat4 view;
-	glm::mat4 proj;
+		uint32_t extra_flags = 0;
+		glm::mat4 model;
+		glm::mat4 view;
+		glm::mat4 proj;
 
-	std::vector<CommandRef> to_command_list();
+		std::vector<CommandRef> to_command_list();
+	};
 };

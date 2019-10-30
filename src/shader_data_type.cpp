@@ -1,6 +1,6 @@
 #include "shader_data_type.h"
 
-std::string to_string(ShaderDataType type)
+std::string Rendy::to_string(ShaderDataType type)
 {
 	switch (type)
 	{
@@ -31,7 +31,7 @@ std::string to_string(ShaderDataType type)
 	return "WTF";
 }
 
-uint32_t get_shader_data_type_size(ShaderDataType type)
+uint32_t Rendy::get_shader_data_type_size(ShaderDataType type)
 {
 	uint32_t size = 0;
 

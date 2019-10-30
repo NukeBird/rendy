@@ -1,8 +1,11 @@
 #pragma once
 #include "model.h"
 
-class ModelBuilder
+namespace Rendy
 {
-public:
-	static ModelRef build(const char* filename);
+	class ModelBuilder
+	{
+	public:
+		static ModelRef build(const char* filename);
+	};
 };

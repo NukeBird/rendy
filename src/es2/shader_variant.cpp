@@ -2,7 +2,7 @@
 #include "../common.h"
 #include <optick.h>
 
-ES2::ShaderVariant::ShaderVariant(const std::string& vtx, const std::string& frg)
+Rendy::ES2::ShaderVariant::ShaderVariant(const std::string& vtx, const std::string& frg)
 {
 	OPTICK_EVENT();
 
@@ -13,14 +13,14 @@ ES2::ShaderVariant::ShaderVariant(const std::string& vtx, const std::string& frg
 	OPTICK_TAG("id", program_id);
 }
 
-ES2::ShaderVariant::~ShaderVariant()
+Rendy::ES2::ShaderVariant::~ShaderVariant()
 {
 	OPTICK_EVENT();
 
 	reset();
 }
 
-void ES2::ShaderVariant::reload()
+void Rendy::ES2::ShaderVariant::reload()
 {
 	OPTICK_EVENT();
 
@@ -30,7 +30,7 @@ void ES2::ShaderVariant::reload()
 	}
 }
 
-bool ES2::ShaderVariant::validate() const
+bool Rendy::ES2::ShaderVariant::validate() const
 {
 	OPTICK_EVENT();
 
@@ -45,7 +45,7 @@ bool ES2::ShaderVariant::validate() const
 	return false;
 }
 
-void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::vec3& vec)
+void Rendy::ES2::ShaderVariant::set_uniform(const std::string& name, const glm::vec3& vec)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("name", name.c_str());
@@ -62,7 +62,7 @@ void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::vec3& v
 	}
 }
 
-void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::mat4& mat)
+void Rendy::ES2::ShaderVariant::set_uniform(const std::string& name, const glm::mat4& mat)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("name", name.c_str());
@@ -79,7 +79,7 @@ void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::mat4& m
 	}
 }
 
-void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::mat3& mat)
+void Rendy::ES2::ShaderVariant::set_uniform(const std::string& name, const glm::mat3& mat)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("name", name.c_str());
@@ -96,7 +96,7 @@ void ES2::ShaderVariant::set_uniform(const std::string& name, const glm::mat3& m
 	}
 }
 
-void ES2::ShaderVariant::set_uniform(const std::string& name, const float number)
+void Rendy::ES2::ShaderVariant::set_uniform(const std::string& name, const float number)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("name", name.c_str());
@@ -113,7 +113,7 @@ void ES2::ShaderVariant::set_uniform(const std::string& name, const float number
 	}
 }
 
-void ES2::ShaderVariant::set_uniform(const std::string& name, const int number)
+void Rendy::ES2::ShaderVariant::set_uniform(const std::string& name, const int number)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("name", name.c_str());
@@ -130,7 +130,7 @@ void ES2::ShaderVariant::set_uniform(const std::string& name, const int number)
 	}
 }
 
-int ES2::ShaderVariant::get_attribute_location(const std::string& name) const
+int Rendy::ES2::ShaderVariant::get_attribute_location(const std::string& name) const
 {
 	OPTICK_EVENT();
 
@@ -148,7 +148,7 @@ int ES2::ShaderVariant::get_attribute_location(const std::string& name) const
 	return location;
 }
 
-void ES2::ShaderVariant::bind()
+void Rendy::ES2::ShaderVariant::bind()
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("id", program_id);
@@ -156,7 +156,7 @@ void ES2::ShaderVariant::bind()
 	glUseProgram(program_id);
 }
 
-void ES2::ShaderVariant::unbind()
+void Rendy::ES2::ShaderVariant::unbind()
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("id", program_id);
@@ -164,7 +164,7 @@ void ES2::ShaderVariant::unbind()
 	glUseProgram(0);
 }
 
-int ES2::ShaderVariant::get_uniform_location(const std::string& name) const
+int Rendy::ES2::ShaderVariant::get_uniform_location(const std::string& name) const
 {
 	OPTICK_EVENT();
 
@@ -182,7 +182,7 @@ int ES2::ShaderVariant::get_uniform_location(const std::string& name) const
 	return location;
 }
 
-void ES2::ShaderVariant::cache_attribute_locations()
+void Rendy::ES2::ShaderVariant::cache_attribute_locations()
 {
 	OPTICK_EVENT();
 
@@ -206,7 +206,7 @@ void ES2::ShaderVariant::cache_attribute_locations()
 	}
 }
 
-void ES2::ShaderVariant::cache_uniform_locations()
+void Rendy::ES2::ShaderVariant::cache_uniform_locations()
 {
 	OPTICK_EVENT();
 
@@ -230,7 +230,7 @@ void ES2::ShaderVariant::cache_uniform_locations()
 	}
 }
 
-void ES2::ShaderVariant::compile_shader()
+void Rendy::ES2::ShaderVariant::compile_shader()
 {
 	OPTICK_EVENT();
 
@@ -258,7 +258,7 @@ void ES2::ShaderVariant::compile_shader()
 	OPTICK_TAG("id", program_id);
 }
 
-void ES2::ShaderVariant::reset()
+void Rendy::ES2::ShaderVariant::reset()
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("id", program_id);

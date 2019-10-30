@@ -53,32 +53,32 @@ uint32_t parse_mesh_flags(const aiMesh* mesh)
 
 	if (mesh->HasPositions())
 	{
-		flags |= USE_VERTEX_POSITION;
+		flags |= Rendy::USE_VERTEX_POSITION;
 		printf("USE_VERTEX_POSITION\n");
 	}
 
 	if (mesh->HasTextureCoords(0))
 	{
-		flags |= USE_VERTEX_COORD;
+		flags |= Rendy::USE_VERTEX_COORD;
 		printf("USE_VERTEX_COORD\n");
 	}
 
 	if (mesh->HasVertexColors(0))
 	{
-		flags |= USE_VERTEX_COLOR;
+		flags |= Rendy::USE_VERTEX_COLOR;
 		printf("USE_VERTEX_COLOR\n");
 	}
 
 	if (mesh->HasNormals())
 	{
-		flags |= USE_VERTEX_NORMAL;
+		flags |= Rendy::USE_VERTEX_NORMAL;
 		printf("USE_VERTEX_NORMAL\n");
 	}
 
 	if (mesh->HasTangentsAndBitangents())
 	{
-		flags |= USE_VERTEX_TANGENT;
-		flags |= USE_VERTEX_BITANGENT;
+		flags |= Rendy::USE_VERTEX_TANGENT;
+		flags |= Rendy::USE_VERTEX_BITANGENT;
 		printf("USE_VERTEX_TANGENT\n");
 		printf("USE_VERTEX_BITANGENT\n");
 	}
@@ -105,32 +105,32 @@ uint32_t parse_mesh_size(uint32_t flags)
 	OPTICK_EVENT();
 	uint32_t element_count = 0; 
 
-	if (flags & USE_VERTEX_POSITION)
+	if (flags & Rendy::USE_VERTEX_POSITION)
 	{
 		element_count += 3;
 	}
 
-	if (flags & USE_VERTEX_COORD)
+	if (flags & Rendy::USE_VERTEX_COORD)
 	{
 		element_count += 2;
 	}
 
-	if (flags & USE_VERTEX_COLOR)
+	if (flags & Rendy::USE_VERTEX_COLOR)
 	{
 		element_count += 4;
 	}
 
-	if (flags & USE_VERTEX_NORMAL)
+	if (flags & Rendy::USE_VERTEX_NORMAL)
 	{
 		element_count += 3;
 	}
 
-	if (flags & USE_VERTEX_TANGENT)
+	if (flags & Rendy::USE_VERTEX_TANGENT)
 	{
 		element_count += 3;
 	}
 
-	if (flags & USE_VERTEX_BITANGENT)
+	if (flags & Rendy::USE_VERTEX_BITANGENT)
 	{
 		element_count += 3;
 	}
@@ -143,54 +143,54 @@ uint32_t parse_mesh_size(uint32_t flags)
 	return element_count * sizeof(float);
 }
 
-BufferLayoutRef parse_buffer_layout(uint32_t flags)
+Rendy::BufferLayoutRef parse_buffer_layout(uint32_t flags)
 {
 	OPTICK_EVENT();
-	std::vector<BufferElement> buffer_elements;
+	std::vector<Rendy::BufferElement> buffer_elements;
 
 	//POSITION
-	if (flags & USE_VERTEX_POSITION)
+	if (flags & Rendy::USE_VERTEX_POSITION)
 	{
-		buffer_elements.emplace_back(ShaderDataType::Float3, "a_position");
+		buffer_elements.emplace_back(Rendy::ShaderDataType::Float3, "a_position");
 	}
 
 	//COORD
-	if (flags & USE_VERTEX_COORD)
+	if (flags & Rendy::USE_VERTEX_COORD)
 	{
-		buffer_elements.emplace_back(ShaderDataType::Float2, "a_coord");
+		buffer_elements.emplace_back(Rendy::ShaderDataType::Float2, "a_coord");
 	}
 
 	//COLOR
-	if (flags & USE_VERTEX_COLOR)
+	if (flags & Rendy::USE_VERTEX_COLOR)
 	{
-		buffer_elements.emplace_back(ShaderDataType::Float4, "a_color");
+		buffer_elements.emplace_back(Rendy::ShaderDataType::Float4, "a_color");
 	}
 
 	//NORMAL
-	if (flags & USE_VERTEX_NORMAL)
+	if (flags & Rendy::USE_VERTEX_NORMAL)
 	{
-		buffer_elements.emplace_back(ShaderDataType::Float3, "a_normal");
+		buffer_elements.emplace_back(Rendy::ShaderDataType::Float3, "a_normal");
 	}
 
 	//TANGENT
-	if (flags & USE_VERTEX_TANGENT)
+	if (flags & Rendy::USE_VERTEX_TANGENT)
 	{
-		buffer_elements.emplace_back(ShaderDataType::Float3, "a_tangent");
+		buffer_elements.emplace_back(Rendy::ShaderDataType::Float3, "a_tangent");
 	}
 
 	//BITANGENT
-	if (flags & USE_VERTEX_BITANGENT)
+	if (flags & Rendy::USE_VERTEX_BITANGENT)
 	{
-		buffer_elements.emplace_back(ShaderDataType::Float3, "a_bitangent");
+		buffer_elements.emplace_back(Rendy::ShaderDataType::Float3, "a_bitangent");
 	}
 
-	return std::make_shared<BufferLayout>(buffer_elements);
+	return std::make_shared<Rendy::BufferLayout>(buffer_elements);
 }
 
-std::vector<Mesh> parse_meshes(const aiScene* scene)
+std::vector<Rendy::Mesh> parse_meshes(const aiScene* scene)
 {
 	OPTICK_EVENT();
-	std::vector<Mesh> result;
+	std::vector<Rendy::Mesh> result;
 	result.reserve(static_cast<size_t>(scene->mNumMeshes));
 
 	glm::vec3 min(9999), max(-9999);
@@ -230,7 +230,7 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 		for (unsigned j = 0; j < assimp_mesh->mNumVertices; ++j)
 		{
 			//POSITION
-			if (mesh_flags & USE_VERTEX_POSITION)
+			if (mesh_flags & Rendy::USE_VERTEX_POSITION)
 			{
 				auto& v = assimp_mesh->mVertices[j];
 				verts.emplace_back(v.x);
@@ -245,7 +245,7 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 			}
 
 			//COORD
-			if (mesh_flags & USE_VERTEX_COORD)
+			if (mesh_flags & Rendy::USE_VERTEX_COORD)
 			{
 				auto& c = assimp_mesh->mTextureCoords[0][j];
 				verts.emplace_back(c.x);
@@ -253,7 +253,7 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 			}
 
 			//COLOR
-			if(mesh_flags & USE_VERTEX_COLOR)
+			if(mesh_flags & Rendy::USE_VERTEX_COLOR)
 			{
 				auto& c = assimp_mesh->mColors[0][j];
 				verts.emplace_back(c.r);
@@ -263,7 +263,7 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 			}
 
 			//NORMAL
-			if(mesh_flags & USE_VERTEX_NORMAL)
+			if(mesh_flags & Rendy::USE_VERTEX_NORMAL)
 			{
 				auto& n = assimp_mesh->mNormals[j];
 				verts.emplace_back(n.x);
@@ -272,7 +272,7 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 			}
 
 			//TANGENT
-			if(mesh_flags & USE_VERTEX_TANGENT)
+			if(mesh_flags & Rendy::USE_VERTEX_TANGENT)
 			{
 				auto& t = assimp_mesh->mTangents[j];
 				verts.emplace_back(t.x);
@@ -281,7 +281,7 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 			}
 
 			//BITANGENT
-			if (mesh_flags & USE_VERTEX_BITANGENT)
+			if (mesh_flags & Rendy::USE_VERTEX_BITANGENT)
 			{
 				auto& b = assimp_mesh->mBitangents[j];
 				verts.emplace_back(b.x);
@@ -304,7 +304,7 @@ std::vector<Mesh> parse_meshes(const aiScene* scene)
 
 		auto layout = parse_buffer_layout(mesh_flags);
 
-		auto vao = VertexArrayFactory::get_instance()->make(verts,
+		auto vao = Rendy::VertexArrayFactory::get_instance()->make(verts,
 			indices, layout);
 
 		mesh.vao = vao;
@@ -336,12 +336,12 @@ glm::mat4 parse_transform(const aiMatrix4x4& from) //TODO: legit?
 	return glm::transpose(glm::make_mat4(&from.a1));
 }
 
-Node parse_node(const aiNode* node)
+Rendy::Node parse_node(const aiNode* node)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("mesh count", node->mNumMeshes);
 
-	Node result;
+	Rendy::Node result;
 	
 	result.name = std::string(node->mName.data, 
 		node->mName.length); //TODO: legit?
@@ -358,7 +358,7 @@ Node parse_node(const aiNode* node)
 	return result;
 }
 
-void link_nodes(std::vector<Node>& node_list,
+void link_nodes(std::vector<Rendy::Node>& node_list,
 	std::unordered_map<uint32_t, const aiNode*>& index_to_node,
 	std::unordered_map<const aiNode*, uint32_t>& node_to_index)
 {
@@ -387,10 +387,10 @@ void link_nodes(std::vector<Node>& node_list,
 	}
 }
 
-std::vector<Node> parse_nodes(const aiScene* scene)
+std::vector<Rendy::Node> parse_nodes(const aiScene* scene)
 {
 	OPTICK_EVENT();
-	std::vector<Node> result;
+	std::vector<Rendy::Node> result;
 
 	std::stack<const aiNode*> unhandled_nodes;
 	unhandled_nodes.emplace(scene->mRootNode);
@@ -436,8 +436,8 @@ int to_index(aiString str)
 	return -1;
 }
 
-std::shared_ptr<AbstractTexture2D> get_texture(const aiScene* scene, int index, 
-	std::vector<Image2DRef>& images)
+std::shared_ptr<Rendy::AbstractTexture2D> get_texture(const aiScene* scene, int index,
+	std::vector<Rendy::Image2DRef>& images)
 {
 	OPTICK_EVENT();
 
@@ -451,19 +451,19 @@ std::shared_ptr<AbstractTexture2D> get_texture(const aiScene* scene, int index,
 		return nullptr;
 	}
 
-	Image2DRef image = images[index];
+	Rendy::Image2DRef image = images[index];
 
-	return std::make_shared<ES2::Texture2D>(image);
+	return std::make_shared<Rendy::ES2::Texture2D>(image);
 }
 
-AbstractMaterialRef parse_default_material(const aiScene* scene,
-	const aiMaterial* material, std::vector<Image2DRef>& images)
+Rendy::AbstractMaterialRef parse_default_material(const aiScene* scene,
+	const aiMaterial* material, std::vector<Rendy::Image2DRef>& images)
 {
 	OPTICK_EVENT();
 	auto& mat = *material;
 
-	std::shared_ptr<AbstractTexture2D> diffuse;
-	std::shared_ptr<AbstractTexture2D> normalmap;
+	std::shared_ptr<Rendy::AbstractTexture2D> diffuse;
+	std::shared_ptr<Rendy::AbstractTexture2D> normalmap;
 
 	//DIFFUSE
 	{
@@ -492,18 +492,18 @@ AbstractMaterialRef parse_default_material(const aiScene* scene,
 	printf("DEFAULT MATERIAL\n diffuse %p \n normalmap %p \n",
 		diffuse.get(), normalmap.get()); //TODO: invalid shader when both textures is nullptr 
 
-	return std::make_shared<DefaultMaterial>(diffuse, normalmap);
+	return std::make_shared<Rendy::DefaultMaterial>(diffuse, normalmap);
 }
 
-AbstractMaterialRef parse_pbr_material(const aiScene* scene,
-	const aiMaterial* material, std::vector<Image2DRef>& images)
+Rendy::AbstractMaterialRef parse_pbr_material(const aiScene* scene,
+	const aiMaterial* material, std::vector<Rendy::Image2DRef>& images)
 {
 	OPTICK_EVENT();
 	auto& mat = *material;
 
-	std::shared_ptr<AbstractTexture2D> albedo;
-	std::shared_ptr<AbstractTexture2D> ao_metallic_roughness;
-	std::shared_ptr<AbstractTexture2D> normalmap;
+	std::shared_ptr<Rendy::AbstractTexture2D> albedo;
+	std::shared_ptr<Rendy::AbstractTexture2D> ao_metallic_roughness;
+	std::shared_ptr<Rendy::AbstractTexture2D> normalmap;
 
 	//ALBEDO
 	{
@@ -572,14 +572,14 @@ AbstractMaterialRef parse_pbr_material(const aiScene* scene,
 		}
 	}
 
-	return std::make_shared<PBRMaterial>(albedo, ao_metallic_roughness, normalmap);
+	return std::make_shared<Rendy::PBRMaterial>(albedo, ao_metallic_roughness, normalmap);
 }
 
-AbstractMaterialRef parse_material(const aiScene* scene,
-	const aiMaterial* material, std::vector<Image2DRef>& images)
+Rendy::AbstractMaterialRef parse_material(const aiScene* scene,
+	const aiMaterial* material, std::vector<Rendy::Image2DRef>& images)
 {
 	OPTICK_EVENT();
-	AbstractMaterialRef result;
+	Rendy::AbstractMaterialRef result;
 	
 	result = parse_pbr_material(scene, material, images);
 
@@ -591,13 +591,13 @@ AbstractMaterialRef parse_material(const aiScene* scene,
 	return result;
 }
 
-std::vector<AbstractMaterialRef> parse_materials(const aiScene* scene, 
-	std::vector<Image2DRef>& images)
+std::vector<Rendy::AbstractMaterialRef> parse_materials(const aiScene* scene,
+	std::vector<Rendy::Image2DRef>& images)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("material count", scene->mNumMaterials);
 
-	std::vector<AbstractMaterialRef> result;
+	std::vector<Rendy::AbstractMaterialRef> result;
 	result.reserve(static_cast<size_t>(scene->mNumMaterials));
 
 	for (unsigned i = 0; i < scene->mNumMaterials; ++i)
@@ -609,7 +609,7 @@ std::vector<AbstractMaterialRef> parse_materials(const aiScene* scene,
 	return result;
 }
 
-Image2DRef parse_image(const aiTexture* assimp_texture)
+Rendy::Image2DRef parse_image(const aiTexture* assimp_texture)
 {
 	OPTICK_EVENT();
 	const char* texture_ptr =
@@ -623,23 +623,23 @@ Image2DRef parse_image(const aiTexture* assimp_texture)
 
 	OPTICK_TAG("texture_size", texture_size);
 
-	return std::make_shared<Image2D>(texture_ptr, texture_size);
+	return std::make_shared<Rendy::Image2D>(texture_ptr, texture_size);
 }
 
-std::vector<Image2DRef> parse_images(const aiScene* scene)
+std::vector<Rendy::Image2DRef> parse_images(const aiScene* scene)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("image count", scene->mNumTextures);
 
-	std::vector<Image2DRef> result;
+	std::vector<Rendy::Image2DRef> result;
 	result.reserve(static_cast<size_t>(scene->mNumTextures));
 
 	{
-		using Image2DFuture = std::shared_future<Image2DRef>;
+		using Image2DFuture = std::shared_future<Rendy::Image2DRef>;
 		std::vector<Image2DFuture> future_images;
 		future_images.reserve(static_cast<size_t>(scene->mNumTextures));
 
-		auto thread_pool = ThreadPool::get_instance();
+		auto thread_pool = Rendy::ThreadPool::get_instance();
 
 		for (uint32_t i = 0; i < scene->mNumTextures; ++i)
 		{
@@ -663,7 +663,7 @@ std::vector<Image2DRef> parse_images(const aiScene* scene)
 	return std::move(result);
 }
 
-ModelRef ModelBuilder::build(const char* filename)
+Rendy::ModelRef Rendy::ModelBuilder::build(const char* filename)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("filename", filename);

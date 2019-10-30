@@ -2,7 +2,7 @@
 #include "../common.h"
 #include <optick.h>
 
-ES2::TextureCube::TextureCube(const std::string& filename)
+Rendy::ES2::TextureCube::TextureCube(const std::string& filename)
 {
 	OPTICK_EVENT();
 	gli_tex = gli::load(filename);
@@ -20,13 +20,13 @@ ES2::TextureCube::TextureCube(const std::string& filename)
 	}
 }
 
-ES2::TextureCube::~TextureCube()
+Rendy::ES2::TextureCube::~TextureCube()
 {
 	OPTICK_EVENT();
 	reset();
 }
 
-void ES2::TextureCube::reload()
+void Rendy::ES2::TextureCube::reload()
 {
 	OPTICK_EVENT();
 	if (!validate())
@@ -36,7 +36,7 @@ void ES2::TextureCube::reload()
 	}
 }
 
-bool ES2::TextureCube::validate() const
+bool Rendy::ES2::TextureCube::validate() const
 {
 	OPTICK_EVENT();
 	if (gli_tex.empty())
@@ -57,7 +57,7 @@ bool ES2::TextureCube::validate() const
 	return true;
 }
 
-void ES2::TextureCube::bind(uint32_t slot)
+void Rendy::ES2::TextureCube::bind(uint32_t slot)
 {
 	OPTICK_EVENT();
 	assert(slot < 8);
@@ -70,7 +70,7 @@ void ES2::TextureCube::bind(uint32_t slot)
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 }
 
-void ES2::TextureCube::unbind(uint32_t slot)
+void Rendy::ES2::TextureCube::unbind(uint32_t slot)
 {
 	OPTICK_EVENT();
 	assert(slot < 8);
@@ -78,7 +78,7 @@ void ES2::TextureCube::unbind(uint32_t slot)
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
-glm::uvec3 ES2::TextureCube::get_size() const
+glm::uvec3 Rendy::ES2::TextureCube::get_size() const
 {
 	OPTICK_EVENT();
 	const auto t = gli_tex.extent(0);
@@ -90,19 +90,19 @@ glm::uvec3 ES2::TextureCube::get_size() const
 	};
 }
 
-TextureFormat ES2::TextureCube::get_format() const
+Rendy::TextureFormat Rendy::ES2::TextureCube::get_format() const
 {
 	OPTICK_EVENT();
 	return TextureFormat::RGB; //TODO
 }
 
-TextureType ES2::TextureCube::get_type() const
+Rendy::TextureType Rendy::ES2::TextureCube::get_type() const
 {
 	OPTICK_EVENT();
 	return TextureType::UnsignedByte; //TODO
 }
 
-bool ES2::TextureCube::load()
+bool Rendy::ES2::TextureCube::load()
 {
 	OPTICK_EVENT();
 	if (gli_tex.empty())
@@ -170,7 +170,7 @@ bool ES2::TextureCube::load()
 	return true;
 }
 
-void ES2::TextureCube::reset()
+void Rendy::ES2::TextureCube::reset()
 {
 	OPTICK_EVENT();
 	if (glIsTexture(id))

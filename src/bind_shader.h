@@ -2,14 +2,17 @@
 #include "abstract_shader.h"
 #include "abstract_command.h"
 
-class BindShader: public AbstractCommand
+namespace Rendy
 {
-public:
-	BindShader(AbstractShaderRef shader, ShaderSettings settings);
-	virtual void execute() override;
-private:
-	AbstractShaderRef shader;
-	ShaderSettings settings;
-};
+	class BindShader : public AbstractCommand
+	{
+	public:
+		BindShader(AbstractShaderRef shader, ShaderSettings settings);
+		virtual void execute() override;
+	private:
+		AbstractShaderRef shader;
+		ShaderSettings settings;
+	};
 
-using BindShaderRef = std::shared_ptr<BindShader>;
+	using BindShaderRef = std::shared_ptr<BindShader>;
+};

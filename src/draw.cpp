@@ -1,11 +1,11 @@
 #include "draw.h"
 
-Draw::Draw(AbstractVertexArrayRef vao)
+Rendy::Draw::Draw(AbstractVertexArrayRef vao)
 {
 	this->vao = vao;
 }
 
-void Draw::execute()
+void Rendy::Draw::execute()
 {
 	if (vao)
 	{

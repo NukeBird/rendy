@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 #include <optick.h>
 
-std::string ShaderSettings::generate_definitions() const
+std::string Rendy::ShaderSettings::generate_definitions() const
 {
 	OPTICK_EVENT();
 
@@ -11,7 +11,7 @@ std::string ShaderSettings::generate_definitions() const
 	return definitions;
 }
 
-bool ShaderSettings::operator==(const ShaderSettings& s) const
+bool Rendy::ShaderSettings::operator==(const ShaderSettings& s) const
 {
 	if (flags == s.flags)
 	{

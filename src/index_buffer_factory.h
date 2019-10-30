@@ -4,8 +4,11 @@
 #include <memory>
 #include <vector>
 
-class IndexBufferFactory: public Singleton<IndexBufferFactory>
+namespace Rendy
 {
-public:
-	AbstractBufferRef make(uint32_t size, const void* ptr);
+	class IndexBufferFactory : public Singleton<IndexBufferFactory>
+	{
+	public:
+		AbstractBufferRef make(uint32_t size, const void* ptr);
+	};
 };

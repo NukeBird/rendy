@@ -2,7 +2,7 @@
 #include <limits>
 #include <optick.h>
 
-uint32_t get_all_shader_flags()
+uint32_t Rendy::get_all_shader_flags()
 {
 	OPTICK_EVENT();
 
@@ -10,7 +10,7 @@ uint32_t get_all_shader_flags()
 	return flags;
 }
 
-std::string shader_flags_to_defines(uint32_t flags)
+std::string Rendy::shader_flags_to_defines(uint32_t flags)
 {
 	OPTICK_EVENT();
 

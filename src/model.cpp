@@ -4,7 +4,7 @@
 
 #include "es2/texture_cube.h"
 
-void Mesh::reload()
+void Rendy::Mesh::reload()
 {
 	OPTICK_EVENT();
 
@@ -14,7 +14,7 @@ void Mesh::reload()
 	}
 }
 
-bool Mesh::validate() const
+bool Rendy::Mesh::validate() const
 {
 	OPTICK_EVENT();
 
@@ -26,25 +26,25 @@ bool Mesh::validate() const
 	return false;
 }
 
-uint32_t Model::get_material_count() const
+uint32_t Rendy::Model::get_material_count() const
 {
 	OPTICK_EVENT();
 	return static_cast<uint32_t>(materials.size());
 }
 
-uint32_t Model::get_mesh_count() const
+uint32_t Rendy::Model::get_mesh_count() const
 {
 	OPTICK_EVENT();
 	return static_cast<uint32_t>(meshes.size());
 }
 
-uint32_t Model::get_node_count() const
+uint32_t Rendy::Model::get_node_count() const
 {
 	OPTICK_EVENT();
 	return static_cast<uint32_t>(nodes.size());
 }
 
-void Model::reload()
+void Rendy::Model::reload()
 {
 	OPTICK_EVENT();
 	for (auto& material: materials)
@@ -58,7 +58,7 @@ void Model::reload()
 	}
 }
 
-bool Model::validate() const
+bool Rendy::Model::validate() const
 {
 	OPTICK_EVENT();
 	for (auto& material: materials)
@@ -82,7 +82,7 @@ bool Model::validate() const
 	return true;
 }
 
-BatchList Model::generate_batch_list(const glm::mat4& model, const glm::mat4& view, 
+Rendy::BatchList Rendy::Model::generate_batch_list(const glm::mat4& model, const glm::mat4& view,
 	const glm::mat4& proj)
 {
 	OPTICK_EVENT();
@@ -97,7 +97,7 @@ BatchList Model::generate_batch_list(const glm::mat4& model, const glm::mat4& vi
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>
 
-void Model::draw(const glm::mat4& transform, const glm::mat4& view, const glm::mat4& proj)
+void Rendy::Model::draw(const glm::mat4& transform, const glm::mat4& view, const glm::mat4& proj)
 {
 	OPTICK_EVENT();
 	auto calls = generate_batch_list(transform, view, proj);
@@ -171,7 +171,7 @@ void Model::draw(const glm::mat4& transform, const glm::mat4& view, const glm::m
 	}
 }
 
-void Model::draw_node(uint32_t node_id,
+void Rendy::Model::draw_node(uint32_t node_id,
 	const glm::mat4& base_transform, const glm::mat4& view, const glm::mat4& proj)
 {
 	OPTICK_EVENT();
@@ -217,7 +217,7 @@ void Model::draw_node(uint32_t node_id,
 	}
 }
 
-void Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_transform, 
+void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_transform,
 	const glm::mat4& view, const glm::mat4& proj, BatchList& calls)
 {
 	OPTICK_EVENT();

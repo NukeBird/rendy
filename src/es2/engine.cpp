@@ -1,6 +1,6 @@
 #include "engine.h"
 
-void ES2::Engine::push(BatchList batches)
+void Rendy::ES2::Engine::push(BatchList batches)
 {
 	CommandList commands;
 
@@ -16,7 +16,7 @@ void ES2::Engine::push(BatchList batches)
 	push(commands);
 }
 
-void ES2::Engine::push(CommandList commands)
+void Rendy::ES2::Engine::push(CommandList commands)
 {
 	for (auto& c : commands)
 	{
@@ -24,12 +24,12 @@ void ES2::Engine::push(CommandList commands)
 	}
 }
 
-void ES2::Engine::flush()
+void Rendy::ES2::Engine::flush()
 {
 	//TODO
 }
 
-void ES2::Engine::reload()
+void Rendy::ES2::Engine::reload()
 {
 	//TODO?
 }

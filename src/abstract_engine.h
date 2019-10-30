@@ -4,12 +4,15 @@
 #include "batch.h"
 #include <vector>
 
-using CommandList = std::vector<CommandRef>;
-
-struct AbstractEngine
+namespace Rendy
 {
-	virtual void push(BatchList batches) = 0;
-	virtual void push(CommandList commands) = 0;
-	virtual void flush() = 0;
-	virtual void reload() = 0;
+	using CommandList = std::vector<CommandRef>;
+
+	struct AbstractEngine
+	{
+		virtual void push(BatchList batches) = 0;
+		virtual void push(CommandList commands) = 0;
+		virtual void flush() = 0;
+		virtual void reload() = 0;
+	};
 };

@@ -4,7 +4,7 @@
 #include <cassert>
 #include <optick.h>
 
-AbstractBufferRef IndexBufferFactory::make(uint32_t size, const void* ptr)
+Rendy::AbstractBufferRef Rendy::IndexBufferFactory::make(uint32_t size, const void* ptr)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("size", size);

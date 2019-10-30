@@ -4,7 +4,7 @@
 #include "generic_shader_sources.hpp"
 #include <optick.h>
 
-AbstractShaderRef ShaderFactory::make(const std::string& vtx, const std::string& frg)
+Rendy::AbstractShaderRef Rendy::ShaderFactory::make(const std::string& vtx, const std::string& frg)
 {
 	OPTICK_EVENT();
 
@@ -43,7 +43,7 @@ std::vector<uint32_t> generate_permutations(uint32_t max_n)
 
 #include <mutex>
 
-AbstractShaderRef ShaderFactory::get_generic_shader()
+Rendy::AbstractShaderRef Rendy::ShaderFactory::get_generic_shader()
 {
 	OPTICK_EVENT();
 

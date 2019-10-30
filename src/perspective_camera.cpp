@@ -4,7 +4,7 @@
 #include <glm/gtx/transform.hpp>
 #include <optick.h>
 
-PerspectiveCamera::PerspectiveCamera(float fov, float aspect_ratio, 
+Rendy::PerspectiveCamera::PerspectiveCamera(float fov, float aspect_ratio,
 	const glm::vec3& position, const glm::vec3& rotation, float near, float far)
 {
 	OPTICK_EVENT();
@@ -18,56 +18,56 @@ PerspectiveCamera::PerspectiveCamera(float fov, float aspect_ratio,
 	//TODO: validation + warnings
 }
 
-bool PerspectiveCamera::look_at(const glm::vec3& position)
+bool Rendy::PerspectiveCamera::look_at(const glm::vec3& position)
 {
 	OPTICK_EVENT();
 	return false;
 }
 
-void PerspectiveCamera::translate(const glm::vec3& translation)
+void Rendy::PerspectiveCamera::translate(const glm::vec3& translation)
 {
 	OPTICK_EVENT();
 }
 
-void PerspectiveCamera::rotate(const glm::vec3& rotation)
+void Rendy::PerspectiveCamera::rotate(const glm::vec3& rotation)
 {
 	OPTICK_EVENT();
 }
 
-void PerspectiveCamera::set_aspect_ratio(float aspect_ratio)
+void Rendy::PerspectiveCamera::set_aspect_ratio(float aspect_ratio)
 {
 	OPTICK_EVENT();
 }
 
-void PerspectiveCamera::set_position(const glm::vec3& position)
+void Rendy::PerspectiveCamera::set_position(const glm::vec3& position)
 {
 	OPTICK_EVENT();
 }
 
-void PerspectiveCamera::set_rotation(const glm::vec3& rotation)
+void Rendy::PerspectiveCamera::set_rotation(const glm::vec3& rotation)
 {
 	OPTICK_EVENT();
 }
 
-bool PerspectiveCamera::is_dirty() const
+bool Rendy::PerspectiveCamera::is_dirty() const
 {
 	OPTICK_EVENT();
 	return view_matrix_is_dirty || projection_matrix_is_dirty;
 }
 
-const glm::vec3& PerspectiveCamera::get_position() const
+const glm::vec3& Rendy::PerspectiveCamera::get_position() const
 {
 	OPTICK_EVENT();
 	return position;
 }
 
-const glm::vec3& PerspectiveCamera::get_rotation() const
+const glm::vec3& Rendy::PerspectiveCamera::get_rotation() const
 {
 	OPTICK_EVENT();
 	return rotation;
 }
 
-const glm::mat4& PerspectiveCamera::get_view_matrix()
+const glm::mat4& Rendy::PerspectiveCamera::get_view_matrix()
 {
 	OPTICK_EVENT();
 	if (view_matrix_is_dirty)
@@ -79,7 +79,7 @@ const glm::mat4& PerspectiveCamera::get_view_matrix()
 	return view_matrix;
 }
 
-const glm::mat4& PerspectiveCamera::get_projection_matrix()
+const glm::mat4& Rendy::PerspectiveCamera::get_projection_matrix()
 {
 	OPTICK_EVENT();
 	if (projection_matrix_is_dirty)
@@ -92,7 +92,7 @@ const glm::mat4& PerspectiveCamera::get_projection_matrix()
 	return projection_matrix;
 }
 
-const glm::mat4& PerspectiveCamera::get_view_projection_matrix()
+const glm::mat4& Rendy::PerspectiveCamera::get_view_projection_matrix()
 {
 	OPTICK_EVENT();
 	if (is_dirty())

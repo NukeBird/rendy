@@ -1,14 +1,17 @@
 #pragma once
 #include "../abstract_engine.h"
 
-namespace ES2
+namespace Rendy
 {
-	class Engine: public AbstractEngine
+	namespace ES2
 	{
-	public:
-		virtual void push(BatchList batches) override;
-		virtual void push(CommandList commands) override;
-		virtual void flush() override;
-		virtual void reload() override;
+		class Engine : public AbstractEngine
+		{
+		public:
+			virtual void push(BatchList batches) override;
+			virtual void push(CommandList commands) override;
+			virtual void flush() override;
+			virtual void reload() override;
+		};
 	};
 };

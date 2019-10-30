@@ -1,11 +1,14 @@
 #pragma once
 #include <string>
 
-enum class TextureFormat
+namespace Rendy
 {
-	RGB,
-	RGBA,
-	Invalid
-};
+	enum class TextureFormat
+	{
+		RGB,
+		RGBA,
+		Invalid
+	};
 
-std::string to_string(TextureFormat format);
+	std::string to_string(TextureFormat format);
+};

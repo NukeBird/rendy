@@ -1,7 +1,7 @@
 #include "vertex_array.h"
 #include <optick.h>
 
-ES2::VertexArray::VertexArray(AbstractBufferRef vbo, 
+Rendy::ES2::VertexArray::VertexArray(AbstractBufferRef vbo,
 	AbstractBufferRef ibo, const BufferLayoutRef& layout)
 {
 	OPTICK_EVENT();
@@ -11,7 +11,7 @@ ES2::VertexArray::VertexArray(AbstractBufferRef vbo,
 	this->layout = layout;
 }
 
-void ES2::VertexArray::reload()
+void Rendy::ES2::VertexArray::reload()
 {
 	OPTICK_EVENT();
 
@@ -20,7 +20,7 @@ void ES2::VertexArray::reload()
 	ibo->reload();
 }
 
-bool ES2::VertexArray::validate() const
+bool Rendy::ES2::VertexArray::validate() const
 {
 	OPTICK_EVENT();
 
@@ -41,7 +41,7 @@ bool ES2::VertexArray::validate() const
 	return is_valid;
 }
 
-void ES2::VertexArray::bind(const ShaderVariantRef& shader)
+void Rendy::ES2::VertexArray::bind(const ShaderVariantRef& shader)
 {
 	OPTICK_EVENT();
 
@@ -58,7 +58,7 @@ void ES2::VertexArray::bind(const ShaderVariantRef& shader)
 	}
 }
 
-void ES2::VertexArray::draw()
+void Rendy::ES2::VertexArray::draw()
 {
 	OPTICK_EVENT();
 
@@ -77,7 +77,7 @@ void ES2::VertexArray::draw()
 	//unbind();
 }
 
-void ES2::VertexArray::unbind()
+void Rendy::ES2::VertexArray::unbind()
 {
 	OPTICK_EVENT();
 
@@ -92,25 +92,25 @@ void ES2::VertexArray::unbind()
 	}
 }
 
-BufferLayoutRef ES2::VertexArray::get_layout() const
+Rendy::BufferLayoutRef Rendy::ES2::VertexArray::get_layout() const
 {
 	OPTICK_EVENT();
 	return layout;
 }
 
-AbstractBufferRef ES2::VertexArray::get_vertex_buffer()
+Rendy::AbstractBufferRef Rendy::ES2::VertexArray::get_vertex_buffer()
 {
 	OPTICK_EVENT();
 	return vbo;
 }
 
-AbstractBufferRef ES2::VertexArray::get_index_buffer()
+Rendy::AbstractBufferRef Rendy::ES2::VertexArray::get_index_buffer()
 {
 	OPTICK_EVENT();
 	return ibo;
 }
 
-void ES2::VertexArray::bind_layout(const ShaderVariantRef& shader)
+void Rendy::ES2::VertexArray::bind_layout(const ShaderVariantRef& shader)
 {
 	OPTICK_EVENT();
 
@@ -131,7 +131,7 @@ void ES2::VertexArray::bind_layout(const ShaderVariantRef& shader)
 	}
 }
 
-GLenum ES2::VertexArray::get_gl_type(const BufferElement& element)
+GLenum Rendy::ES2::VertexArray::get_gl_type(const BufferElement& element)
 {
 	OPTICK_EVENT();
 

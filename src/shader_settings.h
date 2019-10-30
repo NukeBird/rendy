@@ -4,21 +4,24 @@
 #include <string>
 #include <array>
 
-struct ShaderSettings
+namespace Rendy
 {
-	uint32_t flags;
+	struct ShaderSettings
+	{
+		uint32_t flags;
 
-	std::string generate_definitions() const;
+		std::string generate_definitions() const;
 
-	bool operator==(const ShaderSettings& s) const;
+		bool operator==(const ShaderSettings& s) const;
+	};
 };
 
-namespace std 
+namespace std
 {
 	template <>
-	struct hash<ShaderSettings>
+	struct hash<Rendy::ShaderSettings>
 	{
-		std::size_t operator()(const ShaderSettings& s) const
+		std::size_t operator()(const Rendy::ShaderSettings& s) const
 		{
 			auto h = std::hash<uint32_t>();
 			std::size_t value = h(s.flags);

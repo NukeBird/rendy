@@ -1,12 +1,12 @@
 #include "bind_vertex_array.h"
 
-BindVertexArray::BindVertexArray(AbstractVertexArrayRef vao, ShaderVariantRef shader_variant)
+Rendy::BindVertexArray::BindVertexArray(AbstractVertexArrayRef vao, ShaderVariantRef shader_variant)
 {
 	this->vao = vao;
 	this->shader_variant = shader_variant;
 }
 
-void BindVertexArray::execute()
+void Rendy::BindVertexArray::execute()
 {
 	if (vao && shader_variant)
 	{

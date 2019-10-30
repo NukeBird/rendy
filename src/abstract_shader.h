@@ -6,10 +6,13 @@
 #include <memory>
 #include <string>
 
-struct AbstractShader: public AbstractResource
+namespace Rendy
 {
-	virtual ShaderVariantRef compile(const ShaderSettings& settings) = 0;
-	virtual uint32_t get_variant_count() const = 0;
-};
+	struct AbstractShader : public AbstractResource
+	{
+		virtual ShaderVariantRef compile(const ShaderSettings& settings) = 0;
+		virtual uint32_t get_variant_count() const = 0;
+	};
 
-using AbstractShaderRef = std::shared_ptr<AbstractShader>;
+	using AbstractShaderRef = std::shared_ptr<AbstractShader>;
+};
