@@ -34,6 +34,8 @@ namespace Rendy
 		bool stop;
 	};
 
+	using ThreadPoolRef = std::shared_ptr<ThreadPool>;
+
 	// the constructor just launches some amount of workers
 	inline ThreadPool::ThreadPool(size_t threads)
 		: stop(false)
