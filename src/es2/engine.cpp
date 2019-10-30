@@ -1,7 +1,10 @@
 #include "engine.h"
+#include "buffer.h"
+#include <optick.h>
 
 void Rendy::ES2::Engine::push(BatchList batches)
 {
+	OPTICK_EVENT();
 	CommandList commands;
 
 	for (auto& batch: batches)
@@ -18,6 +21,7 @@ void Rendy::ES2::Engine::push(BatchList batches)
 
 void Rendy::ES2::Engine::push(CommandList commands)
 {
+	OPTICK_EVENT();
 	for (auto& c : commands)
 	{
 		c->execute(); //TODO
@@ -26,10 +30,27 @@ void Rendy::ES2::Engine::push(CommandList commands)
 
 void Rendy::ES2::Engine::flush()
 {
+	OPTICK_EVENT();
 	//TODO
 }
 
 void Rendy::ES2::Engine::reload()
 {
+	OPTICK_EVENT();
 	//TODO?
+}
+
+Rendy::AbstractBufferRef Rendy::ES2::Engine::make_vbo(uint32_t size, const void* ptr)
+{
+	OPTICK_EVENT();
+
+	if (size == 0 || ptr == nullptr)
+	{
+		return nullptr;
+	}
+
+	OPTICK_TAG("size", size);
+
+	auto vbo = std::make_shared<ES2::Buffer>(BufferTarget::VBO, size, ptr);
+	return vbo;
 }
