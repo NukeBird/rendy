@@ -15,6 +15,7 @@ namespace Rendy
 
 			virtual AbstractShaderRef make_shader(const std::string& vtx,
 				const std::string& frg) override;
+			virtual AbstractTexture2DRef make_texture2d(Image2DRef image) override;
 			virtual AbstractVertexArrayRef make_vao(AbstractBufferRef vbo, AbstractBufferRef ibo,
 				BufferLayoutRef layout) override;
 			virtual AbstractBufferRef make_vbo(uint32_t size, const void* ptr) override;
