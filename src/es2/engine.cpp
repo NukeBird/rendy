@@ -6,11 +6,6 @@
 #include <optick.h>
 #include <cassert>
 
-Rendy::ES2::Engine::Engine()
-{
-	generic_shader = make_shader(generic_vertex_shader, generic_fragment_shader);
-}
-
 void Rendy::ES2::Engine::push(BatchList batches)
 {
 	OPTICK_EVENT();
@@ -52,11 +47,6 @@ void Rendy::ES2::Engine::reload()
 Rendy::AbstractShaderRef Rendy::ES2::Engine::make_shader(const std::string& vtx, const std::string& frg)
 {
 	return std::make_shared<Shader>(vtx, frg);
-}
-
-Rendy::AbstractShaderRef Rendy::ES2::Engine::get_generic_shader()
-{
-	return generic_shader;
 }
 
 Rendy::AbstractVertexArrayRef Rendy::ES2::Engine::make_vao(AbstractBufferRef vbo, AbstractBufferRef ibo,

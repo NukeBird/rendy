@@ -22,7 +22,6 @@ namespace Rendy
 		virtual void reload() = 0;
 
 		virtual AbstractShaderRef make_shader(const std::string& vtx, const std::string& frg) = 0;
-		virtual AbstractShaderRef get_generic_shader() = 0; //TODO: remove
 		virtual AbstractVertexArrayRef make_vao(AbstractBufferRef vbo, AbstractBufferRef ibo,
 			BufferLayoutRef layout) = 0;
 		virtual AbstractBufferRef make_vbo(uint32_t size, const void* ptr) = 0;
