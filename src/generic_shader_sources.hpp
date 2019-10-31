@@ -193,7 +193,7 @@ precision mediump float;
 
 	vec4 get_diffuse()
 	{
-		vec4 diffuse = vec4(1.0);
+		vec4 diffuse = vec4(0.0);
 		
 		#ifdef USE_VERTEX_COLOR
 			diffuse = v_color;
@@ -201,6 +201,9 @@ precision mediump float;
 
 		#ifdef USE_VERTEX_COORD
 			#ifdef USE_COLOR_TEXTURE
+				#ifndef USE_VERTEX_COLOR
+					diffuse = vec4(1.0);
+				#endif
 				vec4 diffuse_texture_value = read_texture(color_texture, v_coord);
 				diffuse_texture_value.rgb = pow(diffuse_texture_value.rgb, vec3(gamma)); 
 				diffuse *= diffuse_texture_value;
@@ -208,7 +211,7 @@ precision mediump float;
 			#endif
 		#endif
 
-		return vec4(0.0);
+		return diffuse;
 	}
 
 	vec3 get_ao()

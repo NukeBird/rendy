@@ -125,14 +125,6 @@ void Rendy::Model::draw(const glm::mat4& transform, const glm::mat4& view, const
 				glm::distance(translation_b + glm::normalize(translation_b - camera_position) * scale_b, camera_position);
 		});*/
 
-
-	static AbstractTextureCubeRef cubemap;
-
-	if (!cubemap)
-	{
-		cubemap = std::make_shared<ES2::TextureCube>("cube.dds");
-	}
-
 	for (auto& draw_call: calls)
 	{
 		/*auto material = draw_call.material;
@@ -162,6 +154,11 @@ void Rendy::Model::draw(const glm::mat4& transform, const glm::mat4& view, const
 		//system("PAUSE");*/
 		
 		auto cl = draw_call.to_command_list();
+
+		if (!draw_call.material->get_shader()->validate())
+		{
+			printf("INVALID SHADER\n");
+		}
 
 		for (auto command : cl)
 		{

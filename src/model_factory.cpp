@@ -434,6 +434,7 @@ std::vector<Rendy::Node> Rendy::ModelFactory::parse_nodes(const aiScene* scene)
 int Rendy::ModelFactory::to_index(aiString str) const
 {
 	OPTICK_EVENT();
+	printf("%s\n", str.data);
 	if (str.data[0] == '*')
 	{
 		str.data[0] = ' ';
@@ -441,6 +442,7 @@ int Rendy::ModelFactory::to_index(aiString str) const
 		return std::stoi(sss);
 	}
 
+	printf("-1\n");
 	return -1;
 }
 
@@ -540,6 +542,8 @@ Rendy::ImageSetRef Rendy::ModelFactory::form_image_set(const aiScene* scene, con
 		{
 			if (path.length > 0)
 			{
+				printf("path > 0\n");
+				printf("%d\n", scene->GetEmbeddedTexture(path.data));
 				image_set->color = get_image(to_index(path), images);
 			}
 		}
@@ -658,9 +662,15 @@ Rendy::ModelRef Rendy::ModelFactory::make(const void* memory, uint32_t size)
 		const aiScene* scene = nullptr;
 
 		{
-			//OPTICK_EVENT("assimp's importer.ReadFile");
-			OPTICK_PUSH("importer.ReadFileFromMemory");
+			OPTICK_PUSH("importer.ReadFileFromMemory (glb)");
 			scene = importer.ReadFileFromMemory(memory, static_cast<size_t>(size), get_import_flags(), "glb"); //TODO: pass fbx hint too
+			OPTICK_POP();
+		}
+
+		if (!scene)
+		{
+			OPTICK_PUSH("importer.ReadFileFromMemory (fbx)");
+			scene = importer.ReadFileFromMemory(memory, static_cast<size_t>(size), get_import_flags(), "fbx"); //TODO: pass fbx hint too
 			OPTICK_POP();
 		}
 
