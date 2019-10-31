@@ -149,7 +149,7 @@ precision mediump float;
 
 	uniform samplerCube u_iem;
 
-	uniform vec3 u_camera_position;
+	uniform vec3 u_camera_position; //TODO: remove
 
 	out vec4 output_color;
 
@@ -304,7 +304,8 @@ precision mediump float;
 		float f_roughness = get_roughness();
 		vec3 f_normal = get_normal();
 
-		vec3 f_v = normalize(camera_position - v_position);
+		vec3 view_dir = -normalize(v_position);
+		vec3 f_v = -view_dir;//normalize(camera_position - v_position);
 		vec3 f_f0 = vec3(0.04f);
 		f_f0 = mix(f_f0, f_albedo.rgb, f_metallic);
 
