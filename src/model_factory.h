@@ -36,15 +36,19 @@ namespace Rendy
 			std::unordered_map<uint32_t, const aiNode*>& index_to_node,
 			std::unordered_map<const aiNode*, uint32_t>& node_to_index);
 		std::vector<Node> parse_nodes(const aiScene* scene);
-		int to_index(aiString str) const;
+		int to_index(aiString str, const aiScene* scene, 
+			const std::unordered_map<const aiTexture*, int>& aitex_to_index) const;
 		AbstractMaterialRef parse_material(const aiScene* scene,
-			const aiMaterial* material, std::vector<Image2DRef>& images);
+			const aiMaterial* material, std::vector<Image2DRef>& images,
+			const std::unordered_map<const aiTexture*, int>& aitex_to_index);
 		std::vector<AbstractMaterialRef> parse_materials(const aiScene* scene,
 			std::vector<Image2DRef>& images);
+		std::unordered_map<const aiTexture*, int> generate_image_map(const aiScene* scene);
 		Image2DRef parse_image(const aiTexture* assimp_texture);
 		std::vector<Image2DRef> parse_images(const aiScene* scene);
 		ImageSetRef form_image_set(const aiScene* scene,
-			const aiMaterial* material, std::vector<Image2DRef>& images) const;
+			const aiMaterial* material, std::vector<Image2DRef>& images,
+			const std::unordered_map<const aiTexture*, int>& aitex_to_index) const;
 		Image2DRef get_image(int index, std::vector<Image2DRef>& images) const;
 
 		AbstractEngineRef engine;

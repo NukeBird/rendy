@@ -180,6 +180,7 @@ Rendy::BufferLayoutRef Rendy::ModelFactory::parse_buffer_layout(uint32_t flags) 
 template<class T>
 static Rendy::AbstractBufferRef parse_ibo(aiMesh* assimp_mesh, Rendy::AbstractEngineRef engine)
 {
+	OPTICK_EVENT();
 	std::vector<T> indices; //TODO: sometimes uint32_t?
 
 	for (unsigned j = 0; j < assimp_mesh->mNumFaces; ++j)
@@ -431,27 +432,29 @@ std::vector<Rendy::Node> Rendy::ModelFactory::parse_nodes(const aiScene* scene)
 	return result;
 }
 
-int Rendy::ModelFactory::to_index(aiString str) const
+int Rendy::ModelFactory::to_index(aiString str, const aiScene* scene, 
+	const std::unordered_map<const aiTexture*, int>& aitex_to_index) const
 {
 	OPTICK_EVENT();
-	printf("%s\n", str.data);
-	if (str.data[0] == '*')
+
+	auto tex = scene->GetEmbeddedTexture(str.data);
+
+	auto it = aitex_to_index.find(tex);
+	if (it == aitex_to_index.end())
 	{
-		str.data[0] = ' ';
-		std::string sss(str.data, str.length);
-		return std::stoi(sss);
+		return -1;
 	}
 
-	printf("-1\n");
-	return -1;
+	return it->second;
 }
 
 Rendy::AbstractMaterialRef Rendy::ModelFactory::parse_material(const aiScene* scene,
-	const aiMaterial* material, std::vector<Rendy::Image2DRef>& images)
+	const aiMaterial* material, std::vector<Rendy::Image2DRef>& images,
+	const std::unordered_map<const aiTexture*, int>& aitex_to_index)
 {
 	OPTICK_EVENT();
 
-	auto image_set = form_image_set(scene, material, images);
+	auto image_set = form_image_set(scene, material, images, aitex_to_index);
 
 	return engine->make_material(image_set);
 }
@@ -465,13 +468,29 @@ std::vector<Rendy::AbstractMaterialRef> Rendy::ModelFactory::parse_materials(con
 	std::vector<Rendy::AbstractMaterialRef> result;
 	result.reserve(static_cast<size_t>(scene->mNumMaterials));
 
+	auto aitex_to_index = generate_image_map(scene);
+
 	for (unsigned i = 0; i < scene->mNumMaterials; ++i)
 	{
 		result.emplace_back(parse_material(scene, scene->mMaterials[i],
-			images));
+			images, aitex_to_index));
 	}
 
 	return result;
+}
+
+std::unordered_map<const aiTexture*, int> 
+Rendy::ModelFactory::generate_image_map(const aiScene* scene)
+{
+	OPTICK_EVENT();
+	std::unordered_map<const aiTexture*, int> map;
+
+	for (uint32_t i = 0; i < scene->mNumTextures; ++i)
+	{
+		map[scene->mTextures[i]] = i;
+	}
+
+	return map;
 }
 
 Rendy::Image2DRef Rendy::ModelFactory::parse_image(const aiTexture* assimp_texture)
@@ -527,7 +546,9 @@ std::vector<Rendy::Image2DRef> Rendy::ModelFactory::parse_images(const aiScene* 
 	return std::move(result);
 }
 
-Rendy::ImageSetRef Rendy::ModelFactory::form_image_set(const aiScene* scene, const aiMaterial* material, std::vector<Image2DRef>& images) const
+Rendy::ImageSetRef Rendy::ModelFactory::form_image_set(const aiScene* scene, 
+	const aiMaterial* material, std::vector<Image2DRef>& images,
+	const std::unordered_map<const aiTexture*, int>& aitex_to_index) const
 {
 	OPTICK_EVENT();
 
@@ -542,9 +563,8 @@ Rendy::ImageSetRef Rendy::ModelFactory::form_image_set(const aiScene* scene, con
 		{
 			if (path.length > 0)
 			{
-				printf("path > 0\n");
-				printf("%d\n", scene->GetEmbeddedTexture(path.data));
-				image_set->color = get_image(to_index(path), images);
+				image_set->color = get_image(to_index(path, scene, 
+					aitex_to_index), images);
 			}
 		}
 
@@ -555,7 +575,8 @@ Rendy::ImageSetRef Rendy::ModelFactory::form_image_set(const aiScene* scene, con
 			{
 				if (path.length > 0)
 				{
-					image_set->color = get_image(to_index(path), images);
+					image_set->color = get_image(to_index(path, scene, 
+						aitex_to_index), images);
 				}
 			}
 		}
@@ -568,7 +589,8 @@ Rendy::ImageSetRef Rendy::ModelFactory::form_image_set(const aiScene* scene, con
 		{
 			if (path.length > 0)
 			{
-				image_set->normal = get_image(to_index(path), images);
+				image_set->normal = get_image(to_index(path, scene, 
+					aitex_to_index), images);
 			}
 		}
 
@@ -578,7 +600,8 @@ Rendy::ImageSetRef Rendy::ModelFactory::form_image_set(const aiScene* scene, con
 			{
 				if (path.length > 0)
 				{
-					image_set->normal = get_image(to_index(path), images);
+					image_set->normal = get_image(to_index(path, scene, 
+						aitex_to_index), images);
 				}
 			}
 		}
@@ -592,7 +615,8 @@ Rendy::ImageSetRef Rendy::ModelFactory::form_image_set(const aiScene* scene, con
 		{
 			if (path.length > 0)
 			{
-				image_set->metallic_roughness = get_image(to_index(path), images);
+				image_set->metallic_roughness = get_image(to_index(path, scene, 
+					aitex_to_index), images);
 			}
 		}
 	}
@@ -614,6 +638,7 @@ Rendy::Image2DRef Rendy::ModelFactory::get_image(int index, std::vector<Image2DR
 
 Rendy::ModelFactory::ModelFactory(AbstractEngineRef engine, VFSRef vfs, ThreadPoolRef thread_pool)
 {
+	OPTICK_EVENT();
 	this->engine = engine;
 	this->vfs = vfs;
 	this->thread_pool = thread_pool;
