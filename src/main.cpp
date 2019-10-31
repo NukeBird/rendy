@@ -131,7 +131,7 @@ int main(int argc, char** argv)
 	Rendy::AbstractEngineRef engine = std::make_shared<Rendy::ES2::Engine>(vfs);
 	Rendy::ModelFactory model_factory(engine, vfs);
 
-	auto model = model_factory.make("assets/Penguin.fbx");
+	auto model = model_factory.make("assets/guard.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
@@ -174,7 +174,7 @@ int main(int argc, char** argv)
 		static float cam_fov(50.0f);
 		static float cam_aspect = width / static_cast<float>(height);
 		static glm::vec3 cam_pos(0.0, 0.5, 2.8);
-		static glm::vec3 cam_target(0.0, 0.0, 0.0);
+		static glm::vec3 cam_target(0.0, 0.0, 1.3);
 		static float near = 0.1f;
 		static float far = 15.0f;
 
@@ -195,7 +195,7 @@ int main(int argc, char** argv)
 
 		glm::mat4 transform = glm::translate(cam_target) * 
 			glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
-			glm::scale(glm::vec3{ 0.005f });
+			glm::scale(glm::vec3{ 5.2f });
 
 		OPTICK_PUSH("SDL_PollEvent");
 		while (SDL_PollEvent(&event))
