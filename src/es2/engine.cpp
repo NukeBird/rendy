@@ -64,7 +64,8 @@ void Rendy::ES2::Engine::flush()
 void Rendy::ES2::Engine::reload()
 {
 	OPTICK_EVENT();
-	//TODO?
+	generic_shader->reload();
+	iem->reload();
 }
 
 Rendy::AbstractShaderRef Rendy::ES2::Engine::make_shader(const std::string& vtx, const std::string& frg)
