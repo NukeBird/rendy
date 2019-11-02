@@ -28,38 +28,33 @@ Rendy::ES2::Engine::Engine(VFSRef vfs)
 	printf("GENERIC SHADER STATUS: %d\n", generic_shader->validate());
 }
 
-void Rendy::ES2::Engine::push(BatchList batches)
+
+void Rendy::ES2::Engine::push(AbstractDrawableRef drawable, const glm::mat4& model,
+	const glm::mat4& view, const glm::mat4& proj)
 {
-	OPTICK_EVENT();
+	auto batch_list = drawable->generate_batch_list(model, view, proj);
 
-	CommandList commands;
-
-	for (auto& batch: batches)
+	for (const auto& batch: batch_list)
 	{
-		auto cl = batch.to_command_list();
-
-		//TODO: optimize command list!
-
-		commands.insert(commands.end(), cl.begin(), cl.end());
-	}
-
-	push(commands);
-}
-
-void Rendy::ES2::Engine::push(CommandList commands)
-{
-	OPTICK_EVENT();
-
-	for (auto& c : commands)
-	{
-		c->execute(); //TODO
+		batches.emplace_back(batch);
 	}
 }
 
 void Rendy::ES2::Engine::flush()
 {
 	OPTICK_EVENT();
-	//TODO
+
+	for (auto& batch: batches)
+	{
+		auto command_list = batch.to_command_list();
+
+		for (auto& command: command_list)
+		{
+			command->execute();
+		}
+	}
+
+	batches.clear();
 }
 
 void Rendy::ES2::Engine::reload()

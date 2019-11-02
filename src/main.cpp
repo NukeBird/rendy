@@ -210,7 +210,9 @@ int main(int argc, char** argv)
 		glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		model->draw(transform, view, proj);
+		//model->draw(transform, view, proj);
+		engine->push(model, transform, view, proj);
+		engine->flush();
 
 		/*OPTICK_PUSH("glFinish");
 		glFinish();

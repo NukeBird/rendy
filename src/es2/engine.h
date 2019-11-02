@@ -1,6 +1,7 @@
 #pragma once
 #include "../abstract_engine.h"
 #include "../abstract_vfs.h"
+#include <vector>
 
 namespace Rendy
 {
@@ -11,8 +12,8 @@ namespace Rendy
 		public:
 			Engine(VFSRef vfs);
 
-			virtual void push(BatchList batches) override;
-			virtual void push(CommandList commands) override;
+			virtual void push(AbstractDrawableRef drawable, const glm::mat4& model,
+				const glm::mat4& view, const glm::mat4& proj) override;
 			virtual void flush() override;
 			virtual void reload() override;
 
@@ -27,6 +28,8 @@ namespace Rendy
 			virtual AbstractBufferRef make_ibo(uint32_t size, const void* ptr) override;
 			virtual IndexType get_index_type() const override;
 		private:
+			std::vector<Batch> batches;
+
 			AbstractShaderRef generic_shader;
 			AbstractTextureCubeRef iem;
 			VFSRef vfs;
