@@ -75,6 +75,11 @@ void Rendy::ES2::TextureCube::unbind(uint32_t slot)
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
+uint32_t Rendy::ES2::TextureCube::get_max_level() const
+{
+	return static_cast<uint32_t>(gli_tex.max_level());
+}
+
 glm::uvec3 Rendy::ES2::TextureCube::get_size() const
 {
 	OPTICK_EVENT();
