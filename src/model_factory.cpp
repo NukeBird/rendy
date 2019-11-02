@@ -1,9 +1,6 @@
 #include "model_factory.h"
 #include "shader_flags.h"
-#include "es2/default_material.h"
 #include "image2d.h"
-#include "es2/texture2d.h"
-#include "es2/pbr_material.h"
 #include "thread_pool.h"
 #include <unordered_map>
 #include <stack>

@@ -5,12 +5,11 @@
 #include "texture2d.h"
 #include "texture_cube.h"
 #include "default_material.h"
-#include "pbr_material.h"
 #include <optick.h>
 #include <cassert>
 #include <vector>
 
-#include "../generic_shader_sources.hpp"
+#include "default_shader_sources.hpp"
 
 Rendy::ES2::Engine::Engine(VFSRef vfs)
 {
@@ -25,7 +24,7 @@ Rendy::ES2::Engine::Engine(VFSRef vfs)
 
 	iem = make_texture_cube(static_cast<uint32_t>(iem_data.size()), iem_data.data());
 
-	generic_shader = make_shader(generic_vertex_shader, generic_fragment_shader);
+	generic_shader = make_shader(default_vertex_shader, default_fragment_shader);
 	printf("GENERIC SHADER STATUS: %d\n", generic_shader->validate());
 }
 
@@ -94,16 +93,7 @@ Rendy::AbstractMaterialRef Rendy::ES2::Engine::make_material(ImageSetRef image_s
 		normal = make_texture2d(image_set->normal);
 	}
 
-	if (image_set->metallic_roughness && image_set->color)
-	{
-		auto metallic_roughness = make_texture2d(image_set->metallic_roughness);
-
-		material = std::make_shared<PBRMaterial>(color, metallic_roughness, normal, iem, generic_shader);
-	}
-	else
-	{
-		material = std::make_shared<DefaultMaterial>(color, normal, generic_shader);
-	}
+	material = std::make_shared<DefaultMaterial>(color, normal, iem, generic_shader);
 
 	return material;
 }

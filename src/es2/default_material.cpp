@@ -1,16 +1,19 @@
 #include "default_material.h"
 #include "../bind_shader.h"
 #include "../bind_texture2d.h"
+#include "../bind_texture_cube.h"
 #include "../set_uniform.h"
 #include <optick.h>
 
 Rendy::ES2::DefaultMaterial::DefaultMaterial(AbstractTexture2DRef diffuse_texture,
-	AbstractTexture2DRef normal_texture, AbstractShaderRef shader)
+	AbstractTexture2DRef normal_texture, AbstractTextureCubeRef iem_texture, 
+	AbstractShaderRef shader)
 {
 	OPTICK_EVENT();
 
 	this->diffuse_texture = diffuse_texture;
 	this->normal_texture = normal_texture;
+	this->iem_texture = iem_texture;
 	this->shader = shader;
 }
 
@@ -109,6 +112,10 @@ std::vector<Rendy::CommandRef> Rendy::ES2::DefaultMaterial::to_command_list(uint
 	list.emplace_back(std::make_shared<SetUniform<int>>(shader_variant,
 		"normal_texture", 1));
 	list.emplace_back(std::make_shared<BindTexture2D>(normal_texture, 1));
+
+	list.emplace_back(std::make_shared<SetUniform<int>>(shader_variant,
+		"u_iem", 2));
+	list.emplace_back(std::make_shared<BindTextureCube>(iem_texture, 2));
 
 	return list;
 }
