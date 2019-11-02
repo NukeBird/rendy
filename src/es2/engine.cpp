@@ -13,6 +13,8 @@
 
 Rendy::ES2::Engine::Engine(VFSRef vfs)
 {
+	OPTICK_EVENT();
+
 	this->vfs = vfs;
 
 	auto iem_file = vfs->open_file("assets/iem_ldr.dds", FileMode::Read);
@@ -32,6 +34,8 @@ Rendy::ES2::Engine::Engine(VFSRef vfs)
 void Rendy::ES2::Engine::push(AbstractDrawableRef drawable, const glm::mat4& model,
 	const glm::mat4& view, const glm::mat4& proj)
 {
+	OPTICK_EVENT();
+
 	auto batch_list = drawable->generate_batch_list(model, view, proj);
 
 	for (const auto& batch: batch_list)
