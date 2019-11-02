@@ -139,14 +139,6 @@ namespace Rendy
 			uniform sampler2D normal_texture;
 		#endif
 
-		#ifdef USE_METALLIC_ROUGHNESS_TEXTURE
-			uniform sampler2D metallic_roughness_texture;
-		#endif
-
-		#ifdef USE_AMBIENT_TEXTURE
-			uniform sampler2D ambient_texture;
-		#endif
-
 			uniform samplerCube u_iem;
 
 			uniform vec3 u_camera_position;
@@ -218,26 +210,9 @@ namespace Rendy
 				return vec4(0.0);
 			}
 
-			vec3 get_ao()
-			{
-				vec3 ao = vec3(1.0);
-		
-				#ifdef USE_VERTEX_COORD
-					#ifdef USE_AMBIENT_TEXTURE
-						ao = vec3(read_texture(ambient_texture, v_coord).r);
-					#else
-						#ifdef USE_METALLIC_ROUGHNESS_TEXTURE
-							ao = vec3(read_texture(metallic_roughness_texture, v_coord).r);
-						#endif
-					#endif
-				#endif
-
-				return ao;
-			}
-
 			void main()
 			{
-				vec4 result = get_diffuse() * vec4(get_ao(), 1);
+				vec4 result = get_diffuse();
 				result.rgb *= read_texture(u_iem, get_normal()).rgb;
 
 				result.rgb = result.rgb / (result.rgb + vec3(1.0));
