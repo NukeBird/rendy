@@ -2,14 +2,6 @@
 #include <limits>
 #include <optick.h>
 
-uint32_t Rendy::get_all_shader_flags()
-{
-	OPTICK_EVENT();
-
-	constexpr uint32_t flags = std::numeric_limits<uint32_t>::max();
-	return flags;
-}
-
 std::string Rendy::shader_flags_to_defines(uint32_t flags)
 {
 	OPTICK_EVENT();

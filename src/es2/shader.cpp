@@ -11,7 +11,7 @@ Rendy::ES2::Shader::Shader(const std::string& vertex_source, const std::string& 
 	this->fragment_source = fragment_source;
 
 	ShaderSettings settings;
-	settings.flags = get_all_shader_flags();
+	settings.flags = EVERYTHING;
 
 	compile(settings);
 }
