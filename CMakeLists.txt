@@ -39,6 +39,13 @@ if(WIN32)
 
     add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_FILES})
     file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
+
+    foreach(_source IN ITEMS ${PROJECT_SOURCE_FILES})
+        get_filename_component(_source_path "${_source}" PATH)
+        string(REPLACE "${CMAKE_SOURCE_DIR}" "" _group_path "${_source_path}")
+        string(REPLACE "/" "\\" _group_path "${_group_path}")
+        source_group("${_group_path}" FILES "${_source}")
+    endforeach()
 else()
     #TODO: OPTICK_ENABLED=OFF
     add_library(${PROJECT_NAME} ${PROJECT_SOURCE_FILES})
