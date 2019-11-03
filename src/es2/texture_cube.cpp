@@ -92,11 +92,11 @@ glm::uvec3 Rendy::ES2::TextureCube::get_size() const
 	};
 }
 
-Rendy::TextureFormat Rendy::ES2::TextureCube::get_format() const
+/*Rendy::TextureFormat Rendy::ES2::TextureCube::get_format() const
 {
 	OPTICK_EVENT();
 	return TextureFormat::RGB; //TODO
-}
+}*/
 
 Rendy::TextureType Rendy::ES2::TextureCube::get_type() const
 {
