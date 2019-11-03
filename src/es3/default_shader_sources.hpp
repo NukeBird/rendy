@@ -229,6 +229,12 @@ namespace Rendy
 				{
 					vec3 N = get_normal();
 					vec3 V = normalize(u_camera_position - v_position);
+
+					if(dot(N,V) < 0)
+					{
+						N = -N;
+					}
+
 					vec3 R = normalize(reflect(-V, N));
 					
 					vec4 diffuse = get_diffuse();
@@ -249,8 +255,8 @@ namespace Rendy
 					kD *= 1.0 - metallic;
 					vec4 ao = vec4(vec3(read_texture(metallic_roughness_texture, v_coord).r), 1.0);
 
-					vec2 envBRDF = read_texture(lut, vec2(roughness, max(dot(N, V), 0.0))).rg;
-					vec3 specular = mix(F, albedo, metallic) * textureLod(pmrem, R,  roughness * u_max_pmrem_level).rgb * (envBRDF.x + envBRDF.y); 
+					vec2 envBRDF = read_texture(lut, vec2(roughness, max(dot(N, V), 0.0))).gr;
+					vec3 specular = mix(F, albedo, 1.0 - metallic) * textureLod(pmrem, R,  roughness * u_max_pmrem_level).rgb * (envBRDF.x + envBRDF.y); 
 					vec4 ambient = (vec4(kD, 1.0) * diffuse + vec4(specular, 0)) * ao;
 
 					return ambient;
