@@ -14,7 +14,7 @@ namespace Rendy
 		virtual uint32_t get_max_level() const = 0;
 		virtual glm::uvec3 get_size() const = 0;
 		//virtual TextureFormat get_format() const = 0;
-		virtual TextureType get_type() const = 0;
+		//virtual TextureType get_type() const = 0;
 	};
 
 	using AbstractTextureCubeRef = std::shared_ptr<AbstractTextureCube>;

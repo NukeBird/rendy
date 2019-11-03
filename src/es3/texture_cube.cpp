@@ -117,11 +117,11 @@ glm::uvec3 Rendy::ES3::TextureCube::get_size() const
 	return TextureFormat::RGB; //TODO
 }*/
 
-Rendy::TextureType Rendy::ES3::TextureCube::get_type() const
+/*Rendy::TextureType Rendy::ES3::TextureCube::get_type() const
 {
 	OPTICK_EVENT();
 	return TextureType::UnsignedByte; //TODO
-}
+}*/
 
 bool Rendy::ES3::TextureCube::load()
 {
