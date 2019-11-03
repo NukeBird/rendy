@@ -93,7 +93,7 @@ namespace Rendy
 
 		const std::string default_fragment_shader =
 		R"(
-			precision mediump float;
+			precision highp float;
 
 			#ifdef USE_VERTEX_POSITION
 				in vec3 v_position;

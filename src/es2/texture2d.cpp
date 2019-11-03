@@ -163,7 +163,7 @@ bool Rendy::ES2::Texture2D::load_from_image()
 	OPTICK_POP();
 
 	OPTICK_PUSH("glGenerateMipmap");
-	glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+	//glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	OPTICK_POP();
 
