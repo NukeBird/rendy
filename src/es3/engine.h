@@ -28,6 +28,8 @@ namespace Rendy
 			virtual AbstractBufferRef make_ibo(uint32_t size, const void* ptr) override;
 			virtual IndexType get_index_type() const override;
 		private:
+			AbstractTextureCubeRef read_texture_cube(const std::string& path);
+
 			std::vector<Batch> batches;
 
 			AbstractShaderRef generic_shader;

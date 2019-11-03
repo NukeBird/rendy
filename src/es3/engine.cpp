@@ -16,15 +16,7 @@ Rendy::ES3::Engine::Engine(VFSRef vfs)
 	OPTICK_EVENT();
 
 	this->vfs = vfs;
-
-	auto iem_file = vfs->open_file("assets/iem.dds", FileMode::Read);
-	assert(iem_file);
-	assert(iem_file->validate());
-	std::vector<uint8_t> iem_data;
-	iem_data.resize(static_cast<size_t>(iem_file->get_size()));
-	iem_file->read(iem_data.data(), iem_file->get_size());
-
-	iem = make_texture_cube(static_cast<uint32_t>(iem_data.size()), iem_data.data());
+	iem = read_texture_cube("assets/iem.dds");
 
 	printf("IEM max level: %d\n", iem->get_max_level());
 
@@ -167,4 +159,15 @@ Rendy::IndexType Rendy::ES3::Engine::get_index_type() const
 {
 	OPTICK_EVENT();
 	return IndexType::UnsignedShort;
+}
+
+Rendy::AbstractTextureCubeRef Rendy::ES3::Engine::read_texture_cube(const std::string& path)
+{
+	auto file = vfs->open_file(path, FileMode::Read);
+	assert(file);
+	assert(file->validate());
+	std::vector<uint8_t> data;
+	data.resize(static_cast<size_t>(file->get_size()));
+	file->read(&data[0], file->get_size());
+	return make_texture_cube(static_cast<uint32_t>(data.size()), &data[0]);
 }
