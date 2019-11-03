@@ -5,7 +5,7 @@
 
 namespace Rendy
 {
-	namespace ES2
+	namespace ES3
 	{
 		class PBRMaterial final : public AbstractMaterial
 		{
