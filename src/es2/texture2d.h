@@ -15,7 +15,7 @@ namespace Rendy
 			virtual void bind(uint32_t slot) override;
 			virtual void unbind(uint32_t slot) override;
 			virtual glm::uvec2 get_size() const override;
-			virtual TextureFormat get_format() const override;
+			//virtual TextureFormat get_format() const override;
 			virtual TextureType get_type() const override;
 		private:
 			bool load_from_image();

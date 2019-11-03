@@ -111,11 +111,11 @@ glm::uvec2 Rendy::ES2::Texture2D::get_size() const
 	return image->get_size();
 }
 
-Rendy::TextureFormat Rendy::ES2::Texture2D::get_format() const
+/*Rendy::TextureFormat Rendy::ES2::Texture2D::get_format() const
 {
 	OPTICK_EVENT();
 	return format;
-}
+}*/
 
 Rendy::TextureType Rendy::ES2::Texture2D::get_type() const
 {

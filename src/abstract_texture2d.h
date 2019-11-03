@@ -13,7 +13,7 @@ namespace Rendy
 		virtual void bind(uint32_t slot) = 0;
 		virtual void unbind(uint32_t slot) = 0;
 		virtual glm::uvec2 get_size() const = 0;
-		virtual TextureFormat get_format() const = 0;
+		//virtual TextureFormat get_format() const = 0;
 		virtual TextureType get_type() const = 0;
 	};
 
