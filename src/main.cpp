@@ -190,9 +190,9 @@ int main(int argc, char** argv)
 		glm::mat4 proj = glm::perspective(glm::radians(cam_fov),
 			cam_aspect, near, far);
 
-		static float angle = 0.0f;
+		static float angle = 190.0f;
 
-		angle = glm::mod(angle + 20.0f*dt, 360.0f);
+		//angle = glm::mod(angle + 20.0f*dt, 360.0f);
 
 		glm::mat4 transform = glm::translate(cam_target) * 
 			glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
