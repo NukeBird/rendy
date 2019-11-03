@@ -17,8 +17,9 @@ Rendy::ES3::Engine::Engine(VFSRef vfs)
 
 	this->vfs = vfs;
 	iem = read_texture_cube("assets/iem.dds");
+	pmrem = read_texture_cube("assets/pmrem.dds");
 
-	printf("IEM max level: %d\n", iem->get_max_level());
+	printf("PMREM max level: %d\n", pmrem->get_max_level());
 
 	generic_shader = make_shader(default_vertex_shader, default_fragment_shader);
 	printf("GENERIC SHADER STATUS: %d\n", generic_shader->validate());
