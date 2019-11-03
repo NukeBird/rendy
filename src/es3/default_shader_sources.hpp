@@ -150,6 +150,7 @@ namespace Rendy
 
 			uniform samplerCube iem;
 			uniform samplerCube pmrem;
+			uniform sampler2D lut;
 			uniform int u_max_pmrem_level;
 
 			uniform vec3 u_camera_position;
@@ -228,27 +229,28 @@ namespace Rendy
 				{
 					vec3 N = get_normal();
 					vec3 V = normalize(u_camera_position - v_position);
-					vec3 R = reflect(-V, N);
+					vec3 R = normalize(reflect(-V, N));
 					
 					vec4 diffuse = get_diffuse();
+					vec3 albedo = diffuse.rgb;
 					
 					float metallic = read_texture(metallic_roughness_texture, v_coord).b;
 					float roughness = read_texture(metallic_roughness_texture, v_coord).g;
 
 					vec3 F0 = vec3(0.04); 
-					F0 = mix(F0, vec3(diffuse), metallic);
+					F0 = mix(F0, albedo, metallic);
 
 					vec3 irradiance = read_texture(iem, N).rgb;
 					diffuse = vec4(irradiance, 1.0) * diffuse;
 
 					vec3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
 					vec3 kS = F;
-					vec3 kD = 1.0 - kS;
+					vec3 kD = 1.0 - F;
 					kD *= 1.0 - metallic;
 					vec4 ao = vec4(vec3(read_texture(metallic_roughness_texture, v_coord).r), 1.0);
 
-					vec2 envBRDF = vec2(1.0, 0.0); //TODO: load and use LUT
-					vec3 specular = textureLod(pmrem, R,  roughness * u_max_pmrem_level).rgb * (F * envBRDF.x + envBRDF.y); 
+					vec2 envBRDF = read_texture(lut, vec2(roughness, max(dot(N, V), 0.0))).rg;
+					vec3 specular = mix(F, albedo, metallic) * textureLod(pmrem, R,  roughness * u_max_pmrem_level).rgb * (envBRDF.x + envBRDF.y); 
 					vec4 ambient = (vec4(kD, 1.0) * diffuse + vec4(specular, 0)) * ao;
 
 					return ambient;
@@ -268,7 +270,8 @@ namespace Rendy
 			{
 				vec4 result = calculate_lighting();
 
-				result.rgb = result.rgb / (result.rgb + vec3(1.0));
+				result.rgb = vec3(1.0) - exp(-result.rgb);
+				//result.rgb = result.rgb / (result.rgb + vec3(1.0));
 				result.rgb = pow(result.rgb, vec3(1.0/gamma));
 				output_color = result;
 			} 

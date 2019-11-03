@@ -4,6 +4,7 @@
 #include <memory>
 #include "abstract_resource.h"
 #include "texture_type.h"
+#include <gli/gli.hpp>
 
 namespace Rendy
 {
@@ -25,6 +26,8 @@ namespace Rendy
 		void load_image(const char* memory, uint32_t length);
 
 		void* data_ptr = nullptr;
+		gli::texture gli_tex;
+		TextureType type;
 		//uint32_t length = 0;
 		glm::uvec2 size{ 0, 0 };
 		uint32_t channel_count = 0;

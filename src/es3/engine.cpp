@@ -21,6 +21,17 @@ Rendy::ES3::Engine::Engine(VFSRef vfs)
 
 	printf("PMREM max level: %d\n", pmrem->get_max_level());
 
+
+	auto file = vfs->open_file("assets/lut.dds", Rendy::FileMode::Read);
+	std::vector<uint8_t> content;
+	content.resize(file->get_size());
+	file->read(content.data(), file->get_size());
+	Rendy::Image2DRef lut_image = std::make_shared<Image2D>(reinterpret_cast<const char*>(content.data()),
+		content.size());
+	lut = make_texture2d(lut_image);
+	
+	printf("LUT status: %d\n", lut->validate());
+
 	generic_shader = make_shader(default_vertex_shader, default_fragment_shader);
 	printf("GENERIC SHADER STATUS: %d\n", generic_shader->validate());
 }
@@ -94,7 +105,7 @@ Rendy::AbstractMaterialRef Rendy::ES3::Engine::make_material(ImageSetRef image_s
 		metallic_roughness = make_texture2d(image_set->metallic_roughness);
 	}
 
-	material = std::make_shared<PBRMaterial>(albedo, metallic_roughness, normal, iem, pmrem, generic_shader);
+	material = std::make_shared<PBRMaterial>(albedo, metallic_roughness, normal, iem, pmrem, lut, generic_shader);
 
 	return material;
 }

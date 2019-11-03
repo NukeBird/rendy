@@ -15,6 +15,7 @@ namespace Rendy
 				AbstractTexture2DRef normal_texture,
 				AbstractTextureCubeRef iem,
 				AbstractTextureCubeRef pmrem,
+				AbstractTexture2DRef lut,
 				AbstractShaderRef shader);
 			virtual void reload() override;
 			virtual bool validate() const override;
@@ -30,6 +31,7 @@ namespace Rendy
 			AbstractTexture2DRef normal_texture; 
 			AbstractTextureCubeRef iem;
 			AbstractTextureCubeRef pmrem;
+			AbstractTexture2DRef lut;
 			AbstractShaderRef shader;
 		};
 	};

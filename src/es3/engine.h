@@ -35,6 +35,7 @@ namespace Rendy
 			AbstractShaderRef generic_shader;
 			AbstractTextureCubeRef iem;
 			AbstractTextureCubeRef pmrem;
+			AbstractTexture2DRef lut;
 			VFSRef vfs;
 		};
 	};

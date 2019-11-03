@@ -141,7 +141,7 @@ bool Rendy::ES3::TextureCube::load()
 		glGenTextures(1, &id);
 	}
 
-	gli::gl GL(gli::gl::PROFILE_GL33);
+	gli::gl GL(gli::gl::PROFILE_ES30);
 	gli::gl::format const format = GL.translate(gli_tex.format(), gli_tex.swizzles());
 	GLenum target = GL.translate(gli_tex.target());
 

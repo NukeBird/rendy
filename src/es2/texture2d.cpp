@@ -142,8 +142,13 @@ bool Rendy::ES2::Texture2D::load_from_image()
 
 	auto image_type = image->get_type();
 
+	/*if (image_type != TextureType::UnsignedByte)
+	{
+		return false;
+	}*/
+
 	GLenum gl_format = (format == TextureFormat::RGB) ? GL_RGB : GL_RGBA; //TODO
-	GLenum gl_type = (image_type == TextureType::UnsignedByte) ? GL_UNSIGNED_BYTE : GL_INVALID_ENUM; //TODO
+	GLenum gl_type = (image_type == TextureType::UnsignedByte) ? GL_UNSIGNED_BYTE : GL_HALF_FLOAT; //TODO
 
 	bind(0);
 

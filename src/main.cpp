@@ -174,7 +174,7 @@ int main(int argc, char** argv)
 		//OPTICK_PUSH("Tick");
 		static float cam_fov(50.0f);
 		static float cam_aspect = width / static_cast<float>(height);
-		static glm::vec3 cam_pos(0.0, 0.45, 2.8);
+		static glm::vec3 cam_pos(0.0, 0.5, 2.8);
 		static glm::vec3 cam_target(0.0, 0.0, 1.3);
 		static float near = 0.1f;
 		static float far = 15.0f;
@@ -190,13 +190,13 @@ int main(int argc, char** argv)
 		glm::mat4 proj = glm::perspective(glm::radians(cam_fov),
 			cam_aspect, near, far);
 
-		static float angle = 190.0f;
+		static float angle = 0.0f;
 
-		//angle = glm::mod(angle + 20.0f*dt, 360.0f);
+		angle = glm::mod(angle + 20.0f*dt, 360.0f);
 
 		glm::mat4 transform = glm::translate(cam_target) * 
 			glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
-			glm::scale(glm::vec3{ 1.0f });
+			glm::scale(glm::vec3{ 1.1f });
 
 		OPTICK_PUSH("SDL_PollEvent");
 		while (SDL_PollEvent(&event))
