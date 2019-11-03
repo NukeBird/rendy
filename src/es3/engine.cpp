@@ -108,7 +108,7 @@ Rendy::AbstractTexture2DRef Rendy::ES3::Engine::make_texture2d(Image2DRef image)
 Rendy::AbstractTextureCubeRef Rendy::ES3::Engine::make_texture_cube(uint32_t size, const void* ptr)
 {
 	OPTICK_EVENT();
-	return std::make_shared<TextureCube>(ptr, size);
+	return std::make_shared<ES3::TextureCube>(ptr, size);
 }
 
 Rendy::AbstractVertexArrayRef Rendy::ES3::Engine::make_vao(AbstractBufferRef vbo, AbstractBufferRef ibo,

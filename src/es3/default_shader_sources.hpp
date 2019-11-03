@@ -222,8 +222,8 @@ namespace Rendy
 		#else*/
 			vec4 calculate_lighting()
 			{
-				vec4 result = vec4(1);//get_diffuse();
-				result.rgb *= read_texture(pmrem, get_normal(), 0.0f).rgb;
+				vec4 result = get_diffuse();
+				result.rgb *= read_texture(iem, get_normal()).rgb;
 				return result;
 			}
 		//#endif
