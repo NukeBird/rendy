@@ -219,9 +219,39 @@ namespace Rendy
 			}
 
 			#ifdef COOK_TORRANCE 
+				vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
+				{
+					return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(1.0 - cosTheta, 5.0);
+				}
+				
 				vec4 calculate_lighting()
 				{
-					return vec4(1);
+					vec3 N = get_normal();
+					vec3 V = normalize(u_camera_position - v_position);
+					vec3 R = reflect(-V, N);
+					
+					vec4 diffuse = get_diffuse();
+					
+					float metallic = read_texture(metallic_roughness_texture, v_coord).b;
+					float roughness = read_texture(metallic_roughness_texture, v_coord).g;
+
+					vec3 F0 = vec3(0.04); 
+					F0 = mix(F0, vec3(diffuse), metallic);
+
+					vec3 irradiance = read_texture(iem, N).rgb;
+					diffuse = vec4(irradiance, 1.0) * diffuse;
+
+					vec3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
+					vec3 kS = F;
+					vec3 kD = 1.0 - kS;
+					kD *= 1.0 - metallic;
+					vec4 ao = vec4(vec3(read_texture(metallic_roughness_texture, v_coord).r), 1.0);
+
+					vec2 envBRDF = vec2(1.0, 0.0); //TODO: load and use LUT
+					vec3 specular = textureLod(pmrem, R,  roughness * u_max_pmrem_level).rgb * (F * envBRDF.x + envBRDF.y); 
+					vec4 ambient = (vec4(kD, 1.0) * diffuse + vec4(specular, 0)) * ao;
+
+					return ambient;
 				}
 			#endif
 
