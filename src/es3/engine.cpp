@@ -94,7 +94,7 @@ Rendy::AbstractMaterialRef Rendy::ES3::Engine::make_material(ImageSetRef image_s
 		metallic_roughness = make_texture2d(image_set->metallic_roughness);
 	}
 
-	material = std::make_shared<PBRMaterial>(albedo, metallic_roughness, normal, iem, generic_shader);
+	material = std::make_shared<PBRMaterial>(albedo, metallic_roughness, normal, iem, pmrem, generic_shader);
 
 	return material;
 }

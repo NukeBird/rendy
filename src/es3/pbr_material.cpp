@@ -9,6 +9,7 @@ Rendy::ES3::PBRMaterial::PBRMaterial(AbstractTexture2DRef albedo_texture,
 	AbstractTexture2DRef ambient_metallic_roughness_texture, 
 	AbstractTexture2DRef normal_texture,
 	AbstractTextureCubeRef iem,
+	AbstractTextureCubeRef pmrem,
 	AbstractShaderRef shader)
 {
 	OPTICK_EVENT();
@@ -18,6 +19,7 @@ Rendy::ES3::PBRMaterial::PBRMaterial(AbstractTexture2DRef albedo_texture,
 		ambient_metallic_roughness_texture;
 	this->normal_texture = normal_texture;
 	this->iem = iem;
+	this->pmrem = pmrem;
 	this->shader = shader;
 }
 
@@ -139,8 +141,14 @@ std::vector<Rendy::CommandRef> Rendy::ES3::PBRMaterial::to_command_list(uint32_t
 	}
 
 	list.emplace_back(std::make_shared<SetUniform<int>>(shader_variant,
-		"u_iem", 6));
-	list.emplace_back(std::make_shared<BindTextureCube>(iem, 6));
+		"iem", 3));
+	list.emplace_back(std::make_shared<BindTextureCube>(iem, 3));
+
+	list.emplace_back(std::make_shared<SetUniform<int>>(shader_variant,
+		"pmrem", 4));
+	list.emplace_back(std::make_shared<SetUniform<int>>(shader_variant,
+		"u_max_pmrem_level", static_cast<int>(pmrem->get_max_level())));
+	list.emplace_back(std::make_shared<BindTextureCube>(pmrem, 4));
 
 	return list;
 }

@@ -14,6 +14,7 @@ namespace Rendy
 				AbstractTexture2DRef ambient_metallic_roughness_texture,
 				AbstractTexture2DRef normal_texture,
 				AbstractTextureCubeRef iem,
+				AbstractTextureCubeRef pmrem,
 				AbstractShaderRef shader);
 			virtual void reload() override;
 			virtual bool validate() const override;
@@ -28,6 +29,7 @@ namespace Rendy
 			AbstractTexture2DRef ambient_metallic_roughness_texture;
 			AbstractTexture2DRef normal_texture; 
 			AbstractTextureCubeRef iem;
+			AbstractTextureCubeRef pmrem;
 			AbstractShaderRef shader;
 		};
 	};
