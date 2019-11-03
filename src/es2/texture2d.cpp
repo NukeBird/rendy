@@ -140,8 +140,10 @@ bool Rendy::ES2::Texture2D::load_from_image()
 		return false;
 	}
 
+	auto image_type = image->get_type();
+
 	GLenum gl_format = (format == TextureFormat::RGB) ? GL_RGB : GL_RGBA; //TODO
-	GLenum gl_type = GL_UNSIGNED_BYTE; //TODO
+	GLenum gl_type = (image_type == TextureType::UnsignedByte) ? GL_UNSIGNED_BYTE : GL_INVALID_ENUM; //TODO
 
 	bind(0);
 

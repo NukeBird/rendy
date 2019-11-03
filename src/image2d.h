@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <memory>
 #include "abstract_resource.h"
+#include "texture_type.h"
 
 namespace Rendy
 {
@@ -16,6 +17,7 @@ namespace Rendy
 		glm::uvec2 get_size() const;
 		uint32_t get_width() const;
 		uint32_t get_height() const;
+		TextureType get_type() const;
 		uint32_t get_channel_count() const;
 		virtual void reload() override;
 		virtual bool validate() const override;

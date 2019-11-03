@@ -45,6 +45,11 @@ uint32_t Rendy::Image2D::get_height() const
 	return get_size().y;
 }
 
+Rendy::TextureType Rendy::Image2D::get_type() const
+{
+	return TextureType::UnsignedByte;
+}
+
 uint32_t Rendy::Image2D::get_channel_count() const
 {
 	OPTICK_EVENT();
