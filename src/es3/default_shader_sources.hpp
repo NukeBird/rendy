@@ -282,8 +282,8 @@ namespace Rendy
 			{
 				vec4 result = calculate_lighting();
 
-				//result.rgb = vec3(1.0) - exp(-result.rgb);
-				result.rgb = result.rgb / (result.rgb + vec3(1.0));
+				result.rgb = vec3(1.0) - exp(-result.rgb);
+				//result.rgb = result.rgb / (result.rgb + vec3(1.0));
 				result.rgb = pow(result.rgb, vec3(1.0/gamma));
 				output_color = result;
 			} 
