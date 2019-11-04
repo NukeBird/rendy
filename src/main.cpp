@@ -132,7 +132,7 @@ int main(int argc, char** argv)
 	Rendy::AbstractEngineRef engine = std::make_shared<Rendy::ES3::Engine>(vfs);
 	Rendy::ModelFactory model_factory(engine, vfs);
 
-	auto model = model_factory.make("assets/dyno.glb");
+	auto model = model_factory.make("assets/leather_ball.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
@@ -323,7 +323,7 @@ int main(int argc, char** argv)
 
 		glm::mat4 transform = glm::translate(cam_target) *
 			//glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
-			glm::scale(glm::vec3{ 4.5f });
+			glm::scale(glm::vec3{ 1.0f });
 
 		glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
