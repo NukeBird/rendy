@@ -247,7 +247,7 @@ namespace Rendy
 					vec3 normal = get_normal();
 					vec3 view = normalize(u_camera_position - v_position);
 
-					if(dot(normal, view) < 0)
+					if(!gl_FrontFacing)
 					{
 						normal = -normal;
 					}
