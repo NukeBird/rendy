@@ -7,10 +7,10 @@ namespace Rendy
 {
 	namespace ES3
 	{
-		class PBRMaterial final : public AbstractMaterial
+		class DefaultMaterial final : public AbstractMaterial
 		{
 		public:
-			PBRMaterial(AbstractTexture2DRef albedo_texture,
+			DefaultMaterial(AbstractTexture2DRef albedo_texture,
 				AbstractTexture2DRef ambient_metallic_roughness_texture,
 				AbstractTexture2DRef normal_texture,
 				AbstractTextureCubeRef iem,

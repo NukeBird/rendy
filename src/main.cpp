@@ -303,12 +303,12 @@ int main(int argc, char** argv)
 
 		if (increase_r)
 		{
-			cam_radius = glm::clamp(cam_radius + r_speed * dt, 0.5f, 20.0f);
+			cam_radius = glm::clamp(cam_radius + r_speed * dt, 0.25f, 20.0f);
 		}
 
 		if (decrease_r)
 		{
-			cam_radius = glm::clamp(cam_radius - r_speed * dt, 0.5f, 20.0f);
+			cam_radius = glm::clamp(cam_radius - r_speed * dt, 0.25f, 20.0f);
 		}
 
 		glm::mat4 view = glm::lookAt(
@@ -323,7 +323,7 @@ int main(int argc, char** argv)
 
 		glm::mat4 transform = glm::translate(cam_target) *
 			//glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
-			glm::scale(glm::vec3{ 1.0f });
+			glm::scale(glm::vec3{ 2.5f });
 
 		glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

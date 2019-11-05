@@ -4,7 +4,7 @@
 #include "shader.h"
 #include "texture2d.h"
 #include "texture_cube.h"
-#include "pbr_material.h"
+#include "default_material.h"
 #include <optick.h>
 #include <cassert>
 #include <vector>
@@ -105,7 +105,7 @@ Rendy::AbstractMaterialRef Rendy::ES3::Engine::make_material(ImageSetRef image_s
 		metallic_roughness = make_texture2d(image_set->metallic_roughness);
 	}
 
-	material = std::make_shared<PBRMaterial>(albedo, metallic_roughness, normal, iem, pmrem, lut, generic_shader);
+	material = std::make_shared<DefaultMaterial>(albedo, metallic_roughness, normal, iem, pmrem, lut, generic_shader);
 
 	return material;
 }

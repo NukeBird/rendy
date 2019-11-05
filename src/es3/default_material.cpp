@@ -1,11 +1,11 @@
-#include "pbr_material.h"
+#include "default_material.h"
 #include "../bind_shader.h"
 #include "../bind_texture2d.h"
 #include "../bind_texture_cube.h"
 #include "../set_uniform.h"
 #include <optick.h>
 
-Rendy::ES3::PBRMaterial::PBRMaterial(AbstractTexture2DRef albedo_texture,
+Rendy::ES3::DefaultMaterial::DefaultMaterial(AbstractTexture2DRef albedo_texture,
 	AbstractTexture2DRef ambient_metallic_roughness_texture, 
 	AbstractTexture2DRef normal_texture,
 	AbstractTextureCubeRef iem,
@@ -25,7 +25,7 @@ Rendy::ES3::PBRMaterial::PBRMaterial(AbstractTexture2DRef albedo_texture,
 	this->shader = shader;
 }
 
-void Rendy::ES3::PBRMaterial::reload()
+void Rendy::ES3::DefaultMaterial::reload()
 {
 	OPTICK_EVENT();
 
@@ -47,21 +47,26 @@ void Rendy::ES3::PBRMaterial::reload()
 	}
 }
 
-bool Rendy::ES3::PBRMaterial::validate() const
+bool Rendy::ES3::DefaultMaterial::validate() const
 {
 	OPTICK_EVENT();
 
-	if (!albedo_texture || !albedo_texture->validate())
+	if (albedo_texture)
 	{
-		printf("Invalid albedo texture\n");
-		return false;
+		if(!albedo_texture->validate())
+		{
+			printf("Invalid albedo texture\n");
+			return false;
+		}
 	}
 
-	if (!ambient_metallic_roughness_texture ||
-		!ambient_metallic_roughness_texture->validate())
+	if (ambient_metallic_roughness_texture)
 	{
-		printf("Invalid ambient metallic roughness texture\n");
-		return false;
+		if (!ambient_metallic_roughness_texture->validate())
+		{
+			printf("Invalid ambient metallic roughness texture\n");
+			return false;
+		}
 	}
 
 	if (normal_texture)
@@ -82,24 +87,34 @@ bool Rendy::ES3::PBRMaterial::validate() const
 	return true;
 }
 
-Rendy::AbstractShaderRef Rendy::ES3::PBRMaterial::get_shader()
+Rendy::AbstractShaderRef Rendy::ES3::DefaultMaterial::get_shader()
 {
 	OPTICK_EVENT();
 	return shader;
 }
 
-Rendy::ShaderVariantRef Rendy::ES3::PBRMaterial::get_shader_variant(uint32_t extra_flags)
+Rendy::ShaderVariantRef Rendy::ES3::DefaultMaterial::get_shader_variant(uint32_t extra_flags)
 {
 	ShaderSettings settings;
 	settings.flags = extra_flags | get_flags();
 	return shader->compile(settings);
 }
 
-uint32_t Rendy::ES3::PBRMaterial::get_flags() const
+uint32_t Rendy::ES3::DefaultMaterial::get_flags() const
 {
 	OPTICK_EVENT();
 
-	uint32_t flags = USE_COLOR_TEXTURE | USE_METALLIC_ROUGHNESS_TEXTURE;
+	uint32_t flags = 0; 
+	
+	if (albedo_texture)
+	{
+		flags |= USE_COLOR_TEXTURE;
+	}
+	 
+	if (ambient_metallic_roughness_texture)
+	{
+		flags |= USE_METALLIC_ROUGHNESS_TEXTURE;
+	}
 
 	if (normal_texture)
 	{
@@ -109,7 +124,7 @@ uint32_t Rendy::ES3::PBRMaterial::get_flags() const
 	return flags;
 }
 
-std::vector<Rendy::CommandRef> Rendy::ES3::PBRMaterial::to_command_list(uint32_t extra_flags)
+std::vector<Rendy::CommandRef> Rendy::ES3::DefaultMaterial::to_command_list(uint32_t extra_flags)
 {
 	ShaderSettings settings;
 	settings.flags = extra_flags | get_flags();
@@ -159,7 +174,7 @@ std::vector<Rendy::CommandRef> Rendy::ES3::PBRMaterial::to_command_list(uint32_t
 	return list;
 }
 
-void Rendy::ES3::PBRMaterial::bind(const ShaderSettings& settings)
+void Rendy::ES3::DefaultMaterial::bind(const ShaderSettings& settings)
 {
 	OPTICK_EVENT();
 
@@ -186,7 +201,7 @@ void Rendy::ES3::PBRMaterial::bind(const ShaderSettings& settings)
 	}
 }
 
-void Rendy::ES3::PBRMaterial::unbind(uint32_t extra_flags)
+void Rendy::ES3::DefaultMaterial::unbind(uint32_t extra_flags)
 {
 	OPTICK_EVENT();
 

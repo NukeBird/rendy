@@ -201,10 +201,10 @@ namespace Rendy
 
 			vec4 get_diffuse()
 			{
-				vec4 diffuse = vec4(1.0);
-		
 				#ifdef USE_VERTEX_COLOR
-					diffuse = v_color;
+					vec4 diffuse = v_color;
+				#else
+					vec4 diffuse = vec4(1.0);
 				#endif
 
 				#ifdef USE_VERTEX_COORD
@@ -216,7 +216,7 @@ namespace Rendy
 					#endif
 				#endif
 
-				return vec4(0.0);
+				return vec4(0.0, 0.0, 0.0, 1.0);
 			}
 
 			#ifdef COOK_TORRANCE 
