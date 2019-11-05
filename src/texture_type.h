@@ -6,6 +6,7 @@ namespace Rendy
 	enum class TextureType
 	{
 		UnsignedByte,
+		HalfFloat,
 		Invalid
 	};
 

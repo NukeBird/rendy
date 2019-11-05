@@ -111,17 +111,17 @@ glm::uvec2 Rendy::ES2::Texture2D::get_size() const
 	return image->get_size();
 }
 
-Rendy::TextureFormat Rendy::ES2::Texture2D::get_format() const
+/*Rendy::TextureFormat Rendy::ES2::Texture2D::get_format() const
 {
 	OPTICK_EVENT();
 	return format;
-}
+}*/
 
-Rendy::TextureType Rendy::ES2::Texture2D::get_type() const
+/*Rendy::TextureType Rendy::ES2::Texture2D::get_type() const
 {
 	OPTICK_EVENT();
 	return type;
-}
+}*/
 
 bool Rendy::ES2::Texture2D::load_from_image()
 {
@@ -140,8 +140,15 @@ bool Rendy::ES2::Texture2D::load_from_image()
 		return false;
 	}
 
+	auto image_type = image->get_type();
+
+	/*if (image_type != TextureType::UnsignedByte)
+	{
+		return false;
+	}*/
+
 	GLenum gl_format = (format == TextureFormat::RGB) ? GL_RGB : GL_RGBA; //TODO
-	GLenum gl_type = GL_UNSIGNED_BYTE; //TODO
+	GLenum gl_type = (image_type == TextureType::UnsignedByte) ? GL_UNSIGNED_BYTE : GL_HALF_FLOAT; //TODO
 
 	bind(0);
 
@@ -156,7 +163,7 @@ bool Rendy::ES2::Texture2D::load_from_image()
 	OPTICK_POP();
 
 	OPTICK_PUSH("glGenerateMipmap");
-	glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+	//glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	OPTICK_POP();
 

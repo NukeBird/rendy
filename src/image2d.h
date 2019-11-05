@@ -3,6 +3,8 @@
 #include <glm/glm.hpp>
 #include <memory>
 #include "abstract_resource.h"
+#include "texture_type.h"
+#include <gli/gli.hpp>
 
 namespace Rendy
 {
@@ -16,6 +18,7 @@ namespace Rendy
 		glm::uvec2 get_size() const;
 		uint32_t get_width() const;
 		uint32_t get_height() const;
+		TextureType get_type() const;
 		uint32_t get_channel_count() const;
 		virtual void reload() override;
 		virtual bool validate() const override;
@@ -23,6 +26,8 @@ namespace Rendy
 		void load_image(const char* memory, uint32_t length);
 
 		void* data_ptr = nullptr;
+		gli::texture gli_tex;
+		TextureType type;
 		//uint32_t length = 0;
 		glm::uvec2 size{ 0, 0 };
 		uint32_t channel_count = 0;

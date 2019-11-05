@@ -75,6 +75,11 @@ void Rendy::ES2::TextureCube::unbind(uint32_t slot)
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
+uint32_t Rendy::ES2::TextureCube::get_max_level() const
+{
+	return static_cast<uint32_t>(gli_tex.max_level());
+}
+
 glm::uvec3 Rendy::ES2::TextureCube::get_size() const
 {
 	OPTICK_EVENT();
@@ -87,17 +92,17 @@ glm::uvec3 Rendy::ES2::TextureCube::get_size() const
 	};
 }
 
-Rendy::TextureFormat Rendy::ES2::TextureCube::get_format() const
+/*Rendy::TextureFormat Rendy::ES2::TextureCube::get_format() const
 {
 	OPTICK_EVENT();
 	return TextureFormat::RGB; //TODO
-}
+}*/
 
-Rendy::TextureType Rendy::ES2::TextureCube::get_type() const
+/*Rendy::TextureType Rendy::ES2::TextureCube::get_type() const
 {
 	OPTICK_EVENT();
 	return TextureType::UnsignedByte; //TODO
-}
+}*/
 
 bool Rendy::ES2::TextureCube::load()
 {

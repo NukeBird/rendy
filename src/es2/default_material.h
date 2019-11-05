@@ -1,6 +1,7 @@
 #pragma once
 #include "../abstract_material.h"
 #include "../abstract_texture2d.h"
+#include "../abstract_texture_cube.h"
 
 namespace Rendy
 {
@@ -11,6 +12,7 @@ namespace Rendy
 		public:
 			DefaultMaterial(AbstractTexture2DRef diffuse_texture,
 				AbstractTexture2DRef normal_texture,
+				AbstractTextureCubeRef iem_texture,
 				AbstractShaderRef shader);
 			virtual void reload() override;
 			virtual bool validate() const override;
@@ -23,6 +25,7 @@ namespace Rendy
 		private:
 			AbstractTexture2DRef diffuse_texture;
 			AbstractTexture2DRef normal_texture;
+			AbstractTextureCubeRef iem_texture;
 			AbstractShaderRef shader;
 		};
 	};

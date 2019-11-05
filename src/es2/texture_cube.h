@@ -17,9 +17,10 @@ namespace Rendy
 			virtual bool validate() const override;
 			virtual void bind(uint32_t slot) override;
 			virtual void unbind(uint32_t slot) override;
+			virtual uint32_t get_max_level() const override;
 			virtual glm::uvec3 get_size() const override;
-			virtual TextureFormat get_format() const override;
-			virtual TextureType get_type() const override;
+			//virtual TextureFormat get_format() const override;
+			//virtual TextureType get_type() const override;
 		private:
 			bool load();
 			void reset();

@@ -30,6 +30,7 @@ void GLAPIENTRY message_callback(GLenum source,
 //using namespace Rendy;
 
 #include "es2/engine.h"
+#include "es3/engine.h"
 #include "vfs.h"
 
 int main(int argc, char** argv) 
@@ -81,7 +82,7 @@ int main(int argc, char** argv)
 	}
 
 	#ifdef _WIN32
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
@@ -92,7 +93,7 @@ int main(int argc, char** argv)
 		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+		//SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 		//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
 	#else
@@ -128,10 +129,10 @@ int main(int argc, char** argv)
 	#endif // _WIN32
 
 	Rendy::VFSRef vfs = std::make_shared<Rendy::VFS>();
-	Rendy::AbstractEngineRef engine = std::make_shared<Rendy::ES2::Engine>(vfs);
+	Rendy::AbstractEngineRef engine = std::make_shared<Rendy::ES3::Engine>(vfs);
 	Rendy::ModelFactory model_factory(engine, vfs);
 
-	auto model = model_factory.make("assets/guard.glb");
+	auto model = model_factory.make("assets/metal_ball.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
@@ -174,6 +175,7 @@ int main(int argc, char** argv)
 		static float cam_fov(50.0f);
 		static float cam_aspect = width / static_cast<float>(height);
 		static glm::vec3 cam_pos(0.0, 0.5, 2.8);
+		static float cam_radius(1.5f);
 		static glm::vec3 cam_target(0.0, 0.0, 1.3);
 		static float near = 0.1f;
 		static float far = 15.0f;
@@ -183,19 +185,15 @@ int main(int argc, char** argv)
 		float dt = glm::max(0.0001f, d.count());
 		last = now;
 
-		glm::mat4 view = glm::lookAt(cam_pos, cam_target,
-			glm::vec3(0, 1, 0));
+		static float x_angle = 0.0f;
+		static float y_angle = 0.0f;
 
-		glm::mat4 proj = glm::perspective(glm::radians(cam_fov),
-			cam_aspect, near, far);
-
-		static float angle = 0.0f;
-
-		angle = glm::mod(angle + 20.0f*dt, 360.0f);
-
-		glm::mat4 transform = glm::translate(cam_target) * 
-			glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
-			glm::scale(glm::vec3{ 5.2f });
+		static bool turn_left = false;
+		static bool turn_right = false;
+		static bool turn_up = false;
+		static bool turn_down = false;
+		static bool increase_r = false;
+		static bool decrease_r = false;
 
 		OPTICK_PUSH("SDL_PollEvent");
 		while (SDL_PollEvent(&event))
@@ -204,13 +202,135 @@ int main(int argc, char** argv)
 			{
 				is_running = false;
 			}
+			
+			if (event.type == SDL_KEYDOWN)
+			{
+				switch (event.key.keysym.sym)
+				{
+					case SDLK_LEFT:  
+					{
+						turn_left = true;
+						break;
+					}
+					case SDLK_RIGHT:
+					{
+						turn_right = true;
+						break;
+					}
+					case SDLK_UP:
+					{
+						turn_up = true;
+						break;
+					}
+					case SDLK_DOWN:
+					{
+						turn_down = true;
+						break;
+					}
+					case SDLK_w:
+					{
+						decrease_r = true;
+						break;
+					}
+					case SDLK_s:
+					{
+						increase_r = true;
+						break;
+					}
+				}
+			}
+			else if (event.type == SDL_KEYUP)
+			{
+				switch (event.key.keysym.sym)
+				{
+					case SDLK_LEFT:
+					{
+						turn_left = false;
+						break;
+					}
+					case SDLK_RIGHT:
+					{
+						turn_right = false;
+						break;
+					}
+					case SDLK_UP:
+					{
+						turn_up = false;
+						break;
+					}
+					case SDLK_DOWN:
+					{
+						turn_down = false;
+						break;
+					}
+					case SDLK_w:
+					{
+						decrease_r = false;
+						break;
+					}
+					case SDLK_s:
+					{
+						increase_r = false;
+						break;
+					}
+				}
+			}
 		}
 		OPTICK_POP();
+
+		const float turning_speed = 60.0f;
+		const float r_speed = 2.0f;
+
+		if (turn_left)
+		{
+			x_angle = glm::mod(x_angle - turning_speed * dt, 360.0f);
+		}
+
+		if (turn_right)
+		{
+			x_angle = glm::mod(x_angle + turning_speed * dt, 360.0f);
+		}
+
+		if (turn_up)
+		{
+			y_angle = glm::clamp(y_angle - turning_speed * dt, -80.0f, 80.0f);
+		}
+
+		if (turn_down)
+		{
+			y_angle = glm::clamp(y_angle + turning_speed * dt, -80.0f, 80.0f);
+		}
+
+		if (increase_r)
+		{
+			cam_radius = glm::clamp(cam_radius + r_speed * dt, 0.5f, 20.0f);
+		}
+
+		if (decrease_r)
+		{
+			cam_radius = glm::clamp(cam_radius - r_speed * dt, 0.5f, 20.0f);
+		}
+
+		glm::mat4 view = glm::lookAt(
+			glm::vec3(
+				glm::rotate(glm::radians(x_angle), glm::vec3(0, 1, 0)) * 
+				glm::rotate(glm::radians(y_angle), glm::vec3(1, 0, 0)) *
+				glm::vec4(0.0, 0.0, cam_radius, 1.0)) + cam_target, cam_target,
+			glm::vec3(0, 1, 0));
+
+		glm::mat4 proj = glm::perspective(glm::radians(cam_fov),
+			cam_aspect, near, far);
+
+		glm::mat4 transform = glm::translate(cam_target) *
+			//glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
+			glm::scale(glm::vec3{ 1.0f });
 
 		glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		model->draw(transform, view, proj);
+		//model->draw(transform, view, proj);
+		engine->push(model, transform, view, proj);
+		engine->flush();
 
 		/*OPTICK_PUSH("glFinish");
 		glFinish();

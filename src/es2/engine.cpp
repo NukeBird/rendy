@@ -5,15 +5,16 @@
 #include "texture2d.h"
 #include "texture_cube.h"
 #include "default_material.h"
-#include "pbr_material.h"
 #include <optick.h>
 #include <cassert>
 #include <vector>
 
-#include "../generic_shader_sources.hpp"
+#include "default_shader_sources.hpp"
 
 Rendy::ES2::Engine::Engine(VFSRef vfs)
 {
+	OPTICK_EVENT();
+
 	this->vfs = vfs;
 
 	auto iem_file = vfs->open_file("assets/iem_ldr.dds", FileMode::Read);
@@ -25,48 +26,48 @@ Rendy::ES2::Engine::Engine(VFSRef vfs)
 
 	iem = make_texture_cube(static_cast<uint32_t>(iem_data.size()), iem_data.data());
 
-	generic_shader = make_shader(generic_vertex_shader, generic_fragment_shader);
+	printf("IEM max level: %d\n", iem->get_max_level());
+
+	generic_shader = make_shader(default_vertex_shader, default_fragment_shader);
 	printf("GENERIC SHADER STATUS: %d\n", generic_shader->validate());
 }
 
-void Rendy::ES2::Engine::push(BatchList batches)
+
+void Rendy::ES2::Engine::push(AbstractDrawableRef drawable, const glm::mat4& model,
+	const glm::mat4& view, const glm::mat4& proj)
 {
 	OPTICK_EVENT();
 
-	CommandList commands;
+	auto batch_list = drawable->generate_batch_list(model, view, proj);
 
-	for (auto& batch: batches)
+	for (const auto& batch: batch_list)
 	{
-		auto cl = batch.to_command_list();
-
-		//TODO: optimize command list!
-
-		commands.insert(commands.end(), cl.begin(), cl.end());
-	}
-
-	push(commands);
-}
-
-void Rendy::ES2::Engine::push(CommandList commands)
-{
-	OPTICK_EVENT();
-
-	for (auto& c : commands)
-	{
-		c->execute(); //TODO
+		batches.emplace_back(batch);
 	}
 }
 
 void Rendy::ES2::Engine::flush()
 {
 	OPTICK_EVENT();
-	//TODO
+
+	for (auto& batch: batches)
+	{
+		auto command_list = batch.to_command_list();
+
+		for (auto& command: command_list)
+		{
+			command->execute();
+		}
+	}
+
+	batches.clear();
 }
 
 void Rendy::ES2::Engine::reload()
 {
 	OPTICK_EVENT();
-	//TODO?
+	generic_shader->reload();
+	iem->reload();
 }
 
 Rendy::AbstractShaderRef Rendy::ES2::Engine::make_shader(const std::string& vtx, const std::string& frg)
@@ -94,16 +95,7 @@ Rendy::AbstractMaterialRef Rendy::ES2::Engine::make_material(ImageSetRef image_s
 		normal = make_texture2d(image_set->normal);
 	}
 
-	if (image_set->metallic_roughness && image_set->color)
-	{
-		auto metallic_roughness = make_texture2d(image_set->metallic_roughness);
-
-		material = std::make_shared<PBRMaterial>(color, metallic_roughness, normal, iem, generic_shader);
-	}
-	else
-	{
-		material = std::make_shared<DefaultMaterial>(color, normal, generic_shader);
-	}
+	material = std::make_shared<DefaultMaterial>(color, normal, iem, generic_shader);
 
 	return material;
 }

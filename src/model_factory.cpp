@@ -1,9 +1,6 @@
 #include "model_factory.h"
 #include "shader_flags.h"
-#include "es2/default_material.h"
 #include "image2d.h"
-#include "es2/texture2d.h"
-#include "es2/pbr_material.h"
 #include "thread_pool.h"
 #include <unordered_map>
 #include <stack>
@@ -189,7 +186,7 @@ static Rendy::AbstractBufferRef parse_ibo(aiMesh* assimp_mesh, Rendy::AbstractEn
 
 		for (unsigned k = 0; k < face.mNumIndices; ++k)
 		{
-			indices.emplace_back(static_cast<uint16_t>(face.mIndices[k]));
+			indices.emplace_back(static_cast<T>(face.mIndices[k]));
 		}
 	}
 
