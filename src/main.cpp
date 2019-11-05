@@ -129,7 +129,7 @@ int main(int argc, char** argv)
 	#endif // _WIN32
 
 	Rendy::VFSRef vfs = std::make_shared<Rendy::VFS>();
-	Rendy::AbstractEngineRef engine = std::make_shared<Rendy::ES2::Engine>(vfs);
+	Rendy::AbstractEngineRef engine = std::make_shared<Rendy::ES3::Engine>(vfs);
 	Rendy::ModelFactory model_factory(engine, vfs);
 
 	auto model = model_factory.make("assets/dyno.glb");
