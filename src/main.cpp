@@ -27,8 +27,6 @@ void GLAPIENTRY message_callback(GLenum source,
 	std::cout << message_string << std::endl;
 }
 
-//using namespace Rendy;
-
 #include "es2/engine.h"
 #include "es3/engine.h"
 #include "vfs.h"
@@ -36,43 +34,6 @@ void GLAPIENTRY message_callback(GLenum source,
 int main(int argc, char** argv) 
 {
 	//OPTICK_APP("RendySandbox");
-
-	/*
-		auto https_models	= make_https_fs("model");
-		auto https_textures	= make_https_fs("texture");
-		auto https_markers	= make_https_fs("marker");
-
-		auto native_models = make_native_fs("res/models");
-		auto native_textures = make_native_fs("res/textures");
-		auto native_markers = make_native_fs("res/markers");
-
-		auto vfs = make_vfs();
-		vfs->mount("models", native_models);
-		vfs->mount("models", https_models);
-
-		vfs->mount("textures", native_textures);
-		vfs->mount("textures", https_textures);
-
-		vfs->mount("markers", native_markers);
-		vfs->mount("markers", https_markers);
-	*/
-
-	/*VFS vfs;
-	auto nfs = std::make_shared<NativeFS>("assets");
-	vfs.mount("test_alias", nfs);
-
-	std::cout << "NativeFS status: " << nfs->validate() << std::endl;
-
-	auto file = vfs.open_file("test_alias/test.txt", FileMode::Read);
-
-	std::cout << "File status: " << file->validate() << std::endl;
-	std::cout << "File size: " << file->get_size() << std::endl;
-	
-	std::string text;
-	text.resize(file->get_size());
-	file->read(&text[0], text.size());
-
-	std::cout << text << std::endl << std::endl;*/
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
 	{
@@ -93,7 +54,7 @@ int main(int argc, char** argv)
 		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
-		//SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 		//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
 	#else
@@ -118,7 +79,7 @@ int main(int argc, char** argv)
 			std::cout << glewGetErrorString(glewInit()) << std::endl;
 		}
 
-		//if (SDL_GL_SetSwapInterval(-1) == -1) //adaptive v-sync
+		if (SDL_GL_SetSwapInterval(-1) != 0) //adaptive v-sync
 		{
 			SDL_GL_SetSwapInterval(1); //enable v-sync
 		}
@@ -132,7 +93,7 @@ int main(int argc, char** argv)
 	Rendy::AbstractEngineRef engine = std::make_shared<Rendy::ES3::Engine>(vfs);
 	Rendy::ModelFactory model_factory(engine, vfs);
 
-	auto model = model_factory.make("assets/dyno.glb");
+	auto model = model_factory.make("assets/ainz.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
@@ -161,17 +122,12 @@ int main(int argc, char** argv)
 		s = m.suffix().str();
 	}*/
 
-	//ES2::TextureCube cube("cube.dds");
-	//std::cout << "cubemap status: " << cube.validate() << std::endl;
-	glFinish();
-
 	SDL_Event event;
 	bool is_running = true;
 	while (is_running)
 	{
 		OPTICK_FRAME("Frame");
 
-		//OPTICK_PUSH("Tick");
 		static float cam_fov(50.0f);
 		static float cam_aspect = width / static_cast<float>(height);
 		static glm::vec3 cam_pos(0.0, 0.5, 2.8);

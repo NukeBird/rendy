@@ -170,7 +170,7 @@ Rendy::AbstractBufferRef Rendy::ES3::Engine::make_ibo(uint32_t size, const void*
 Rendy::IndexType Rendy::ES3::Engine::get_index_type() const
 {
 	OPTICK_EVENT();
-	return IndexType::UnsignedShort;
+	return IndexType::UnsignedInt;
 }
 
 Rendy::AbstractTextureCubeRef Rendy::ES3::Engine::read_texture_cube(const std::string& path)

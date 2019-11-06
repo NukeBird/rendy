@@ -674,8 +674,15 @@ Rendy::ModelRef Rendy::ModelFactory::make(const void* memory, uint32_t size)
 
 		if (engine->get_index_type() == IndexType::UnsignedShort)
 		{
-			importer.SetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT, std::numeric_limits<unsigned short>::max());
+			importer.SetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT, 
+				std::numeric_limits<unsigned short>::max());
 		}
+		else
+		{
+			importer.SetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT, 
+				AI_SLM_DEFAULT_MAX_VERTICES);
+		}
+
 		importer.SetPropertyInteger(AI_CONFIG_IMPORT_TER_MAKE_UVS, 1);
 		importer.SetPropertyInteger(AI_CONFIG_PP_SBBC_MAX_BONES, 35);
 		importer.SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE, 80.0f);
@@ -714,6 +721,8 @@ Rendy::ModelRef Rendy::ModelFactory::make(const void* memory, uint32_t size)
 		model->materials = std::move(parse_materials(scene, model->images));
 		printf("DONE\n");
 		//TODO
+
+		printf("Animation count: %d\n", scene->mNumAnimations); //TODO
 
 		return model;
 	}
