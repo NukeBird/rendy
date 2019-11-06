@@ -29,8 +29,15 @@ void Rendy::ES3::VertexArray::reload()
 	generate_vao();
 
 	//won't do anything if vbo/ibo valid
-	vbo->reload();
-	ibo->reload();
+	if (vbo)
+	{
+		vbo->reload();
+	}
+
+	if (ibo)
+	{
+		ibo->reload();
+	}
 }
 
 bool Rendy::ES3::VertexArray::validate() const

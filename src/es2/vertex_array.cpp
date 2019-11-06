@@ -16,8 +16,15 @@ void Rendy::ES2::VertexArray::reload()
 	OPTICK_EVENT();
 
 	//won't do anything if vbo/ibo valid
-	vbo->reload();
-	ibo->reload();
+	if (vbo)
+	{
+		vbo->reload();
+	}
+
+	if (ibo)
+	{
+		ibo->reload();
+	}
 }
 
 bool Rendy::ES2::VertexArray::validate() const
