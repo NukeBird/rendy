@@ -7,7 +7,7 @@
 
 namespace Rendy
 {
-	struct AbstractSampler: public AbstractResource
+	struct AbstractSampler2D: public AbstractResource
 	{
 		virtual void bind(uint32_t slot) = 0;
 		virtual void unbind(uint32_t slot) = 0;
@@ -19,5 +19,5 @@ namespace Rendy
 		virtual WrapMode get_wrap_mode() const = 0;
 	};
 
-	using AbstractSamplerRef = std::shared_ptr<AbstractSampler>;
+	using AbstractSampler2DRef = std::shared_ptr<AbstractSampler2D>;
 };
