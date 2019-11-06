@@ -8,6 +8,9 @@ Rendy::ES2::Texture2D::Texture2D(Image2DRef image)
 	OPTICK_EVENT();
 
 	this->image = image;
+	this->sampler = std::make_shared<Sampler2D>();
+	sampler->set_min_filter(MinFilter::LinearMipmapLinear);
+	sampler->set_mag_filter(MagFilter::Linear);
 
 	glGenTextures(1, &id);
 
@@ -33,6 +36,8 @@ void Rendy::ES2::Texture2D::reload()
 			reset();
 		}
 	}
+
+	sampler->reload();
 }
 
 bool Rendy::ES2::Texture2D::validate() const
@@ -63,6 +68,16 @@ bool Rendy::ES2::Texture2D::validate() const
 		return false;
 	}
 
+	if (!sampler)
+	{
+		return false;
+	}
+
+	if (!sampler->validate())
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -76,10 +91,7 @@ void Rendy::ES2::Texture2D::bind(uint32_t slot)
 	glActiveTexture(GL_TEXTURE0 + slot);
 	glBindTexture(GL_TEXTURE_2D, id);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); //TODO
+	sampler->bind(slot);
 }
 
 void Rendy::ES2::Texture2D::unbind(uint32_t slot)
@@ -91,6 +103,43 @@ void Rendy::ES2::Texture2D::unbind(uint32_t slot)
 	assert(slot < 8);
 	glActiveTexture(GL_TEXTURE0 + slot);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	sampler->unbind(slot);
+}
+
+void Rendy::ES2::Texture2D::set_min_filter(MinFilter filter)
+{
+	sampler->set_min_filter(filter);
+}
+
+void Rendy::ES2::Texture2D::set_mag_filter(MagFilter filter)
+{
+	sampler->set_mag_filter(filter);
+}
+
+void Rendy::ES2::Texture2D::set_wrap_mode(WrapMode mode)
+{
+	sampler->set_wrap_mode(mode);
+}
+
+Rendy::MinFilter Rendy::ES2::Texture2D::get_min_filter() const
+{
+	return sampler->get_min_filter();
+}
+
+Rendy::MagFilter Rendy::ES2::Texture2D::get_mag_filter() const
+{
+	return sampler->get_mag_filter();
+}
+
+Rendy::WrapMode Rendy::ES2::Texture2D::get_wrap_mode() const
+{
+	return  sampler->get_wrap_mode();
+}
+
+Rendy::AbstractSampler2DRef Rendy::ES2::Texture2D::get_sampler()
+{
+	return sampler;
 }
 
 glm::uvec2 Rendy::ES2::Texture2D::get_size() const
