@@ -234,15 +234,10 @@ namespace Rendy
 					vec3 specular_color = vec3(0.0);
 					vec3 f0 = vec3(0.04);
 
-					specular_color = f0;
-
 					vec4 mr_sample = read_texture(metallic_roughness_texture, v_coord);
 					float ao = mr_sample.r;
 					roughness = clamp(mr_sample.g, 0.0, 1.0);
 					metallic = clamp(mr_sample.b, 0.0, 1.0);
-
-					diffuse_color = base_color.rgb * (vec3(1.0) - f0) * (1.0 - metallic);
-					specular_color = mix(f0, base_color.rgb, metallic);
 
 					vec3 normal = get_normal();
 					vec3 view = normalize(u_camera_position - v_position);
@@ -253,6 +248,12 @@ namespace Rendy
 					}
 
 					float NdotV = clamp(dot(normal, view), 0.0, 1.0);
+
+					specular_color = f0;//fresnelSchlickRoughness(NdotV, f0, roughness);
+
+					diffuse_color = base_color.rgb * (vec3(1.0) - f0) * (1.0 - metallic);
+					specular_color = mix(f0, base_color.rgb, metallic);
+
 					float lod = clamp(roughness * float(u_max_pmrem_level), 0.0, float(u_max_pmrem_level));
 					vec3 reflection = normalize(reflect(-view, normal));
 					vec2 brdf_sample_uv = clamp(vec2(NdotV, roughness), vec2(0.0, 0.0), vec2(1.0, 1.0));
@@ -262,7 +263,7 @@ namespace Rendy
 					vec4 specular_sample = read_texture(pmrem, reflection, lod);
 
 					vec3 diffuse = diffuse_sample.rgb * diffuse_color;
-					vec3 specular = specular_sample.rgb * vec3(specular_color * brdf.x + brdf.y);
+					vec3 specular = specular_sample.rgb * (specular_color * brdf.x + vec3(brdf.y));
 					vec3 color = (diffuse + specular) * vec3(ao);
 
 					return vec4(color, base_color.a);

@@ -112,7 +112,7 @@ int main(int argc, char** argv)
 	Rendy::AbstractEngineRef engine = std::make_shared<Rendy::ES3::Engine>(vfs);
 	Rendy::ModelFactory model_factory(engine, vfs);
 
-	auto model = model_factory.make("assets/matball.glb");
+	auto model = model_factory.make("assets/miku.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
@@ -300,7 +300,7 @@ int main(int argc, char** argv)
 			//glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
 			glm::scale(glm::vec3{ 2.5f });
 
-		glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
+		glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//model->draw(transform, view, proj);
