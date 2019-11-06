@@ -65,7 +65,7 @@ int main(int argc, char** argv)
 		std::cout << "SDL_GL_MULTISAMPLEBUFFERS " <<
 			!SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1) << std::endl;
 		std::cout << "SDL_GL_MULTISAMPLESAMPLES " << 
-			!SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16) << std::endl;
+			!SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4) << std::endl;
 		std::cout << "SDL_GL_CONTEXT_FLAGS " <<
 			!SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG) << std::endl;
 		//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
@@ -112,7 +112,7 @@ int main(int argc, char** argv)
 	Rendy::AbstractEngineRef engine = std::make_shared<Rendy::ES3::Engine>(vfs);
 	Rendy::ModelFactory model_factory(engine, vfs);
 
-	auto model = model_factory.make("assets/shoes.glb");
+	auto model = model_factory.make("assets/robot.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
