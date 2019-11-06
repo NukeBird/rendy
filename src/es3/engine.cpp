@@ -15,6 +15,9 @@ Rendy::ES3::Engine::Engine(VFSRef vfs)
 {
 	OPTICK_EVENT();
 
+	glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+	glHint(GL_FRAGMENT_SHADER_DERIVATIVE_HINT, GL_NICEST);
+
 	this->vfs = vfs;
 	iem = read_texture_cube("assets/iem.dds");
 	pmrem = read_texture_cube("assets/pmrem.dds");

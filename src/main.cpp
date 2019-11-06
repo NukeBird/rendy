@@ -43,18 +43,31 @@ int main(int argc, char** argv)
 	}
 
 	#ifdef _WIN32
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
-		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+		std::cout << "SDL_GL_CONTEXT_MAJOR_VERSION " <<
+			!SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4) << std::endl;
+		std::cout << "SDL_GL_CONTEXT_MINOR_VERSION " <<
+			!SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3) << std::endl;
+		std::cout << "SDL_GL_CONTEXT_PROFILE_MASK " <<
+			!SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, 
+				SDL_GL_CONTEXT_PROFILE_COMPATIBILITY) << std::endl;
+		std::cout << "SDL_GL_RED_SIZE " <<
+			!SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8) << std::endl;
+		std::cout << "SDL_GL_GREEN_SIZE " <<
+			!SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8) << std::endl;
+		std::cout << "SDL_GL_BLUE_SIZE " <<
+			!SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8) << std::endl;
+		std::cout << "SDL_GL_DEPTH_SIZE " <<
+			!SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16) << std::endl;
+		std::cout << "SDL_GL_DOUBLEBUFFER " <<
+			!SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) << std::endl;
+		std::cout << "SDL_GL_ACCELERATED_VISUAL " <<
+			!SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1) << std::endl;
+		std::cout << "SDL_GL_MULTISAMPLEBUFFERS " <<
+			!SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1) << std::endl;
+		std::cout << "SDL_GL_MULTISAMPLESAMPLES " << 
+			!SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4) << std::endl;
+		std::cout << "SDL_GL_CONTEXT_FLAGS " <<
+			!SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG) << std::endl;
 		//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
 	#else
@@ -63,8 +76,14 @@ int main(int argc, char** argv)
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 	#endif
 
-	const int width = 1280;// *2;
-	const int height = 640;
+	int width = 0;
+	int height = 0;
+
+	SDL_DisplayMode displayMode;
+	SDL_GetDesktopDisplayMode(0, &displayMode);
+
+	width = static_cast<int>(displayMode.w * 0.8f);
+	height = static_cast<int>(displayMode.h * 0.8f);
 
 	SDL_Window *window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, 
 		SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
@@ -93,7 +112,7 @@ int main(int argc, char** argv)
 	Rendy::AbstractEngineRef engine = std::make_shared<Rendy::ES3::Engine>(vfs);
 	Rendy::ModelFactory model_factory(engine, vfs);
 
-	auto model = model_factory.make("assets/ainz.glb");
+	auto model = model_factory.make("assets/matball.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
@@ -297,7 +316,8 @@ int main(int argc, char** argv)
 		OPTICK_POP();
 	}
 
-	SDL_GL_DeleteContext(glcontext);
+	SDL_GL_DeleteContext(glcontext);  
+	SDL_DestroyWindow(window);
 
 	//OPTICK_SAVE_CAPTURE("capture.opt");
 
