@@ -65,7 +65,7 @@ int main(int argc, char** argv)
 		std::cout << "SDL_GL_MULTISAMPLEBUFFERS " <<
 			!SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1) << std::endl;
 		std::cout << "SDL_GL_MULTISAMPLESAMPLES " << 
-			!SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4) << std::endl;
+			!SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16) << std::endl;
 		std::cout << "SDL_GL_CONTEXT_FLAGS " <<
 			!SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG) << std::endl;
 		//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
@@ -76,14 +76,14 @@ int main(int argc, char** argv)
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 	#endif
 
-	int width = 0;
-	int height = 0;
+	int width = 1280;
+	int height = 720;
 
 	SDL_DisplayMode displayMode;
 	SDL_GetDesktopDisplayMode(0, &displayMode);
 
-	width = static_cast<int>(displayMode.w * 0.8f);
-	height = static_cast<int>(displayMode.h * 0.8f);
+	//width = static_cast<int>(displayMode.w * 0.8f);
+	//height = static_cast<int>(displayMode.h * 0.8f);
 
 	SDL_Window *window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, 
 		SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
@@ -112,7 +112,7 @@ int main(int argc, char** argv)
 	Rendy::AbstractEngineRef engine = std::make_shared<Rendy::ES3::Engine>(vfs);
 	Rendy::ModelFactory model_factory(engine, vfs);
 
-	auto model = model_factory.make("assets/miku.glb");
+	auto model = model_factory.make("assets/shoes.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;

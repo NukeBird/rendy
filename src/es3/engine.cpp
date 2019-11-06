@@ -32,6 +32,9 @@ Rendy::ES3::Engine::Engine(VFSRef vfs)
 	Rendy::Image2DRef lut_image = std::make_shared<Image2D>(reinterpret_cast<const char*>(content.data()),
 		content.size());
 	lut = make_texture2d(lut_image);
+	lut->set_wrap_mode(WrapMode::ClampToEdge);
+	lut->set_min_filter(MinFilter::Linear);
+	lut->set_mag_filter(MagFilter::Linear);
 	
 	printf("LUT status: %d\n", lut->validate());
 
