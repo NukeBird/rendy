@@ -232,12 +232,6 @@ namespace Rendy
 					vec4 base_color = get_diffuse();
 					vec3 diffuse_color = vec3(0.0);
 					vec3 specular_color = vec3(0.0);
-					vec3 f0 = vec3(0.04);
-
-					vec4 mr_sample = read_texture(metallic_roughness_texture, v_coord);
-					float ao = mr_sample.r;
-					roughness = clamp(mr_sample.g, 0.0, 1.0);
-					metallic = clamp(mr_sample.b, 0.0, 1.0);
 
 					vec3 normal = get_normal();
 					vec3 view = normalize(u_camera_position - v_position);
@@ -249,15 +243,22 @@ namespace Rendy
 
 					float NdotV = clamp(dot(normal, view), 0.0, 1.0);
 
-					specular_color = f0;//fresnelSchlickRoughness(NdotV, f0, roughness);
+					vec4 mr_sample = read_texture(metallic_roughness_texture, v_coord);
+					float ao = mr_sample.r;
+					roughness = clamp(mr_sample.g, 0.0, 1.0);
+					metallic = clamp(mr_sample.b, 0.0, 1.0);
+					vec3 f0 = mix(vec3(0.04), base_color.rgb, metallic);
+					vec3 f = f0;//fresnelSchlickRoughness(NdotV, f0, roughness);
 
-					diffuse_color = base_color.rgb * (vec3(1.0) - f0) * (1.0 - metallic);
-					specular_color = mix(f0, base_color.rgb, metallic);
+					specular_color = f;
+
+					diffuse_color = base_color.rgb * (vec3(1.0) - f) * (1.0 - metallic);
+					//specular_color = mix(f0, base_color.rgb, metallic);
 
 					float lod = clamp(roughness * float(u_max_pmrem_level), 0.0, float(u_max_pmrem_level));
 					vec3 reflection = normalize(reflect(-view, normal));
-					vec2 brdf_sample_uv = clamp(vec2(NdotV, roughness), vec2(0.0, 0.0), vec2(1.0, 1.0));
-					vec2 brdf = read_texture(lut, brdf_sample_uv).rg;
+					vec2 brdf_sample_uv = vec2(NdotV, roughness);
+					vec2 brdf = read_texture(lut, brdf_sample_uv).xy;
 
 					vec4 diffuse_sample = read_texture(iem, normal);
 					vec4 specular_sample = read_texture(pmrem, reflection, lod);
@@ -274,7 +275,7 @@ namespace Rendy
 				vec4 calculate_lighting()
 				{
 					vec4 result = get_diffuse();
-					result.rgb *= read_texture(iem, get_normal()).rgb;
+					//result.rgb *= read_texture(iem, get_normal()).rgb;
 					return result;
 				}
 			#endif

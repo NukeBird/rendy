@@ -605,6 +605,12 @@ Rendy::ImageSetRef Rendy::ModelFactory::form_image_set(const aiScene* scene,
 	}
 
 	//AO_METALLIC_ROUGHNESS
+
+	float ior;
+	mat.Get(AI_MATKEY_SHININESS, ior);
+
+	printf("IOR %f\n", ior);
+
 	{
 		aiString path;
 		if (mat.GetTexture(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLICROUGHNESS_TEXTURE,
