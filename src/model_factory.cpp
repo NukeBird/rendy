@@ -717,7 +717,7 @@ Rendy::ModelRef Rendy::ModelFactory::make(const void* memory, uint32_t size)
 		}
 
 		importer.SetPropertyInteger(AI_CONFIG_IMPORT_TER_MAKE_UVS, 1);
-		importer.SetPropertyInteger(AI_CONFIG_PP_SBBC_MAX_BONES, 35);
+		importer.SetPropertyInteger(AI_CONFIG_PP_SBBC_MAX_BONES, 120);
 		importer.SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE, 80.0f);
 		importer.SetPropertyInteger(AI_CONFIG_PP_SBP_REMOVE, aiPrimitiveType_LINE | aiPrimitiveType_POINT);
 
