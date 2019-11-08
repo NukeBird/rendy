@@ -265,7 +265,7 @@ namespace Rendy
 					//specular_sample.rgb = pow(specular_sample.rgb, vec3(1.0/gamma));
 
 					vec3 diffuse = diffuse_sample.rgb * diffuse_color;
-					vec3 specular = specular_sample.rgb * (specular_color * brdf.x);//+ vec3(brdf.y));
+					vec3 specular = specular_sample.rgb * (specular_color * brdf.x);// + vec3(brdf.y));
 					vec3 color = (diffuse + specular) * vec3(ao);
 
 					return vec4(color, base_color.a);
@@ -281,13 +281,32 @@ namespace Rendy
 				}
 			#endif
 
+			vec3 toneMapACES(vec3 color)
+			{
+				const float A = 2.51;
+				const float B = 0.03;
+				const float C = 2.43;
+				const float D = 0.59;
+				const float E = 0.14;
+				return pow(clamp((color * (A * color + B)) / (color * (C * color + D) + E), 0.0, 1.0),
+				vec3(1.0/gamma));
+			}
+
 			void main()
 			{
 				vec4 result = calculate_lighting();
 
 				//result.rgb = vec3(1.0) - exp(-result.rgb);
-				result.rgb = result.rgb / (result.rgb + vec3(1.0));
-				result.rgb = pow(result.rgb, vec3(1.0/gamma));
+
+				if(gl_FragCoord.x > 640.0)
+				{
+					result.rgb = toneMapACES(result.rgb);
+				}
+				else
+				{
+					result.rgb = result.rgb / (result.rgb + vec3(1.0));
+					result.rgb = pow(result.rgb, vec3(1.0/gamma));
+				}
 				output_color = result;
 			} 
 		)";

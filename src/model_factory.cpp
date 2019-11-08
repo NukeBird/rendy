@@ -553,6 +553,33 @@ Rendy::ImageSetRef Rendy::ModelFactory::form_image_set(const aiScene* scene,
 
 	auto& mat = *material;
 
+	{
+		aiColor4D base_color_factor;
+		if (mat.Get(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR,
+			base_color_factor) == AI_SUCCESS)
+		{
+			printf("Base color factor: %f %f %f %f\n",
+				base_color_factor.r,
+				base_color_factor.g,
+				base_color_factor.b,
+				base_color_factor.a);
+		}
+
+		float metallic_factor;
+		if (mat.Get(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLIC_FACTOR,
+			metallic_factor) == AI_SUCCESS)
+		{
+			printf("Metallic factor: %f\n", metallic_factor);
+		}
+
+		float roughness_factor;
+		if (mat.Get(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR,
+			roughness_factor) == AI_SUCCESS)
+		{
+			printf("Roughness factor: %f\n", roughness_factor);
+		}
+	}
+
 	//DIFFUSE
 	{
 		aiString path;
