@@ -298,15 +298,15 @@ namespace Rendy
 
 				//result.rgb = vec3(1.0) - exp(-result.rgb);
 
-				if(gl_FragCoord.x > 640.0)
-				{
+				/*if(gl_FragCoord.x > 640.0)
+				{*/
 					result.rgb = toneMapACES(result.rgb);
-				}
+				/*}
 				else
 				{
 					result.rgb = result.rgb / (result.rgb + vec3(1.0));
 					result.rgb = pow(result.rgb, vec3(1.0/gamma));
-				}
+				}*/
 				output_color = result;
 			} 
 		)";

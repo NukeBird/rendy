@@ -65,7 +65,7 @@ int main(int argc, char** argv)
 		std::cout << "SDL_GL_MULTISAMPLEBUFFERS " <<
 			!SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1) << std::endl;
 		std::cout << "SDL_GL_MULTISAMPLESAMPLES " << 
-			!SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4) << std::endl;
+			!SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16) << std::endl;
 		std::cout << "SDL_GL_CONTEXT_FLAGS " <<
 			!SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG) << std::endl;
 		//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
@@ -112,7 +112,7 @@ int main(int argc, char** argv)
 	Rendy::AbstractEngineRef engine = std::make_shared<Rendy::ES3::Engine>(vfs);
 	Rendy::ModelFactory model_factory(engine, vfs);
 
-	auto model = model_factory.make("assets/robot.glb");
+	auto model = model_factory.make("assets/human.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
@@ -296,7 +296,7 @@ int main(int argc, char** argv)
 		glm::mat4 proj = glm::perspective(glm::radians(cam_fov),
 			cam_aspect, near, far);
 
-		glm::mat4 transform = glm::translate(cam_target) *
+		glm::mat4 transform = glm::translate(cam_target + glm::vec3(0, 0.5, 0)) *
 			//glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
 			glm::scale(glm::vec3{ 2.5f });
 
