@@ -40,13 +40,8 @@ namespace Rendy
 		uint32_t get_node_count() const;
 		virtual void reload() override;
 		virtual bool validate() const override;
-
 		virtual BatchList generate_batch_list(const glm::mat4& model,
 			const glm::mat4& view, const glm::mat4& proj) override;
-
-		void draw(const glm::mat4& transform = glm::mat4(1.0),
-			const glm::mat4& view = glm::mat4(1.0),
-			const glm::mat4& proj = glm::mat4(1.0));
 	private:
 		void generate_draw_calls(uint32_t node_id,
 			const glm::mat4& base_transform,
