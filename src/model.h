@@ -69,6 +69,7 @@ namespace Rendy
 		uint32_t get_material_count() const;
 		uint32_t get_mesh_count() const;
 		uint32_t get_node_count() const;
+		virtual void update(float dt) override;
 		virtual void reload() override;
 		virtual bool validate() const override;
 		virtual BatchList generate_batch_list(const glm::mat4& model,
@@ -86,7 +87,15 @@ namespace Rendy
 		std::vector<Mesh> meshes;
 		std::vector<Node> nodes;
 		std::unordered_map<std::string, uint32_t> name_to_node;
+		uint32_t animation_index = 0;
+		float elapsed_time = 0.0f;
 
+		uint32_t find_key_index(const std::vector<VectorKey>& keys, float time) const;
+		uint32_t find_key_index(const std::vector<QuatKey>& keys, float time) const;
+		glm::vec3 calculate_position(AnimationNodeRef animation, float time);
+		glm::quat calculate_rotation(AnimationNodeRef animation, float time);
+		glm::vec3 calculate_scale(AnimationNodeRef animation, float time);
+		glm::mat4 calculate_transform(AnimationNodeRef animation, float time);
 		void calculate_cache();
 
 		friend class ModelFactory;
