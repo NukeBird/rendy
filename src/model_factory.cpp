@@ -338,6 +338,8 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 
 static glm::vec3 to_vec3(const aiVector3D& v)
 {
+	OPTICK_EVENT();
+
 	glm::vec3 result;
 
 	result.x = v.x;
@@ -349,6 +351,8 @@ static glm::vec3 to_vec3(const aiVector3D& v)
 
 static glm::quat to_quat(const aiQuaternion& q)
 {
+	OPTICK_EVENT();
+
 	glm::quat result;
 
 	result.x = q.x;
@@ -362,6 +366,8 @@ static glm::quat to_quat(const aiQuaternion& q)
 Rendy::AnimationNodeRef Rendy::ModelFactory::parse_animation_channel
 	(const aiNodeAnim* assimp_channel) const
 {
+	OPTICK_EVENT();
+
 	AnimationNodeRef channel = std::make_shared<AnimationNode>();
 
 	channel->name = std::string(assimp_channel->mNodeName.data,
@@ -403,6 +409,8 @@ Rendy::AnimationNodeRef Rendy::ModelFactory::parse_animation_channel
 std::vector<Rendy::AnimationNodeRef> Rendy::ModelFactory::parse_animation_channels
 	(aiNodeAnim** assimp_channels, uint32_t channel_count) const
 {
+	OPTICK_EVENT();
+
 	std::vector<AnimationNodeRef> channels;
 	channels.reserve(static_cast<size_t>(channel_count));
 
@@ -417,6 +425,8 @@ std::vector<Rendy::AnimationNodeRef> Rendy::ModelFactory::parse_animation_channe
 Rendy::Animation Rendy::ModelFactory::parse_animation
 	(const aiAnimation* assimp_animation) const
 {
+	OPTICK_EVENT();
+
 	Animation result;
 
 	result.duration = static_cast<float>(assimp_animation->mDuration);
@@ -434,6 +444,8 @@ Rendy::Animation Rendy::ModelFactory::parse_animation
 std::vector<Rendy::Animation> Rendy::ModelFactory::parse_animations
 	(const aiScene* scene) const
 {
+	OPTICK_EVENT();
+
 	std::vector<Animation> animations;
 	animations.reserve(static_cast<size_t>(scene->mNumAnimations));
 
