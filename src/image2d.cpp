@@ -109,9 +109,10 @@ void Rendy::Image2D::load_image(const char* memory, uint32_t length)
 	{
 		bool fail = false;
 
-		gli::gl GL(gli::gl::PROFILE_GL33);
-		gli::gl::format const format = GL.translate(gli_tex.format(), gli_tex.swizzles());
 		gli_tex = gli::load(memory, length);
+		gli::gl GL(gli::gl::PROFILE_ES30);
+		gli::gl::format const format = GL.translate(gli_tex.format(), gli_tex.swizzles());
+
 		if (gli_tex.empty() || gli_tex.target() != gli::target::TARGET_2D)
 		{
 			fail = true;
