@@ -336,6 +336,114 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 	return result;
 }
 
+static glm::vec3 to_vec3(const aiVector3D& v)
+{
+	glm::vec3 result;
+
+	result.x = v.x;
+	result.y = v.y;
+	result.z = v.z;
+
+	return std::move(result); //TODO?
+}
+
+static glm::quat to_quat(const aiQuaternion& q)
+{
+	glm::quat result;
+
+	result.x = q.x;
+	result.y = q.y;
+	result.z = q.z;
+	result.w = q.w;
+
+	return std::move(result); //TODO?
+}
+
+Rendy::AnimationNodeRef Rendy::ModelFactory::parse_animation_channel
+	(const aiNodeAnim* assimp_channel) const
+{
+	AnimationNodeRef channel = std::make_shared<AnimationNode>();
+
+	channel->name = std::string(assimp_channel->mNodeName.data,
+		assimp_channel->mNodeName.length); //TODO: legit?
+	channel->position_keys.resize(static_cast<size_t>(assimp_channel->mNumPositionKeys));
+	channel->rotation_keys.resize(static_cast<size_t>(assimp_channel->mNumRotationKeys));
+	channel->scaling_keys.resize(static_cast<size_t>(assimp_channel->mNumScalingKeys));
+
+	for (uint32_t i = 0; i < assimp_channel->mNumPositionKeys; ++i)
+	{
+		auto& assimp_key = assimp_channel->mPositionKeys[i];
+		auto& key = channel->position_keys[i];
+
+		key.time = static_cast<float>(assimp_key.mTime);
+		key.value = to_vec3(assimp_key.mValue);
+	}
+
+	for (uint32_t i = 0; i < assimp_channel->mNumRotationKeys; ++i)
+	{
+		auto& assimp_key = assimp_channel->mRotationKeys[i];
+		auto& key = channel->rotation_keys[i];
+
+		key.time = static_cast<float>(assimp_key.mTime);
+		key.value = to_quat(assimp_key.mValue);
+	}
+
+	for (uint32_t i = 0; i < assimp_channel->mNumScalingKeys; ++i)
+	{
+		auto& assimp_key = assimp_channel->mScalingKeys[i];
+		auto& key = channel->scaling_keys[i];
+
+		key.time = static_cast<float>(assimp_key.mTime);
+		key.value = to_vec3(assimp_key.mValue);
+	}
+
+	return channel;
+}
+
+std::vector<Rendy::AnimationNodeRef> Rendy::ModelFactory::parse_animation_channels
+	(aiNodeAnim** assimp_channels, uint32_t channel_count) const
+{
+	std::vector<AnimationNodeRef> channels;
+	channels.reserve(static_cast<size_t>(channel_count));
+
+	for (uint32_t i = 0; i < channel_count; ++i)
+	{
+		channels.emplace_back(parse_animation_channel(assimp_channels[i]));
+	}
+
+	return std::move(channels); //TODO?
+}
+
+Rendy::Animation Rendy::ModelFactory::parse_animation
+	(const aiAnimation* assimp_animation) const
+{
+	Animation result;
+
+	result.duration = static_cast<float>(assimp_animation->mDuration);
+	result.name = std::string(assimp_animation->mName.data,
+		assimp_animation->mName.length); //TODO: legit?
+	result.ticks_per_second = static_cast<float>(assimp_animation->mTicksPerSecond);
+	result.channels = parse_animation_channels(assimp_animation->mChannels, 
+		assimp_animation->mNumChannels);
+
+	return std::move(result); //TODO?
+}
+
+std::vector<Rendy::Animation> Rendy::ModelFactory::parse_animations
+	(const aiScene* scene) const
+{
+	std::vector<Animation> animations;
+	animations.reserve(static_cast<size_t>(scene->mNumAnimations));
+
+	for (uint32_t i = 0; i < scene->mNumAnimations; ++i)
+	{
+		animations.emplace_back(parse_animation(
+			std::move(scene->mAnimations[i]))); //TODO: remove move?
+	}
+
+	return std::move(animations);
+}
+
 glm::mat4 Rendy::ModelFactory::parse_transform(const aiMatrix4x4& from) const
 {
 	OPTICK_EVENT();
@@ -456,8 +564,8 @@ Rendy::AbstractMaterialRef Rendy::ModelFactory::parse_material(const aiScene* sc
 	return engine->make_material(image_set);
 }
 
-std::vector<Rendy::AbstractMaterialRef> Rendy::ModelFactory::parse_materials(const aiScene* scene,
-	std::vector<Rendy::Image2DRef>& images)
+std::vector<Rendy::AbstractMaterialRef> Rendy::ModelFactory::parse_materials
+	(const aiScene* scene, std::vector<Rendy::Image2DRef>& images)
 {
 	OPTICK_EVENT();
 	OPTICK_TAG("material count", scene->mNumMaterials);

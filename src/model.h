@@ -12,7 +12,7 @@
 
 namespace Rendy
 {
-	struct Mesh : public AbstractResource
+	struct Mesh: public AbstractResource
 	{
 		AbstractVertexArrayRef vao;
 		uint32_t material_id;
@@ -32,7 +32,37 @@ namespace Rendy
 		std::vector<uint32_t> child_ids;
 	};
 
-	class Model : public AbstractDrawable
+	struct VectorKey
+	{
+		glm::vec3 value;
+		float time;
+	};
+
+	struct QuatKey
+	{
+		glm::quat value;
+		float time;
+	};
+
+	struct AnimationNode
+	{
+		std::string name;
+		std::vector<VectorKey> position_keys;
+		std::vector<QuatKey> rotation_keys;
+		std::vector<VectorKey> scaling_keys;
+	};
+
+	using AnimationNodeRef = std::shared_ptr<AnimationNode>;
+
+	struct Animation
+	{
+		float duration;
+		std::string name;
+		float ticks_per_second;
+		std::vector<AnimationNodeRef> channels;
+	};
+
+	class Model: public AbstractDrawable
 	{
 	public:
 		uint32_t get_material_count() const;
@@ -50,6 +80,7 @@ namespace Rendy
 			BatchList& calls);
 
 		std::vector<AbstractMaterialRef> materials;
+		std::vector<Animation> animations;
 		std::vector<Image2DRef> images;
 		std::vector<Mesh> meshes;
 		std::vector<Node> nodes;

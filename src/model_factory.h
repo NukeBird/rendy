@@ -30,6 +30,11 @@ namespace Rendy
 		uint32_t parse_mesh_size(uint32_t flags) const;
 		BufferLayoutRef parse_buffer_layout(uint32_t flags) const;
 		std::vector<Mesh> parse_meshes(const aiScene* scene);
+		AnimationNodeRef parse_animation_channel(const aiNodeAnim* assimp_channel) const;
+		std::vector<AnimationNodeRef> parse_animation_channels
+		(aiNodeAnim** assimp_channels, uint32_t channel_count) const;
+		Animation parse_animation(const aiAnimation* assimp_animation) const;
+		std::vector<Animation> parse_animations(const aiScene* scene) const;
 		glm::mat4 parse_transform(const aiMatrix4x4& from) const;
 		Node parse_node(const aiNode* node);
 		void link_nodes(std::vector<Node>& node_list,
