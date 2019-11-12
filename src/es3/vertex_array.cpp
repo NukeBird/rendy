@@ -161,7 +161,12 @@ void Rendy::ES3::VertexArray::bind_layout(const ShaderVariantRef& shader)
 				false, layout->get_stride(), reinterpret_cast<const void*>(e.offset)); //TODO warning C4312:  'reinterpret_cast': 
 														//conversion from 'const uint32_t' to 'const void *' of greater size
 		}
+		else
+		{
+			printf("(NOT FOUND) %s\n", e.name.c_str());
+		}
 	}
+	printf("\n");
 }
 
 GLenum Rendy::ES3::VertexArray::get_gl_type(const BufferElement& element)
