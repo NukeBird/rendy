@@ -85,6 +85,10 @@ namespace Rendy
 		std::vector<Mesh> meshes;
 		std::vector<Node> nodes;
 
+		std::unordered_map<std::string, uint32_t> name_to_node;
+
+		void calculate_cache();
+
 		friend class ModelFactory;
 	};
 

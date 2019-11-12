@@ -125,3 +125,24 @@ void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_t
 		generate_draw_calls(child_id, transform, view, proj, calls);
 	}
 }
+
+void Rendy::Model::calculate_cache()
+{
+	OPTICK_EVENT();
+
+	for (uint32_t i = 0; i < static_cast<uint32_t>(nodes.size()); ++i)
+	{
+		auto& node = nodes[i];
+		auto it = name_to_node.find(node.name);
+
+		if (it != name_to_node.end())
+		{
+			printf("NODE NAME DUPLICATION: %s\n", node.name.c_str());
+		}
+		else
+		{
+			name_to_node[node.name] = i;
+			printf("Node %s cached\n", node.name.c_str());
+		}
+	}
+}

@@ -860,10 +860,12 @@ Rendy::ModelRef Rendy::ModelFactory::make(const void* memory, uint32_t size)
 		model->images = std::move(parse_images(scene));
 		printf("MATERIALS\n");
 		model->materials = std::move(parse_materials(scene, model->images));
-		printf("DONE\n");
-		//TODO
-
+		printf("ANIMATIONS\n");
+		model->animations = std::move(parse_animations(scene));
 		printf("Animation count: %d\n", scene->mNumAnimations); //TODO
+		printf("DONE\n");
+
+		model->calculate_cache();
 
 		return model;
 	}
