@@ -168,52 +168,6 @@ void Rendy::Model::draw(const glm::mat4& transform, const glm::mat4& view, const
 	}
 }
 
-void Rendy::Model::draw_node(uint32_t node_id,
-	const glm::mat4& base_transform, const glm::mat4& view, const glm::mat4& proj)
-{
-	OPTICK_EVENT();
-	assert(node_id < get_node_count());
-	auto& node = nodes[node_id];
-
-	auto transform = base_transform * node.transform;
-
-	glm::mat3 view_rotation(view);
-	glm::vec3 camera_position = -view[3] * view_rotation;
-
-	for (const auto& mesh_id: node.mesh_ids)
-	{
-		assert(mesh_id < get_mesh_count());
-		auto& mesh = meshes[mesh_id];
-
-		assert(mesh.material_id < get_material_count());
-		auto& material = materials[mesh.material_id];
-
-		auto shader = material->get_shader();
-
-		ShaderSettings settings; //TODO: lights
-		settings.flags = mesh.flags | material->get_flags();
-		auto shader_variant = shader->compile(settings); //TODO
-
-		mesh.vao->bind(shader_variant);
-
-		material->bind(settings);
-		shader_variant->set_uniform("u_view", view);
-		shader_variant->set_uniform("u_projection", proj);
-		shader_variant->set_uniform("u_view_projection", proj * view);
-		shader_variant->set_uniform("u_transform", transform);
-		shader_variant->set_uniform("u_camera_position", camera_position);
-
-		mesh.vao->draw();
-		mesh.vao->unbind();
-		material->unbind(mesh.flags);
-	}
-
-	for (const auto& child_id: node.child_ids)
-	{
-		draw_node(child_id, transform, view, proj);
-	}
-}
-
 void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_transform,
 	const glm::mat4& view, const glm::mat4& proj, BatchList& calls)
 {

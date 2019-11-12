@@ -48,11 +48,6 @@ namespace Rendy
 			const glm::mat4& view = glm::mat4(1.0),
 			const glm::mat4& proj = glm::mat4(1.0));
 	private:
-		void draw_node(uint32_t node_id,
-			const glm::mat4& base_transform = glm::mat4(1.0),
-			const glm::mat4& view = glm::mat4(1.0),
-			const glm::mat4& proj = glm::mat4(1.0));
-
 		void generate_draw_calls(uint32_t node_id,
 			const glm::mat4& base_transform,
 			const glm::mat4& view,

@@ -65,7 +65,7 @@ int main(int argc, char** argv)
 		std::cout << "SDL_GL_MULTISAMPLEBUFFERS " <<
 			!SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1) << std::endl;
 		std::cout << "SDL_GL_MULTISAMPLESAMPLES " << 
-			!SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16) << std::endl;
+			!SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4) << std::endl;
 		std::cout << "SDL_GL_CONTEXT_FLAGS " <<
 			!SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG) << std::endl;
 		//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
