@@ -50,6 +50,12 @@ namespace Rendy
 			#ifdef USE_VERTEX_TBN_MATRIX
 				out mat3 v_tbn;
 			#endif
+
+			#ifdef USE_VERTEX_BONES
+				in vec4 a_bone_id;
+				in vec4 a_weight;
+				out vec4 v_weight;
+			#endif
   
 			uniform mat4 u_transform;
 			uniform mat4 u_view;
@@ -58,6 +64,10 @@ namespace Rendy
 
 			void main()
 			{
+			#ifdef USE_VERTEX_BONES
+				v_weight = a_weight;
+			#endif
+
 			#ifdef USE_VERTEX_POSITION
 				gl_Position = u_view_projection * u_transform * vec4(a_position, 1.0);
 				v_position = vec3(u_transform * vec4(a_position, 1.0));
@@ -97,6 +107,10 @@ namespace Rendy
 
 			#ifdef USE_VERTEX_POSITION
 				in vec3 v_position;
+			#endif
+
+			#ifdef USE_VERTEX_BONES
+				in vec4 v_weight;
 			#endif
 
 			#ifdef USE_VERTEX_COORD

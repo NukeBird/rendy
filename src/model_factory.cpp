@@ -11,7 +11,7 @@ unsigned Rendy::ModelFactory::get_import_flags() const
 {
 	OPTICK_EVENT();
 	return //aiProcessPreset_TargetRealtime_MaxQuality |
-		aiProcess_GenNormals |
+		//aiProcess_GenNormals | //MAY NOT BE SPECIFIED TOGETHER WITH GenSmoothNormals
 		aiProcess_GenSmoothNormals |
 		aiProcess_FindInstances |
 		aiProcess_FindDegenerates |
@@ -77,10 +77,12 @@ uint32_t Rendy::ModelFactory::parse_mesh_flags(const aiMesh* mesh) const
 		flags |= USE_VERTEX_TBN_MATRIX;
 		printf("USE_VERTEX_TBN_MATRIX\n");
 	}*/
-	/*if (mesh->HasBones())
+	
+	if (mesh->HasBones())
 	{
-		flags |= USE_VERTEX_BONES; //TODO
-	}*/
+		flags |= USE_VERTEX_BONES;
+		printf("USE_VERTEX_BONES\n");
+	}
 
 	printf("\n");
 
@@ -122,10 +124,10 @@ uint32_t Rendy::ModelFactory::parse_mesh_size(uint32_t flags) const
 		element_count += 3;
 	}
 
-	/*if (flags & USE_VERTEX_BONES)
+	if (flags & Rendy::USE_VERTEX_BONES)
 	{
-		element_count += 4; //TODO
-	}*/
+		element_count += 8;
+	}
 
 	return element_count * sizeof(float);
 }
@@ -169,6 +171,14 @@ Rendy::BufferLayoutRef Rendy::ModelFactory::parse_buffer_layout(uint32_t flags) 
 	if (flags & Rendy::USE_VERTEX_BITANGENT)
 	{
 		buffer_elements.emplace_back(Rendy::ShaderDataType::Float3, "a_bitangent");
+	}
+
+	//BONES
+	if (flags & Rendy::USE_VERTEX_BONES)
+	{
+		printf("BLAB\n");
+		buffer_elements.emplace_back(Rendy::ShaderDataType::Float4, "a_bone_id");
+		buffer_elements.emplace_back(Rendy::ShaderDataType::Float4, "a_weight");
 	}
 
 	return std::make_shared<Rendy::BufferLayout>(buffer_elements);
@@ -233,6 +243,26 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 				assimp_mesh->mAABB.mMax.z
 			});
 
+		uint32_t bones_offset = 0;
+
+		std::vector<aiVertexWeight>* tmp = nullptr;
+
+		if (mesh_flags & Rendy::USE_VERTEX_BONES)
+		{
+			tmp = new std::vector<aiVertexWeight>[assimp_mesh->mNumVertices];
+
+			for (uint32_t j = 0; j < assimp_mesh->mNumBones; j++)
+			{
+				const aiBone* pBone = assimp_mesh->mBones[j];
+
+				for (uint32_t k = 0; k < pBone->mNumWeights; k++)
+				{
+					tmp[pBone->mWeights[k].mVertexId].
+						emplace_back(j, pBone->mWeights[k].mWeight);
+				}
+			}
+		}
+
 		for (unsigned j = 0; j < assimp_mesh->mNumVertices; ++j)
 		{
 			//POSITION
@@ -242,6 +272,8 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 				verts.emplace_back(v.x);
 				verts.emplace_back(v.y);
 				verts.emplace_back(v.z);
+
+				bones_offset += 3;
 
 				for (int l = 0; l < 3; ++l)
 				{
@@ -256,6 +288,8 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 				auto& c = assimp_mesh->mTextureCoords[0][j];
 				verts.emplace_back(c.x);
 				verts.emplace_back(c.y);
+
+				bones_offset += 2;
 			}
 
 			//COLOR
@@ -266,6 +300,8 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 				verts.emplace_back(c.g);
 				verts.emplace_back(c.b);
 				verts.emplace_back(c.a);
+
+				bones_offset += 4;
 			}
 
 			//NORMAL
@@ -275,6 +311,8 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 				verts.emplace_back(n.x);
 				verts.emplace_back(n.y);
 				verts.emplace_back(n.z);
+
+				bones_offset += 3;
 			}
 
 			//TANGENT
@@ -284,6 +322,8 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 				verts.emplace_back(t.x);
 				verts.emplace_back(t.y);
 				verts.emplace_back(t.z);
+
+				bones_offset += 3;
 			}
 
 			//BITANGENT
@@ -293,9 +333,35 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 				verts.emplace_back(b.x);
 				verts.emplace_back(b.y);
 				verts.emplace_back(b.z);
+
+				bones_offset += 3;
+			}
+
+			//BONE
+			if (mesh_flags & Rendy::USE_VERTEX_BONES)
+			{
+				assert(tmp[j].size() <= 4);
+
+				for (uint32_t k = 0; k < tmp[j].size(); ++k)
+				{
+					verts.emplace_back(tmp[j][k].mVertexId);
+				}
+				for (uint32_t k = tmp[j].size(); k < 4; ++k)
+				{
+					verts.emplace_back(0.0f);
+				}
+				for (uint32_t k = 0; k < tmp[j].size(); ++k)
+				{
+					verts.emplace_back(tmp[j][k].mWeight);
+				}
+				for (uint32_t k = tmp[j].size(); k < 4; ++k)
+				{
+					verts.emplace_back(0.0f);
+				}
 			}
 		}
 
+		delete[] tmp;
 
 		auto layout = parse_buffer_layout(mesh_flags);
 
@@ -866,10 +932,11 @@ Rendy::ModelRef Rendy::ModelFactory::make(const void* memory, uint32_t size)
 
 		printf("(BEFORE)\n");
 		auto model = std::make_shared<Model>();
-		printf("MESHES\n");
-		model->meshes = std::move(parse_meshes(scene));
 		printf("NODES\n");
 		model->nodes = std::move(parse_nodes(scene));
+		model->calculate_cache();
+		printf("MESHES\n");
+		model->meshes = std::move(parse_meshes(scene));
 		printf("IMAGES\n");
 		model->images = std::move(parse_images(scene));
 		printf("MATERIALS\n");
@@ -878,8 +945,6 @@ Rendy::ModelRef Rendy::ModelFactory::make(const void* memory, uint32_t size)
 		model->animations = std::move(parse_animations(scene));
 		printf("Animation count: %d\n", scene->mNumAnimations); //TODO
 		printf("DONE\n");
-
-		model->calculate_cache();
 
 		return model;
 	}
