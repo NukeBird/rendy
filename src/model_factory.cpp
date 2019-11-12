@@ -423,6 +423,8 @@ Rendy::Animation Rendy::ModelFactory::parse_animation
 	result.name = std::string(assimp_animation->mName.data,
 		assimp_animation->mName.length); //TODO: legit?
 	result.ticks_per_second = static_cast<float>(assimp_animation->mTicksPerSecond);
+	result.ticks_per_second = result.ticks_per_second != 0.0f ? 
+		result.ticks_per_second : 25.0f;
 	result.channels = parse_animation_channels(assimp_animation->mChannels, 
 		assimp_animation->mNumChannels);
 
