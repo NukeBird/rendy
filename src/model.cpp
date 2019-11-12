@@ -1,7 +1,7 @@
 #include "model.h"
 #include <stack>
 #include <optick.h>
-
+#include <glm/gtx/quaternion.hpp>
 #include "es2/texture_cube.h"
 
 void Rendy::Mesh::reload()
@@ -197,25 +197,84 @@ uint32_t Rendy::Model::find_key_index(const std::vector<QuatKey>& keys, float ti
 glm::vec3 Rendy::Model::calculate_position(AnimationNodeRef animation, float time)
 {
 	OPTICK_EVENT();
-	return glm::vec3();
+	if (animation->position_keys.size() == 1)
+	{
+		return animation->position_keys[0].value;
+	}
+
+	uint32_t position_index = find_key_index(animation->position_keys, time);
+	uint32_t next_position_index = position_index + 1;
+	assert(next_position_index < static_cast<uint32_t>(animation->position_keys.size()));
+	float dt = animation->position_keys[next_position_index].time -
+		animation->position_keys[position_index].time;
+	assert(dt >= 0.0f);
+	float factor = (time - animation->position_keys[position_index].time) / dt;
+	assert(factor >= 0.0f && factor <= 1.0f);
+	const auto& start = animation->position_keys[position_index].value;
+	const auto& end = animation->position_keys[next_position_index].value;
+	const auto delta_position = end - start;
+
+	return start + factor * delta_position;
 }
 
 glm::quat Rendy::Model::calculate_rotation(AnimationNodeRef animation, float time)
 {
 	OPTICK_EVENT();
-	return glm::quat();
+	if (animation->rotation_keys.size() == 1)
+	{
+		return animation->rotation_keys[0].value;
+	}
+
+	uint32_t rotation_index = find_key_index(animation->rotation_keys, time);
+	uint32_t next_rotation_index = (rotation_index + 1);
+	assert(next_rotation_index < static_cast<uint32_t>(animation->rotation_keys.size()));
+	float dt = animation->rotation_keys[next_rotation_index].time - 
+		animation->rotation_keys[rotation_index].time;
+	float factor = (time - animation->rotation_keys[rotation_index].time) / dt;
+	assert(factor >= 0.0f && factor <= 1.0f);
+	const auto& start = animation->rotation_keys[rotation_index].value;
+	const auto& end = animation->rotation_keys[next_rotation_index].value;
+
+	return glm::normalize(glm::lerp(start, end, factor));
 }
 
 glm::vec3 Rendy::Model::calculate_scale(AnimationNodeRef animation, float time)
 {
 	OPTICK_EVENT();
-	return glm::vec3();
+	if (animation->scaling_keys.size() == 1)
+	{
+		return animation->scaling_keys[0].value;
+	}
+
+	uint32_t scaling_index = find_key_index(animation->scaling_keys, time);
+	uint32_t next_scaling_index = scaling_index + 1;
+	assert(next_scaling_index < static_cast<uint32_t>(animation->scaling_keys.size()));
+	float dt = animation->scaling_keys[next_scaling_index].time -
+		animation->scaling_keys[scaling_index].time;
+	assert(dt >= 0.0f);
+	float factor = (time - animation->scaling_keys[scaling_index].time) / dt;
+	assert(factor >= 0.0f && factor <= 1.0f);
+	const auto& start = animation->scaling_keys[scaling_index].value;
+	const auto& end = animation->scaling_keys[next_scaling_index].value;
+	const auto delta_scaling = end - start;
+
+	return start + factor * delta_scaling;
 }
 
 glm::mat4 Rendy::Model::calculate_transform(AnimationNodeRef animation, float time)
 {
 	OPTICK_EVENT();
-	return glm::mat4();
+
+	auto position = calculate_position(animation, time);
+	auto rotation = calculate_rotation(animation, time);
+	auto scale = calculate_scale(animation, time);
+
+	glm::mat4 transform =
+		glm::scale(glm::mat4(), scale) *
+		glm::toMat4(rotation) *
+		glm::translate(glm::mat4(), position);
+
+	return std::move(transform); //TODO?
 }
 
 void Rendy::Model::calculate_cache()

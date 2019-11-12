@@ -33,7 +33,7 @@ void GLAPIENTRY message_callback(GLenum source,
 
 int main(int argc, char** argv) 
 {
-	//OPTICK_APP("RendySandbox");
+	OPTICK_APP("RendySandbox");
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
 	{
@@ -159,6 +159,8 @@ int main(int argc, char** argv)
 		std::chrono::duration<float> d = now - last;
 		float dt = glm::max(0.0001f, d.count());
 		last = now;
+
+		model->update(dt);
 
 		static float x_angle = 0.0f;
 		static float y_angle = 0.0f;
