@@ -65,6 +65,7 @@ namespace Rendy
 	class Model: public AbstractDrawable
 	{
 	public:
+		bool has_animations() const;
 		uint32_t get_material_count() const;
 		uint32_t get_mesh_count() const;
 		uint32_t get_node_count() const;
@@ -84,7 +85,6 @@ namespace Rendy
 		std::vector<Image2DRef> images;
 		std::vector<Mesh> meshes;
 		std::vector<Node> nodes;
-
 		std::unordered_map<std::string, uint32_t> name_to_node;
 
 		void calculate_cache();

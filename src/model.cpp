@@ -26,6 +26,11 @@ bool Rendy::Mesh::validate() const
 	return false;
 }
 
+bool Rendy::Model::has_animations() const
+{
+	return !animations.empty();
+}
+
 uint32_t Rendy::Model::get_material_count() const
 {
 	OPTICK_EVENT();
