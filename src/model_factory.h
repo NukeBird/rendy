@@ -27,6 +27,9 @@ namespace Rendy
 	private:
 		unsigned get_import_flags() const;
 		uint32_t parse_mesh_flags(const aiMesh* mesh) const;
+		std::vector<Bone> parse_mesh_bones(const aiMesh* mesh) const;
+		std::unordered_map<std::string, std::vector<Bone>> 
+			parse_bones(const aiScene* scene) const;
 		uint32_t parse_mesh_size(uint32_t flags) const;
 		BufferLayoutRef parse_buffer_layout(uint32_t flags) const;
 		std::vector<Mesh> parse_meshes(const aiScene* scene);

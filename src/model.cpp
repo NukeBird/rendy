@@ -148,24 +148,29 @@ void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_t
 	OPTICK_EVENT();
 	auto& node = nodes[node_id];
 
-	auto transform = base_transform * node.transform;
+	glm::mat4 transform = base_transform * node.transform;
 
-	for (const auto& mesh_id: node.mesh_ids)
+	if (!node.mesh_ids.empty())
 	{
-		assert(mesh_id < get_mesh_count());
-		auto& mesh = meshes[mesh_id];
+		glm::mat4 inverse_transform = glm::inverse(transform);
 
-		assert(mesh.material_id < get_material_count());
-		auto& material = materials[mesh.material_id];
+		for (const auto& mesh_id : node.mesh_ids)
+		{
+			assert(mesh_id < get_mesh_count());
+			auto& mesh = meshes[mesh_id];
 
-		calls.emplace_back();
-		auto& call = calls[calls.size() - 1];
-		call.vao = mesh.vao;
-		call.extra_flags = mesh.flags;
-		call.material = material;
-		call.model = transform;
-		call.view = view;
-		call.proj = proj;
+			assert(mesh.material_id < get_material_count());
+			auto& material = materials[mesh.material_id];
+
+			calls.emplace_back();
+			auto& call = calls[calls.size() - 1];
+			call.vao = mesh.vao;
+			call.extra_flags = mesh.flags;
+			call.material = material;
+			call.model = transform;
+			call.view = view;
+			call.proj = proj;
+		}
 	}
 
 	for (const auto& child_id : node.child_ids)

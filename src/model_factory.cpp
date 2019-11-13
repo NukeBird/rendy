@@ -89,9 +89,47 @@ uint32_t Rendy::ModelFactory::parse_mesh_flags(const aiMesh* mesh) const
 	return flags;
 }
 
+std::vector<Rendy::Bone> Rendy::ModelFactory::parse_mesh_bones(const aiMesh* mesh) const
+{
+	std::vector<Bone> bones;
+	bones.reserve(static_cast<size_t>(mesh->mNumBones));
+
+	for (uint32_t i = 0; i < mesh->mNumBones; ++i)
+	{
+		auto assimp_bone = mesh->mBones[i];
+		Bone bone;
+		bone.name = std::string(assimp_bone->mName.data,
+			assimp_bone->mName.length);
+		bone.offset_matrix = parse_transform(assimp_bone->mOffsetMatrix);
+		bones.emplace_back(std::move(bone));
+	}
+
+	return std::move(bones); //TODO?
+}
+
+std::unordered_map<std::string, std::vector<Rendy::Bone>> 
+	Rendy::ModelFactory::parse_bones(const aiScene* scene) const
+{
+	OPTICK_EVENT();
+
+	std::unordered_map<std::string, std::vector<Bone>> bone_map;
+
+	for (uint32_t i = 0; i < scene->mNumMeshes; ++i)
+	{
+		auto assimp_mesh = scene->mMeshes[i];
+		std::string mesh_name(assimp_mesh->mName.data, 
+			assimp_mesh->mName.length);
+
+		bone_map[mesh_name] = std::move(parse_mesh_bones(assimp_mesh));
+	}
+
+	return std::move(bone_map); //TODO?
+}
+
 uint32_t Rendy::ModelFactory::parse_mesh_size(uint32_t flags) const
 {
 	OPTICK_EVENT();
+
 	uint32_t element_count = 0; 
 
 	if (flags & Rendy::USE_VERTEX_POSITION)
@@ -941,6 +979,8 @@ Rendy::ModelRef Rendy::ModelFactory::make(const void* memory, uint32_t size)
 		model->images = std::move(parse_images(scene));
 		printf("MATERIALS\n");
 		model->materials = std::move(parse_materials(scene, model->images));
+		printf("BONES\n");
+		model->name_to_bones = std::move(parse_bones(scene));
 		printf("ANIMATIONS\n");
 		model->animations = std::move(parse_animations(scene));
 		printf("Animation count: %d\n", scene->mNumAnimations); //TODO

@@ -23,6 +23,12 @@ namespace Rendy
 		virtual bool validate() const override;
 	};
 
+	struct Bone
+	{
+		std::string name;
+		glm::mat4 offset_matrix;
+	};
+
 	struct Node
 	{
 		int32_t root_id = -1;
@@ -88,6 +94,7 @@ namespace Rendy
 		std::vector<Mesh> meshes;
 		std::vector<Node> nodes;
 		std::unordered_map<std::string, uint32_t> name_to_node;
+		std::unordered_map<std::string, std::vector<Bone>> name_to_bones;
 		uint32_t animation_index = 0;
 		float elapsed_time = 0.0f;
 
