@@ -6,6 +6,8 @@ namespace Rendy
 {
 	struct AbstractSetUniform : public AbstractCommand {}; //TODO: move?
 
+	using AbstractSetUniformRef = std::shared_ptr<AbstractSetUniform>;
+
 	template <class T>
 	class SetUniform: public AbstractSetUniform
 	{
