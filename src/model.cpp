@@ -132,6 +132,16 @@ Rendy::BatchList Rendy::Model::generate_batch_list(const glm::mat4& model, const
 	return std::move(calls);
 }
 
+glm::mat4 Rendy::Model::get_world_transform(const Node& node) const
+{
+	if (node.root_id == -1)
+	{
+		return node.transform;
+	}
+
+	return get_world_transform(nodes[node.root_id]) * node.transform;
+}
+
 void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_transform,
 	const glm::mat4& view, const glm::mat4& proj, BatchList& calls)
 {

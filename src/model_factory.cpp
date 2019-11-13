@@ -565,7 +565,7 @@ void Rendy::ModelFactory::link_nodes(std::vector<Rendy::Node>& node_list,
 
 		if (assimp_node->mParent == nullptr)
 		{
-			node.root_id = 0;
+			node.root_id = -1;
 		}
 		else
 		{

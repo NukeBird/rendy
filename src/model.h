@@ -25,7 +25,7 @@ namespace Rendy
 
 	struct Node
 	{
-		uint32_t root_id; //TODO: remove?
+		int32_t root_id = -1;
 		std::string name;
 		glm::mat4 transform;
 		std::vector<uint32_t> mesh_ids;
@@ -75,6 +75,7 @@ namespace Rendy
 		virtual BatchList generate_batch_list(const glm::mat4& model,
 			const glm::mat4& view, const glm::mat4& proj) override;
 	private:
+		glm::mat4 get_world_transform(const Node& node) const;
 		void generate_draw_calls(uint32_t node_id,
 			const glm::mat4& base_transform,
 			const glm::mat4& view,
