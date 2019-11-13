@@ -130,6 +130,101 @@ void Rendy::ES2::ShaderVariant::set_uniform(const std::string& name, const int n
 	}
 }
 
+void Rendy::ES2::ShaderVariant::set_uniform(const std::string& name, 
+	const std::vector<glm::vec3>& vec_array)
+{
+	OPTICK_EVENT();
+	OPTICK_TAG("name", name.c_str());
+
+	auto location = get_uniform_location(name);
+
+	if (location == -1)
+	{
+		//TODO: warning
+	}
+	else
+	{
+		glUniform3fv(location, static_cast<GLsizei>(vec_array.size()), 
+			&vec_array[0][0]);
+	}
+}
+
+void Rendy::ES2::ShaderVariant::set_uniform(const std::string& name,
+	const std::vector<glm::mat4>& mat_array)
+{
+	OPTICK_EVENT();
+	OPTICK_TAG("name", name.c_str());
+
+	auto location = get_uniform_location(name);
+
+	if (location == -1)
+	{
+		//TODO: warning
+	}
+	else
+	{
+		glUniformMatrix4fv(location, static_cast<GLsizei>(mat_array.size()), 
+			false, &mat_array[0][0][0]);
+	}
+}
+
+void Rendy::ES2::ShaderVariant::set_uniform(const std::string& name,
+	const std::vector<glm::mat3>& mat_array)
+{
+	OPTICK_EVENT();
+	OPTICK_TAG("name", name.c_str());
+
+	auto location = get_uniform_location(name);
+
+	if (location == -1)
+	{
+		//TODO: warning
+	}
+	else
+	{
+		glUniformMatrix3fv(location, static_cast<GLsizei>(mat_array.size()),
+			false, &mat_array[0][0][0]);
+	}
+}
+
+void Rendy::ES2::ShaderVariant::set_uniform(const std::string& name,
+	const std::vector<float>& float_array)
+{
+	OPTICK_EVENT();
+	OPTICK_TAG("name", name.c_str());
+
+	auto location = get_uniform_location(name);
+
+	if (location == -1)
+	{
+		//TODO: warning
+	}
+	else
+	{
+		glUniform1fv(location, static_cast<GLsizei>(float_array.size()),
+			&float_array[0]);
+	}
+}
+
+void Rendy::ES2::ShaderVariant::set_uniform(const std::string& name,
+	const std::vector<int>& int_array)
+{
+	OPTICK_EVENT();
+	OPTICK_TAG("name", name.c_str());
+
+	auto location = get_uniform_location(name);
+
+	if (location == -1)
+	{
+		//TODO: warning
+	}
+	else
+	{
+		glUniform1iv(location, static_cast<GLsizei>(int_array.size()),
+			&int_array[0]);
+	}
+}
+
 int Rendy::ES2::ShaderVariant::get_attribute_location(const std::string& name) const
 {
 	OPTICK_EVENT();

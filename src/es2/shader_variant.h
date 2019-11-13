@@ -19,6 +19,16 @@ namespace Rendy
 			virtual void set_uniform(const std::string& name, const glm::mat3& mat) override;
 			virtual void set_uniform(const std::string& name, const float number) override;
 			virtual void set_uniform(const std::string& name, const int number) override;
+			virtual void set_uniform(const std::string& name, 
+				const std::vector<glm::vec3>& vec_array) override;
+			virtual void set_uniform(const std::string& name,
+				const std::vector<glm::mat4>& mat_array) override;
+			virtual void set_uniform(const std::string& name,
+				const std::vector<glm::mat3>& mat_array) override;
+			virtual void set_uniform(const std::string& name,
+				const std::vector<float>& float_array) override;
+			virtual void set_uniform(const std::string& name,
+				const std::vector<int>& int_array) override;
 			virtual int get_attribute_location(const std::string& name) const override;
 			virtual void bind() override;
 			virtual void unbind() override;
