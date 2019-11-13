@@ -11,20 +11,11 @@ std::vector<Rendy::CommandRef> Rendy::Batch::to_command_list()
 
 	auto shader_variant = material->get_shader_variant(extra_flags);
 	list.emplace_back(std::make_shared<BindVertexArray>(vao, shader_variant));
-	list.emplace_back(std::make_shared<SetUniform<glm::mat4>>(
-		shader_variant, "u_view", view));
-	list.emplace_back(std::make_shared<SetUniform<glm::mat4>>(
-		shader_variant, "u_projection", proj));
-	list.emplace_back(std::make_shared<SetUniform<glm::mat4>>(
-		shader_variant, "u_view_projection", proj * view));
-	list.emplace_back(std::make_shared<SetUniform<glm::mat4>>(
-		shader_variant, "u_transform", model));
 
-	glm::mat3 view_rotation(view);
-	glm::vec3 camera_position = -view[3] * view_rotation;
-
-	list.emplace_back(std::make_shared<SetUniform<glm::vec3>>(
-		shader_variant, "u_camera_position", camera_position));
+	for (auto& u: uniforms)
+	{
+		list.emplace_back(u);
+	}
 
 	list.emplace_back(std::make_shared<Draw>(vao));
 

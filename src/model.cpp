@@ -187,9 +187,22 @@ void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_t
 			call.vao = mesh.vao;
 			call.extra_flags = mesh.flags;
 			call.material = material;
-			call.model = transform;
-			call.view = view;
-			call.proj = proj;
+			//call.model = transform;
+			auto shader_variant = material->get_shader_variant(call.extra_flags);
+			call.uniforms.emplace_back(std::make_shared<SetUniformMat4>
+				(shader_variant, "u_transform", transform));
+			call.uniforms.emplace_back(std::make_shared<SetUniformMat4>
+				(shader_variant, "u_view", view));
+			call.uniforms.emplace_back(std::make_shared<SetUniformMat4>
+				(shader_variant, "u_projection", proj));
+			call.uniforms.emplace_back(std::make_shared<SetUniformMat4>
+				(shader_variant, "u_view_projection", proj * view));	
+			
+			glm::mat3 view_rotation(view);
+			glm::vec3 camera_position = -view[3] * view_rotation;
+
+			call.uniforms.emplace_back(std::make_shared<SetUniform<glm::vec3>>(
+				shader_variant, "u_camera_position", camera_position));
 		}
 	}
 
