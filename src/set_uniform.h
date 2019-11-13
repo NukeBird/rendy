@@ -4,8 +4,10 @@
 
 namespace Rendy
 {
+	struct AbstractSetUniform : public AbstractCommand {}; //TODO: move?
+
 	template <class T>
-	class SetUniform : public AbstractCommand
+	class SetUniform: public AbstractSetUniform
 	{
 	public:
 		SetUniform(ShaderVariantRef shader_variant, const std::string& uniform_name,

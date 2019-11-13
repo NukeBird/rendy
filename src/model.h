@@ -82,6 +82,8 @@ namespace Rendy
 			const glm::mat4& view, const glm::mat4& proj) override;
 	private:
 		glm::mat4 get_world_transform(const Node& node) const;
+		std::vector<glm::mat4> calculate_bone_transforms(const Mesh& mesh, 
+			const glm::mat4& inverse_transform);
 		void generate_draw_calls(uint32_t node_id,
 			const glm::mat4& base_transform,
 			const glm::mat4& view,

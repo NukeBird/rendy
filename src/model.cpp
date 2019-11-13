@@ -142,6 +142,24 @@ glm::mat4 Rendy::Model::get_world_transform(const Node& node) const
 	return get_world_transform(nodes[node.root_id]) * node.transform;
 }
 
+std::vector<glm::mat4> Rendy::Model::calculate_bone_transforms(const Mesh& mesh,
+	const glm::mat4& inverse_transform)
+{
+	std::vector<glm::mat4> transforms;
+	auto& mesh_bones = name_to_bones[mesh.name];
+	transforms.reserve(mesh_bones.size());
+
+	for (const auto& bone: mesh_bones)
+	{
+		auto bone_node_id = name_to_node[bone.name];
+		auto& bone_node = nodes[bone_node_id];
+		transforms.emplace_back(inverse_transform * get_world_transform(bone_node) *
+			bone.offset_matrix);
+	}
+
+	return std::move(transforms); //TODO?
+}
+
 void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_transform,
 	const glm::mat4& view, const glm::mat4& proj, BatchList& calls)
 {
@@ -161,6 +179,8 @@ void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_t
 
 			assert(mesh.material_id < get_material_count());
 			auto& material = materials[mesh.material_id];
+
+			auto bones = calculate_bone_transforms(mesh, inverse_transform);
 
 			calls.emplace_back();
 			auto& call = calls[calls.size() - 1];
