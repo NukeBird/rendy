@@ -463,7 +463,7 @@ static glm::quat to_quat(const aiQuaternion& q)
 	result.y = q.y;
 	result.z = q.z;
 	result.w = q.w;
-
+	
 	return std::move(result); //TODO?
 }
 

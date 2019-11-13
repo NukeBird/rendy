@@ -159,12 +159,14 @@ void Rendy::ES2::ShaderVariant::set_uniform(const std::string& name,
 
 	if (location == -1)
 	{
+		//printf("NO");
 		//TODO: warning
 	}
 	else
 	{
+		//printf("YES");
 		glUniformMatrix4fv(location, static_cast<GLsizei>(mat_array.size()), 
-			false, &mat_array[0][0][0]);
+			false, glm::value_ptr(mat_array[0]));
 	}
 }
 
@@ -322,6 +324,12 @@ void Rendy::ES2::ShaderVariant::cache_uniform_locations()
 
 		int location = glGetUniformLocation(program_id, name);
 		uniform_cache[std::string(name, length)] = location;
+	}
+
+	printf("CACHED UNIFORMS\n");
+	for (auto& i : uniform_cache)
+	{
+		printf("%s : %d\n", i.first.c_str(), i.second);
 	}
 }
 

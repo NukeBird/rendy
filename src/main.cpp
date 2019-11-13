@@ -112,7 +112,7 @@ int main(int argc, char** argv)
 	Rendy::AbstractEngineRef engine = std::make_shared<Rendy::ES3::Engine>(vfs);
 	Rendy::ModelFactory model_factory(engine, vfs);
 
-	auto model = model_factory.make("assets/doll.glb");
+	auto model = model_factory.make("assets/Penguin4.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
@@ -303,12 +303,12 @@ int main(int argc, char** argv)
 
 		if (increase_r)
 		{
-			cam_radius = glm::clamp(cam_radius + dt, 0.1f, 20.0f);
+			cam_radius = glm::clamp(cam_radius + dt, 0.000001f, 20.0f);
 		}
 
 		if (decrease_r)
 		{
-			cam_radius = glm::clamp(cam_radius - dt, 0.1f, 20.0f);
+			cam_radius = glm::clamp(cam_radius - dt, 0.001f, 20.0f);
 		}
 
 		const float height_speed = 0.25f;

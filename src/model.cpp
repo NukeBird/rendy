@@ -3,6 +3,7 @@
 #include <optick.h>
 #include <glm/gtx/quaternion.hpp>
 #include "es2/texture_cube.h"
+#include "common.h"
 
 void Rendy::Mesh::reload()
 {
@@ -127,7 +128,7 @@ Rendy::BatchList Rendy::Model::generate_batch_list(const glm::mat4& model, const
 	BatchList calls;
 	if (get_node_count() > 0)
 	{
-		generate_draw_calls(0, model, view, proj, calls);
+		generate_draw_calls(0, glm::mat4(1.0), model, view, proj, calls);
 	}
 	return std::move(calls);
 }
@@ -146,22 +147,33 @@ std::vector<glm::mat4> Rendy::Model::calculate_bone_transforms(const Mesh& mesh,
 	const glm::mat4& inverse_transform)
 {
 	std::vector<glm::mat4> transforms;
+	transforms.resize(120, glm::mat4(1));
+
 	auto& mesh_bones = name_to_bones[mesh.name];
-	transforms.reserve(mesh_bones.size());
+	//transforms.reserve(mesh_bones.size());
+
+	uint32_t i = 0;
 
 	for (const auto& bone: mesh_bones)
 	{
 		auto bone_node_id = name_to_node[bone.name];
 		auto& bone_node = nodes[bone_node_id];
-		transforms.emplace_back(inverse_transform * get_world_transform(bone_node) *
-			bone.offset_matrix);
+		transforms[i] = (bone.offset_matrix * get_world_transform(bone_node) *
+			inverse_transform);
+
+		if (bone_node_id >= 120)
+		{
+			printf("REE\n");
+		}
+
+		++i;
 	}
 
 	return std::move(transforms); //TODO?
 }
 
 void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_transform,
-	const glm::mat4& view, const glm::mat4& proj, BatchList& calls)
+	const glm::mat4& model, const glm::mat4& view, const glm::mat4& proj, BatchList& calls)
 {
 	OPTICK_EVENT();
 	auto& node = nodes[node_id];
@@ -170,7 +182,7 @@ void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_t
 
 	if (!node.mesh_ids.empty())
 	{
-		glm::mat4 inverse_transform = glm::inverse(transform);
+		glm::mat4 inverse_transform = glm::inverse(nodes[0].transform);
 
 		for (const auto& mesh_id : node.mesh_ids)
 		{
@@ -187,10 +199,13 @@ void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_t
 			call.vao = mesh.vao;
 			call.extra_flags = mesh.flags;
 			call.material = material;
-			//call.model = transform;
 			auto shader_variant = material->get_shader_variant(call.extra_flags);
+
+			call.uniforms.emplace_back(std::make_shared<SetUniformMat4Array>
+				(shader_variant, "u_bones[0]", bones));
+
 			call.uniforms.emplace_back(std::make_shared<SetUniformMat4>
-				(shader_variant, "u_transform", transform));
+				(shader_variant, "u_transform", model * transform));
 			call.uniforms.emplace_back(std::make_shared<SetUniformMat4>
 				(shader_variant, "u_view", view));
 			call.uniforms.emplace_back(std::make_shared<SetUniformMat4>
@@ -208,7 +223,7 @@ void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_t
 
 	for (const auto& child_id : node.child_ids)
 	{
-		generate_draw_calls(child_id, transform, view, proj, calls);
+		generate_draw_calls(child_id, transform, model, view, proj, calls);
 	}
 }
 
@@ -283,7 +298,7 @@ glm::quat Rendy::Model::calculate_rotation(AnimationNodeRef animation, float tim
 	const auto& start = animation->rotation_keys[rotation_index].value;
 	const auto& end = animation->rotation_keys[next_rotation_index].value;
 
-	return glm::normalize(glm::lerp(start, end, factor));
+	return glm::normalize(glm::slerp(start, end, factor));
 }
 
 glm::vec3 Rendy::Model::calculate_scale(AnimationNodeRef animation, float time)
@@ -317,10 +332,10 @@ glm::mat4 Rendy::Model::calculate_transform(AnimationNodeRef animation, float ti
 	auto rotation = calculate_rotation(animation, time);
 	auto scale = calculate_scale(animation, time);
 
-	glm::mat4 transform =
-		glm::scale(glm::mat4(), scale) *
+	glm::mat4 transform = 
+		glm::translate(position) *
 		glm::toMat4(rotation) *
-		glm::translate(glm::mat4(), position);
+		glm::scale(scale);
 
 	return std::move(transform); //TODO?
 }

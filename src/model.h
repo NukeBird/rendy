@@ -86,6 +86,7 @@ namespace Rendy
 			const glm::mat4& inverse_transform);
 		void generate_draw_calls(uint32_t node_id,
 			const glm::mat4& base_transform,
+			const glm::mat4& model,
 			const glm::mat4& view,
 			const glm::mat4& proj,
 			BatchList& calls);
