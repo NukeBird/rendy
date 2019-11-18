@@ -272,6 +272,10 @@ int Rendy::ES2::ShaderVariant::get_uniform_location(const std::string& name) con
 	{
 		location = (*it).second;
 	}
+	else
+	{
+		//printf("WTF is %s?\n", name.c_str());
+	}
 
 	OPTICK_TAG("name", name.c_str());
 	OPTICK_TAG("location", location);
@@ -321,6 +325,19 @@ void Rendy::ES2::ShaderVariant::cache_uniform_locations()
 	for (int i = 0; i < count; ++i)
 	{
 		glGetActiveUniform(program_id, (GLuint)i, buffer_size, &length, &size, &type, name);
+
+		printf(
+			"i %d\n"
+			"length %d\n"
+			"size %d\n"
+			"type %d\n"
+			"name %s\n\n",
+			i,
+			length,
+			size,
+			type,
+			name
+		);
 
 		int location = glGetUniformLocation(program_id, name);
 		uniform_cache[std::string(name, length)] = location;

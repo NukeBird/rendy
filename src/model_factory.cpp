@@ -218,7 +218,7 @@ Rendy::BufferLayoutRef Rendy::ModelFactory::parse_buffer_layout(uint32_t flags) 
 		buffer_elements.emplace_back(Rendy::ShaderDataType::Float4, "a_bone_id");
 		buffer_elements.emplace_back(Rendy::ShaderDataType::Float4, "a_weight");
 	}
-
+	
 	return std::make_shared<Rendy::BufferLayout>(buffer_elements);
 }
 
@@ -943,7 +943,7 @@ Rendy::ModelRef Rendy::ModelFactory::make(const void* memory, uint32_t size)
 		}
 
 		importer.SetPropertyInteger(AI_CONFIG_IMPORT_TER_MAKE_UVS, 1);
-		importer.SetPropertyInteger(AI_CONFIG_PP_SBBC_MAX_BONES, 120);
+		importer.SetPropertyInteger(AI_CONFIG_PP_SBBC_MAX_BONES, 1200);
 		importer.SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE, 80.0f);
 		importer.SetPropertyInteger(AI_CONFIG_PP_SBP_REMOVE, aiPrimitiveType_LINE | aiPrimitiveType_POINT);
 

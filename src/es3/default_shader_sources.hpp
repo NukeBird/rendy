@@ -54,6 +54,7 @@ namespace Rendy
 			#ifdef USE_VERTEX_BONES
 				in vec4 a_bone_id;
 				in vec4 a_weight;
+				out vec4 v_weight;
 
 				uniform mat4 u_bones[MAX_BONES];
 			#endif
@@ -72,6 +73,10 @@ namespace Rendy
 				bone_transform += u_bones[int(a_bone_id[1])] * a_weight[1];
 				bone_transform += u_bones[int(a_bone_id[2])] * a_weight[2];
 				bone_transform += u_bones[int(a_bone_id[3])] * a_weight[3];
+			#endif
+
+			#ifdef USE_VERTEX_BONES
+				v_weight = a_weight;
 			#endif
 
 			#ifdef USE_VERTEX_POSITION
@@ -167,6 +172,10 @@ namespace Rendy
 
 			#ifndef COOK_TORRANCE
 				#define DIFFUSE_RENDERER
+			#endif
+
+			#ifdef USE_VERTEX_BONES
+				in vec4 v_weight;
 			#endif
 
 			uniform samplerCube iem;
@@ -328,7 +337,8 @@ namespace Rendy
 					result.rgb = result.rgb / (result.rgb + vec3(1.0));
 					result.rgb = pow(result.rgb, vec3(1.0/gamma));
 				}*/
-				output_color = result;
+				//output_color = result;
+				output_color = vec4(v_weight.rgb, 1.0);
 				//output_color = vec4(1);
 			} 
 		)";
