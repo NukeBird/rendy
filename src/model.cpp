@@ -161,10 +161,10 @@ std::vector<glm::mat4> Rendy::Model::calculate_bone_transforms(const Mesh& mesh,
 		transforms[i] = (inverse_transform * get_world_transform(bone_node) *
 			bone.offset_matrix);
 
-		if (bone_node_id >= 120)
+		/*if (bone_node_id >= 120)
 		{
 			printf("REE\n");
-		}
+		}*/
 
 		++i;
 	}
@@ -182,7 +182,7 @@ void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_t
 
 	if (!node.mesh_ids.empty())
 	{
-		glm::mat4 inverse_transform = glm::inverse(transform);
+		glm::mat4 inverse_transform = glm::inverse(nodes[0].transform);
 
 		for (const auto& mesh_id : node.mesh_ids)
 		{
@@ -205,7 +205,7 @@ void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_t
 				(shader_variant, "u_bones[0]", bones));
 
 			call.uniforms.emplace_back(std::make_shared<SetUniformMat4>
-				(shader_variant, "u_transform", model * transform));
+				(shader_variant, "u_transform", model));
 			call.uniforms.emplace_back(std::make_shared<SetUniformMat4>
 				(shader_variant, "u_view", view));
 			call.uniforms.emplace_back(std::make_shared<SetUniformMat4>
@@ -234,7 +234,7 @@ static uint32_t find_key_index(const std::vector<T>& keys, float time)
 
 	for (uint32_t i = 0; i < static_cast<uint32_t>(keys.size()) - 1; ++i)
 	{
-		const auto& key = keys[i + 1U];
+		const auto& key = keys[i + 1];
 
 		if (time < key.time)
 		{
@@ -332,10 +332,10 @@ glm::mat4 Rendy::Model::calculate_transform(AnimationNodeRef animation, float ti
 	auto rotation = calculate_rotation(animation, time);
 	auto scale = calculate_scale(animation, time);
 
-	glm::mat4 transform = glm::mat4(1.0);
-	transform *= glm::translate(position);
-	transform *= glm::toMat4(rotation);
-	transform *= glm::scale(scale);
+	glm::mat4 transform = 
+		glm::translate(position) *
+		glm::toMat4(rotation) *
+		glm::scale(scale);
 
 	return std::move(transform); //TODO?
 }

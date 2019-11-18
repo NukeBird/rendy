@@ -382,7 +382,7 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 
 				for (uint32_t k = 0; k < tmp[j].size(); ++k)
 				{
-					verts.emplace_back(tmp[j][k].mVertexId);
+					verts.emplace_back(static_cast<float>(tmp[j][k].mVertexId));
 				}
 				for (uint32_t k = tmp[j].size(); k < 4; ++k)
 				{
