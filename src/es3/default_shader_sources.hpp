@@ -242,11 +242,10 @@ namespace Rendy
 						vec4 diffuse_texture_value = read_texture(color_texture, v_coord);
 						diffuse_texture_value.rgb = pow(diffuse_texture_value.rgb, vec3(gamma)); 
 						diffuse *= diffuse_texture_value;
-						return diffuse;
 					#endif
 				#endif
 
-				return vec4(0.0, 0.0, 0.0, 1.0);
+				return diffuse;
 			}
 
 			#ifdef COOK_TORRANCE 
@@ -337,8 +336,8 @@ namespace Rendy
 					result.rgb = result.rgb / (result.rgb + vec3(1.0));
 					result.rgb = pow(result.rgb, vec3(1.0/gamma));
 				}*/
-				//output_color = result;
-				output_color = vec4(v_weight.rgb, 1.0);
+				output_color = result;
+				//vec4(v_weight.rgb, 1.0);
 				//output_color = vec4(1);
 			} 
 		)";

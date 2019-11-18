@@ -4,7 +4,7 @@
 #include "thread_pool.h"
 #include <unordered_map>
 #include <stack>
-
+#include <assimp/material.h>
 #include <optick.h>
 
 unsigned Rendy::ModelFactory::get_import_flags() const 
