@@ -541,8 +541,8 @@ Rendy::Animation Rendy::ModelFactory::parse_animation
 		assimp_animation->mName.length); //TODO: legit?
 	result.ticks_per_second = static_cast<float>(assimp_animation->mTicksPerSecond);
 	result.ticks_per_second = result.ticks_per_second != 0.0f ? 
-		result.ticks_per_second : 25.0f;
-	result.ticks_per_second = 400.0f;
+		result.ticks_per_second * 15.0f : 25.0f;
+	//result.ticks_per_second = 750.0f;
 	printf("PS %f\n", result.ticks_per_second);
 	result.channels = parse_animation_channels(assimp_animation->mChannels, 
 		assimp_animation->mNumChannels);
@@ -948,7 +948,7 @@ Rendy::ModelRef Rendy::ModelFactory::make(const void* memory, uint32_t size)
 		}
 
 		importer.SetPropertyInteger(AI_CONFIG_IMPORT_TER_MAKE_UVS, 1);
-		importer.SetPropertyInteger(AI_CONFIG_PP_SBBC_MAX_BONES, 1200);
+		importer.SetPropertyInteger(AI_CONFIG_PP_SBBC_MAX_BONES, 120);
 		importer.SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE, 80.0f);
 		importer.SetPropertyInteger(AI_CONFIG_PP_SBP_REMOVE, aiPrimitiveType_LINE | aiPrimitiveType_POINT);
 
@@ -956,14 +956,14 @@ Rendy::ModelRef Rendy::ModelFactory::make(const void* memory, uint32_t size)
 
 		{
 			OPTICK_PUSH("importer.ReadFileFromMemory (glb)");
-			scene = importer.ReadFileFromMemory(memory, static_cast<size_t>(size), get_import_flags(), "glb"); //TODO: pass fbx hint too
+			scene = importer.ReadFileFromMemory(memory, static_cast<size_t>(size), get_import_flags(), "glb");
 			OPTICK_POP();
 		}
 
 		if (!scene)
 		{
 			OPTICK_PUSH("importer.ReadFileFromMemory (fbx)");
-			scene = importer.ReadFileFromMemory(memory, static_cast<size_t>(size), get_import_flags(), "fbx"); //TODO: pass fbx hint too
+			scene = importer.ReadFileFromMemory(memory, static_cast<size_t>(size), get_import_flags(), "fbx");
 			OPTICK_POP();
 		}
 

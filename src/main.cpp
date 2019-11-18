@@ -152,8 +152,8 @@ int main(int argc, char** argv)
 		static glm::vec3 cam_pos(0.0, 0.0, 2.8);
 		static float cam_radius(1.5f);
 		static glm::vec3 cam_target(0.0, 0.0, 1.3);
-		static float near = 0.1f;
-		static float far = 2000.0f;
+		static float near = 0.01f;
+		static float far = 1000.0f;
 
 		auto now = std::chrono::steady_clock::now();
 		std::chrono::duration<float> d = now - last;
@@ -335,7 +335,7 @@ int main(int argc, char** argv)
 
 		glm::mat4 transform = glm::translate(cam_target + glm::vec3(0, height, 0)) *
 			//glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
-			glm::scale(glm::vec3{ 0.2f });
+			glm::scale(glm::vec3{ 1.5f });
 
 		glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -182,7 +182,7 @@ void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_t
 
 	if (!node.mesh_ids.empty())
 	{
-		glm::mat4 inverse_transform = glm::inverse(nodes[0].transform);
+		glm::mat4 inverse_transform = glm::inverse(transform);
 
 		for (const auto& mesh_id : node.mesh_ids)
 		{
@@ -205,7 +205,7 @@ void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_t
 				(shader_variant, "u_bones[0]", bones));
 
 			call.uniforms.emplace_back(std::make_shared<SetUniformMat4>
-				(shader_variant, "u_transform", model));
+				(shader_variant, "u_transform", model * transform));
 			call.uniforms.emplace_back(std::make_shared<SetUniformMat4>
 				(shader_variant, "u_view", view));
 			call.uniforms.emplace_back(std::make_shared<SetUniformMat4>
