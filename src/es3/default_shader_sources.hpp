@@ -336,7 +336,7 @@ namespace Rendy
 					result.rgb = result.rgb / (result.rgb + vec3(1.0));
 					result.rgb = pow(result.rgb, vec3(1.0/gamma));
 				}*/
-				output_color = vec4(get_normal()*0.5 + 0.5, 1.0);
+				output_color = result;
 				//vec4(v_weight.rgb, 1.0);
 				//output_color = vec4(1);
 			} 
