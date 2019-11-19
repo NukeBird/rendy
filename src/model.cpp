@@ -272,6 +272,19 @@ glm::vec3 Rendy::Model::calculate_position(AnimationNodeRef animation, float tim
 		animation->position_keys[position_index].time;
 	assert(dt >= 0.0f);
 	float factor = (time - animation->position_keys[position_index].time) / dt;
+
+	if (time < animation->position_keys[0].time)
+	{
+		dt = animation->position_keys[0].time;
+		factor = time / dt;
+		//printf("%f < %f\n", time, animation->position_keys[0].time);
+		const auto& start = animation->position_keys[animation->position_keys.size() - 1].value;
+		const auto& end = animation->position_keys[0].value;
+		const auto delta_position = end - start;
+
+		return start + factor * delta_position;
+	}
+
 	assert(factor >= 0.0f && factor <= 1.0f);
 	const auto& start = animation->position_keys[position_index].value;
 	const auto& end = animation->position_keys[next_position_index].value;
@@ -294,6 +307,17 @@ glm::quat Rendy::Model::calculate_rotation(AnimationNodeRef animation, float tim
 	float dt = animation->rotation_keys[next_rotation_index].time - 
 		animation->rotation_keys[rotation_index].time;
 	float factor = (time - animation->rotation_keys[rotation_index].time) / dt;
+
+	if (time < animation->rotation_keys[0].time)
+	{
+		dt = animation->rotation_keys[0].time;
+		factor = time / dt;
+		const auto& start = animation->rotation_keys[animation->rotation_keys.size() - 1].value;
+		const auto& end = animation->rotation_keys[0].value;
+
+		return glm::normalize(glm::slerp(start, end, factor));
+	}
+
 	assert(factor >= 0.0f && factor <= 1.0f);
 	const auto& start = animation->rotation_keys[rotation_index].value;
 	const auto& end = animation->rotation_keys[next_rotation_index].value;
@@ -316,6 +340,18 @@ glm::vec3 Rendy::Model::calculate_scale(AnimationNodeRef animation, float time)
 		animation->scaling_keys[scaling_index].time;
 	assert(dt >= 0.0f);
 	float factor = (time - animation->scaling_keys[scaling_index].time) / dt;
+
+	if (time < animation->scaling_keys[0].time)
+	{
+		dt = animation->scaling_keys[0].time;
+		factor = time / dt;
+		const auto& start = animation->scaling_keys[animation->scaling_keys.size() - 1].value;
+		const auto& end = animation->scaling_keys[0].value;
+		const auto delta_scaling = end - start;
+
+		return start + factor * delta_scaling;
+	}
+
 	assert(factor >= 0.0f && factor <= 1.0f);
 	const auto& start = animation->scaling_keys[scaling_index].value;
 	const auto& end = animation->scaling_keys[next_scaling_index].value;
