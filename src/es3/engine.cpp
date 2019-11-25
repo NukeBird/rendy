@@ -42,20 +42,6 @@ Rendy::ES3::Engine::Engine(VFSRef vfs)
 	printf("GENERIC SHADER STATUS: %d\n", generic_shader->validate());
 }
 
-
-void Rendy::ES3::Engine::push(AbstractDrawableRef drawable, const glm::mat4& model,
-	const glm::mat4& view, const glm::mat4& proj)
-{
-	OPTICK_EVENT();
-
-	auto batch_list = drawable->generate_batch_list(model, view, proj);
-
-	for (const auto& batch: batch_list)
-	{
-		batches.emplace_back(batch);
-	}
-}
-
 void Rendy::ES3::Engine::reload()
 {
 	OPTICK_EVENT();

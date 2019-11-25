@@ -1,5 +1,16 @@
 #include "abstract_engine.h"
 
+void Rendy::AbstractEngine::push(AbstractDrawableRef drawable, 
+	const glm::mat4& model, const glm::mat4& view, const glm::mat4& proj)
+{
+	auto batch_list = drawable->generate_batch_list(model, view, proj);
+
+	for (const auto& batch : batch_list)
+	{
+		batches.emplace_back(batch);
+	}
+}
+
 void Rendy::AbstractEngine::flush()
 {
 	//TODO: set default states?

@@ -22,7 +22,7 @@ namespace Rendy
 	struct AbstractEngine
 	{
 		virtual void push(AbstractDrawableRef drawable, const glm::mat4& model,
-			const glm::mat4& view, const glm::mat4& proj) = 0;
+			const glm::mat4& view, const glm::mat4& proj);
 		virtual void flush();
 		virtual void reload();
 		virtual bool validate();

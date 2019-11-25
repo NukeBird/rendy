@@ -11,11 +11,7 @@ namespace Rendy
 		{
 		public:
 			Engine(VFSRef vfs);
-
-			virtual void push(AbstractDrawableRef drawable, const glm::mat4& model,
-				const glm::mat4& view, const glm::mat4& proj) override;
 			virtual void reload() override;
-
 			virtual AbstractShaderRef make_shader(const std::string& vtx,
 				const std::string& frg) override;
 			virtual AbstractMaterialRef make_material(ImageSetRef image_set) override;
@@ -28,8 +24,6 @@ namespace Rendy
 			virtual IndexType get_index_type() const override;
 		private:
 			AbstractTextureCubeRef read_texture_cube(const std::string& path);
-
-			BatchList batches;
 
 			AbstractShaderRef generic_shader;
 			AbstractTextureCubeRef iem;
