@@ -17,8 +17,6 @@
 
 namespace Rendy
 {
-	using CommandList = std::vector<CommandRef>; //TODO: move?
-
 	struct AbstractEngine
 	{
 		virtual void push(AbstractDrawableRef drawable, const glm::mat4& model,

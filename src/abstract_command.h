@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <vector>
 
 namespace Rendy
 {
@@ -9,4 +10,5 @@ namespace Rendy
 	};
 
 	using CommandRef = std::shared_ptr<AbstractCommand>;
+	using CommandList = std::vector<CommandRef>;
 };
