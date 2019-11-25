@@ -33,16 +33,6 @@ void GLAPIENTRY message_callback(GLenum source,
 
 struct DumbStage: public Rendy::AbstractRenderStage
 {
-	virtual void reload() override
-	{
-		//DO NOTHING
-	}
-
-	virtual bool validate() const override
-	{
-		return true;
-	}
-
 	virtual void execute(const Rendy::BatchList& batches) override
 	{
 		for (auto& batch: batches)
