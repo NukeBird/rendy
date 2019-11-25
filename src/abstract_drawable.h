@@ -7,8 +7,6 @@
 
 namespace Rendy
 {
-	using BatchList = std::vector<Batch>;
-
 	struct AbstractDrawable : public AbstractResource
 	{
 		virtual BatchList generate_batch_list(const glm::mat4& model,

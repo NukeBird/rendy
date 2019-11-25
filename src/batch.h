@@ -19,4 +19,6 @@ namespace Rendy
 
 		std::vector<CommandRef> to_command_list();
 	};
+
+	using BatchList = std::vector<Batch>;
 };

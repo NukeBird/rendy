@@ -30,7 +30,7 @@ namespace Rendy
 		private:
 			AbstractTextureCubeRef read_texture_cube(const std::string& path);
 
-			std::vector<Batch> batches;
+			BatchList batches;
 
 			AbstractShaderRef generic_shader;
 			AbstractTextureCubeRef iem;
