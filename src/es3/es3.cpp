@@ -70,5 +70,5 @@ Rendy::AbstractBufferRef Rendy::ES3::GAPI::make_ibo(uint32_t size,
 Rendy::IndexType Rendy::ES3::GAPI::get_index_type() const
 {
 	OPTICK_EVENT();
-	return IndexType::UnsignedShort;
+	return IndexType::UnsignedInt;
 }
