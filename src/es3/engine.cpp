@@ -1,10 +1,6 @@
 #include "engine.h"
-#include "buffer.h"
-#include "vertex_array.h"
-#include "shader.h"
-#include "texture2d.h"
-#include "texture_cube.h"
 #include "default_material.h"
+#include "es3.h"
 #include <optick.h>
 #include <cassert>
 #include <vector>
@@ -18,6 +14,7 @@ Rendy::ES3::Engine::Engine(VFSRef vfs)
 	glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
 	glHint(GL_FRAGMENT_SHADER_DERIVATIVE_HINT, GL_NICEST);
 
+	this->gapi = std::make_shared<ES3::GAPI>();
 	this->vfs = vfs;
 	iem = read_texture_cube("assets/iem.dds");
 	pmrem = read_texture_cube("assets/pmrem.dds");
@@ -50,10 +47,9 @@ void Rendy::ES3::Engine::reload()
 	iem->reload();
 }
 
-Rendy::AbstractShaderRef Rendy::ES3::Engine::make_shader(const std::string& vtx, const std::string& frg)
+Rendy::AbstractGAPIRef Rendy::ES3::Engine::get_gapi() const
 {
-	OPTICK_EVENT();
-	return std::make_shared<Shader>(vtx, frg);
+	return gapi;
 }
 
 Rendy::AbstractMaterialRef Rendy::ES3::Engine::make_material(ImageSetRef image_set)
@@ -84,69 +80,6 @@ Rendy::AbstractMaterialRef Rendy::ES3::Engine::make_material(ImageSetRef image_s
 	material = std::make_shared<DefaultMaterial>(albedo, metallic_roughness, normal, iem, pmrem, lut, generic_shader);
 
 	return material;
-}
-
-Rendy::AbstractTexture2DRef Rendy::ES3::Engine::make_texture2d(Image2DRef image)
-{
-	OPTICK_EVENT();
-	return std::make_shared<Texture2D>(image);
-}
-
-Rendy::AbstractTextureCubeRef Rendy::ES3::Engine::make_texture_cube(uint32_t size, const void* ptr)
-{
-	OPTICK_EVENT();
-	return std::make_shared<ES3::TextureCube>(ptr, size);
-}
-
-Rendy::AbstractVertexArrayRef Rendy::ES3::Engine::make_vao(AbstractBufferRef vbo, AbstractBufferRef ibo,
-	BufferLayoutRef layout)
-{
-	OPTICK_EVENT();
-
-	assert(vbo);
-	assert(vbo->get_target() == BufferTarget::VBO); //TODO
-
-	if (ibo)
-	{
-		assert(ibo->get_target() == BufferTarget::IBO); //TODO
-	}
-
-	return std::make_shared<VertexArray>(vbo, ibo, layout);
-}
-
-Rendy::AbstractBufferRef Rendy::ES3::Engine::make_vbo(uint32_t size, const void* ptr)
-{
-	OPTICK_EVENT();
-
-	if (size == 0 || ptr == nullptr)
-	{
-		return nullptr;
-	}
-
-	OPTICK_TAG("size", size);
-
-	auto vbo = std::make_shared<ES3::Buffer>(BufferTarget::VBO, size, ptr);
-	return vbo;
-}
-
-Rendy::AbstractBufferRef Rendy::ES3::Engine::make_ibo(uint32_t size, const void* ptr)
-{
-	OPTICK_EVENT();
-	OPTICK_TAG("size", size);
-
-	if (size == 0 || ptr == nullptr)
-	{
-		return nullptr;
-	}
-
-	auto ibo = std::make_shared<ES3::Buffer>(BufferTarget::IBO, size, ptr);
-	return ibo;
-}
-
-Rendy::IndexType Rendy::ES3::Engine::get_index_type() const
-{
-	OPTICK_EVENT();
-	return IndexType::UnsignedInt;
 }
 
 Rendy::AbstractTextureCubeRef Rendy::ES3::Engine::read_texture_cube(const std::string& path)

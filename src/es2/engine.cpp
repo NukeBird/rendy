@@ -1,9 +1,5 @@
+#include "es2.h"
 #include "engine.h"
-#include "buffer.h"
-#include "vertex_array.h"
-#include "shader.h"
-#include "texture2d.h"
-#include "texture_cube.h"
 #include "default_material.h"
 #include <optick.h>
 #include <cassert>
@@ -15,6 +11,7 @@ Rendy::ES2::Engine::Engine(VFSRef vfs)
 {
 	OPTICK_EVENT();
 
+	this->gapi = std::make_shared<ES2::GAPI>();
 	this->vfs = vfs;
 
 	auto iem_file = vfs->open_file("assets/iem_ldr.dds", FileMode::Read);
@@ -40,10 +37,9 @@ void Rendy::ES2::Engine::reload()
 	iem->reload();
 }
 
-Rendy::AbstractShaderRef Rendy::ES2::Engine::make_shader(const std::string& vtx, const std::string& frg)
+Rendy::AbstractGAPIRef Rendy::ES2::Engine::get_gapi() const
 {
-	OPTICK_EVENT();
-	return std::make_shared<Shader>(vtx, frg);
+	return gapi;
 }
 
 Rendy::AbstractMaterialRef Rendy::ES2::Engine::make_material(ImageSetRef image_set)
@@ -68,67 +64,4 @@ Rendy::AbstractMaterialRef Rendy::ES2::Engine::make_material(ImageSetRef image_s
 	material = std::make_shared<DefaultMaterial>(color, normal, iem, generic_shader);
 
 	return material;
-}
-
-Rendy::AbstractTexture2DRef Rendy::ES2::Engine::make_texture2d(Image2DRef image)
-{
-	OPTICK_EVENT();
-	return std::make_shared<Texture2D>(image);
-}
-
-Rendy::AbstractTextureCubeRef Rendy::ES2::Engine::make_texture_cube(uint32_t size, const void* ptr)
-{
-	OPTICK_EVENT();
-	return std::make_shared<TextureCube>(ptr, size);
-}
-
-Rendy::AbstractVertexArrayRef Rendy::ES2::Engine::make_vao(AbstractBufferRef vbo, AbstractBufferRef ibo,
-	BufferLayoutRef layout)
-{
-	OPTICK_EVENT();
-
-	assert(vbo);
-	assert(vbo->get_target() == BufferTarget::VBO); //TODO
-
-	if (ibo)
-	{
-		assert(ibo->get_target() == BufferTarget::IBO); //TODO
-	}
-
-	return std::make_shared<VertexArray>(vbo, ibo, layout);
-}
-
-Rendy::AbstractBufferRef Rendy::ES2::Engine::make_vbo(uint32_t size, const void* ptr)
-{
-	OPTICK_EVENT();
-
-	if (size == 0 || ptr == nullptr)
-	{
-		return nullptr;
-	}
-
-	OPTICK_TAG("size", size);
-
-	auto vbo = std::make_shared<ES2::Buffer>(BufferTarget::VBO, size, ptr);
-	return vbo;
-}
-
-Rendy::AbstractBufferRef Rendy::ES2::Engine::make_ibo(uint32_t size, const void* ptr)
-{
-	OPTICK_EVENT();
-	OPTICK_TAG("size", size);
-
-	if (size == 0 || ptr == nullptr)
-	{
-		return nullptr;
-	}
-
-	auto ibo = std::make_shared<ES2::Buffer>(BufferTarget::IBO, size, ptr);
-	return ibo;
-}
-
-Rendy::IndexType Rendy::ES2::Engine::get_index_type() const
-{
-	OPTICK_EVENT();
-	return IndexType::UnsignedShort;
 }

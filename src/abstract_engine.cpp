@@ -73,3 +73,38 @@ void Rendy::AbstractEngine::add_stage(AbstractRenderStageRef stage)
 	OPTICK_EVENT();
 	render_stages.emplace_back(stage);
 }
+
+Rendy::AbstractShaderRef Rendy::AbstractEngine::make_shader(const std::string & vtx, const std::string & frg)
+{
+	return get_gapi()->make_shader(vtx, frg);
+}
+
+Rendy::AbstractTexture2DRef Rendy::AbstractEngine::make_texture2d(Image2DRef image)
+{
+	return get_gapi()->make_texture2d(image);
+}
+
+Rendy::AbstractTextureCubeRef Rendy::AbstractEngine::make_texture_cube(uint32_t size, const void * ptr)
+{
+	return get_gapi()->make_texture_cube(size, ptr);
+}
+
+Rendy::AbstractVertexArrayRef Rendy::AbstractEngine::make_vao(AbstractBufferRef vbo, AbstractBufferRef ibo, BufferLayoutRef layout)
+{
+	return get_gapi()->make_vao(vbo, ibo, layout);
+}
+
+Rendy::AbstractBufferRef Rendy::AbstractEngine::make_vbo(uint32_t size, const void * ptr)
+{
+	return get_gapi()->make_vbo(size, ptr);
+}
+
+Rendy::AbstractBufferRef Rendy::AbstractEngine::make_ibo(uint32_t size, const void* ptr)
+{
+	return get_gapi()->make_ibo(size, ptr);
+}
+
+Rendy::IndexType Rendy::AbstractEngine::get_index_type() const
+{
+	return get_gapi()->get_index_type();
+}
