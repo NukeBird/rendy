@@ -5,7 +5,7 @@
 #include "draw.h"
 #include <memory>
 
-std::vector<Rendy::CommandRef> Rendy::Batch::to_command_list()
+Rendy::CommandList Rendy::Batch::to_command_list() const
 {
 	auto list = material->to_command_list(extra_flags);
 

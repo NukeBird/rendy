@@ -17,7 +17,7 @@ namespace Rendy
 
 		uint32_t extra_flags = 0;
 
-		std::vector<CommandRef> to_command_list();
+		CommandList to_command_list() const;
 	};
 
 	using BatchList = std::vector<Batch>;
