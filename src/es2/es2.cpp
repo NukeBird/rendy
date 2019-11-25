@@ -13,14 +13,14 @@ Rendy::AbstractShaderRef Rendy::ES2::GAPI::make_shader(const std::string& vtx,
 Rendy::AbstractTexture2DRef Rendy::ES2::GAPI::make_texture2d(Image2DRef image)
 {
 	OPTICK_EVENT();
-	return std::make_shared<Texture2D>(image);
+	return std::make_shared<ES2::Texture2D>(image);
 }
 
 Rendy::AbstractTextureCubeRef Rendy::ES2::GAPI::make_texture_cube(uint32_t size,
 	const void* ptr)
 {
 	OPTICK_EVENT();
-	return std::make_shared<TextureCube>(ptr, size);
+	return std::make_shared<ES2::TextureCube>(ptr, size);
 }
 
 Rendy::AbstractVertexArrayRef Rendy::ES2::GAPI::make_vao(AbstractBufferRef vbo, 
@@ -36,7 +36,7 @@ Rendy::AbstractVertexArrayRef Rendy::ES2::GAPI::make_vao(AbstractBufferRef vbo,
 		assert(ibo->get_target() == BufferTarget::IBO); //TODO
 	}
 
-	return std::make_shared<VertexArray>(vbo, ibo, layout);
+	return std::make_shared<ES2::VertexArray>(vbo, ibo, layout);
 }
 
 Rendy::AbstractBufferRef Rendy::ES2::GAPI::make_vbo(uint32_t size, 
