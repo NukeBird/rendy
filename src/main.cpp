@@ -31,6 +31,32 @@ void GLAPIENTRY message_callback(GLenum source,
 #include "es3/engine.h"
 #include "vfs.h"
 
+struct DumbStage: public Rendy::AbstractRenderStage
+{
+	virtual void reload() override
+	{
+		//DO NOTHING
+	}
+
+	virtual bool validate() const override
+	{
+		return true;
+	}
+
+	virtual void execute(const Rendy::BatchList& batches) override
+	{
+		for (auto& batch: batches)
+		{
+			auto command_list = batch.to_command_list();
+
+			for (auto& command: command_list)
+			{
+				command->execute();
+			}
+		}
+	}
+};
+
 int main(int argc, char** argv) 
 {
 	//OPTICK_APP("RendySandbox");
@@ -110,6 +136,7 @@ int main(int argc, char** argv)
 
 	Rendy::VFSRef vfs = std::make_shared<Rendy::VFS>();
 	Rendy::AbstractEngineRef engine = std::make_shared<Rendy::ES3::Engine>(vfs);
+	engine->add_stage(std::make_shared<DumbStage>());
 	Rendy::ModelFactory model_factory(engine, vfs);
 
 	auto model = model_factory.make("assets/dude.glb");
