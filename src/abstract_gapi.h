@@ -18,5 +18,5 @@ namespace Rendy
 		virtual IndexType get_index_type() const = 0; //TODO: move to capabilities?
 	};
 
-	using AbstractGAPIRef = std::shared_ptr<AbstractGAPIRef>;
+	using AbstractGAPIRef = std::shared_ptr<AbstractGAPI>;
 };
