@@ -1,5 +1,25 @@
 #include "abstract_engine.h"
 
+/*void Rendy::AbstractEngine::flush()
+{
+	//TODO: set default states?
+	for (auto& stage : render_stages)
+	{
+		stage->execute(batches);
+	}
+}*/
+
+void Rendy::AbstractEngine::reload()
+{
+	for (auto& stage: render_stages)
+	{
+		stage->reload();
+	}
+
+	batches.clear();
+	printf("BEEP\n");
+}
+
 bool Rendy::AbstractEngine::validate()
 {
 	for (auto& stage: render_stages)

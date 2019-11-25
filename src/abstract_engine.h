@@ -24,7 +24,7 @@ namespace Rendy
 		virtual void push(AbstractDrawableRef drawable, const glm::mat4& model,
 			const glm::mat4& view, const glm::mat4& proj) = 0;
 		virtual void flush() = 0;
-		virtual void reload() = 0;
+		virtual void reload();
 		virtual bool validate();
 		
 		uint32_t get_stage_count() const;

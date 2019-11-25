@@ -76,6 +76,7 @@ void Rendy::ES3::Engine::flush()
 void Rendy::ES3::Engine::reload()
 {
 	OPTICK_EVENT();
+	AbstractEngine::reload();
 	generic_shader->reload();
 	iem->reload();
 }
