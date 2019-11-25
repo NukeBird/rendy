@@ -1,13 +1,15 @@
 #include "abstract_engine.h"
 
-/*void Rendy::AbstractEngine::flush()
+void Rendy::AbstractEngine::flush()
 {
 	//TODO: set default states?
 	for (auto& stage : render_stages)
 	{
 		stage->execute(batches);
 	}
-}*/
+
+	batches.clear();
+}
 
 void Rendy::AbstractEngine::reload()
 {
@@ -17,7 +19,6 @@ void Rendy::AbstractEngine::reload()
 	}
 
 	batches.clear();
-	printf("BEEP\n");
 }
 
 bool Rendy::AbstractEngine::validate()

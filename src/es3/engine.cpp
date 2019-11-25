@@ -56,23 +56,6 @@ void Rendy::ES3::Engine::push(AbstractDrawableRef drawable, const glm::mat4& mod
 	}
 }
 
-void Rendy::ES3::Engine::flush()
-{
-	OPTICK_EVENT();
-
-	for (auto& batch: batches)
-	{
-		auto command_list = batch.to_command_list();
-
-		for (auto& command: command_list)
-		{
-			command->execute();
-		}
-	}
-
-	batches.clear();
-}
-
 void Rendy::ES3::Engine::reload()
 {
 	OPTICK_EVENT();

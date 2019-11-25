@@ -23,7 +23,7 @@ namespace Rendy
 	{
 		virtual void push(AbstractDrawableRef drawable, const glm::mat4& model,
 			const glm::mat4& view, const glm::mat4& proj) = 0;
-		virtual void flush() = 0;
+		virtual void flush();
 		virtual void reload();
 		virtual bool validate();
 		

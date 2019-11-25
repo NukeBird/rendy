@@ -14,7 +14,6 @@ namespace Rendy
 
 			virtual void push(AbstractDrawableRef drawable, const glm::mat4& model,
 				const glm::mat4& view, const glm::mat4& proj) override;
-			virtual void flush() override;
 			virtual void reload() override;
 
 			virtual AbstractShaderRef make_shader(const std::string& vtx,
