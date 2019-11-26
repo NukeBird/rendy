@@ -283,15 +283,16 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 
 		uint32_t bones_offset = 0;
 
-		std::vector<aiVertexWeight>* tmp = nullptr;
+		std::unordered_map<uint32_t, std::vector<aiVertexWeight>> tmp;
 
 		if (mesh_flags & Rendy::USE_VERTEX_BONES)
 		{
-			tmp = new std::vector<aiVertexWeight>[assimp_mesh->mNumVertices];
+			tmp.reserve(static_cast<size_t>(assimp_mesh->mNumBones));
 
 			for (uint32_t j = 0; j < assimp_mesh->mNumBones; j++)
 			{
 				const aiBone* pBone = assimp_mesh->mBones[j];
+				tmp[j].reserve(static_cast<size_t>(pBone->mNumWeights));
 
 				for (uint32_t k = 0; k < pBone->mNumWeights; k++)
 				{
@@ -398,8 +399,6 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 				}
 			}
 		}
-
-		delete[] tmp;
 
 		auto layout = parse_buffer_layout(mesh_flags);
 
