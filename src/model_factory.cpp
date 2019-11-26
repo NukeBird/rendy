@@ -283,20 +283,20 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 
 		uint32_t bones_offset = 0;
 
-		std::unordered_map<uint32_t, std::vector<aiVertexWeight>> tmp;
+		std::unordered_map<uint32_t, std::vector<aiVertexWeight>> weight_map;
 
 		if (mesh_flags & Rendy::USE_VERTEX_BONES)
 		{
-			tmp.reserve(static_cast<size_t>(assimp_mesh->mNumBones));
+			weight_map.reserve(static_cast<size_t>(assimp_mesh->mNumBones));
 
 			for (uint32_t j = 0; j < assimp_mesh->mNumBones; j++)
 			{
 				const aiBone* pBone = assimp_mesh->mBones[j];
-				tmp[j].reserve(static_cast<size_t>(pBone->mNumWeights));
+				weight_map[j].reserve(static_cast<size_t>(pBone->mNumWeights));
 
 				for (uint32_t k = 0; k < pBone->mNumWeights; k++)
 				{
-					tmp[pBone->mWeights[k].mVertexId].
+					weight_map[pBone->mWeights[k].mVertexId].
 						emplace_back(j, pBone->mWeights[k].mWeight);
 				}
 			}
@@ -379,21 +379,21 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 			//BONE
 			if (mesh_flags & Rendy::USE_VERTEX_BONES)
 			{
-				assert(tmp[j].size() <= 4);
+				assert(weight_map[j].size() <= 4);
 
-				for (uint32_t k = 0; k < tmp[j].size(); ++k)
+				for (uint32_t k = 0; k < weight_map[j].size(); ++k)
 				{
-					verts.emplace_back(static_cast<float>(tmp[j][k].mVertexId));
+					verts.emplace_back(static_cast<float>(weight_map[j][k].mVertexId));
 				}
-				for (uint32_t k = tmp[j].size(); k < 4; ++k)
+				for (uint32_t k = weight_map[j].size(); k < 4; ++k)
 				{
 					verts.emplace_back(0.0f);
 				}
-				for (uint32_t k = 0; k < tmp[j].size(); ++k)
+				for (uint32_t k = 0; k < weight_map[j].size(); ++k)
 				{
-					verts.emplace_back(tmp[j][k].mWeight);
+					verts.emplace_back(weight_map[j][k].mWeight);
 				}
-				for (uint32_t k = tmp[j].size(); k < 4; ++k)
+				for (uint32_t k = weight_map[j].size(); k < 4; ++k)
 				{
 					verts.emplace_back(0.0f);
 				}
