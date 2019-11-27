@@ -24,12 +24,15 @@ find_package(stb CONFIG REQUIRED)
 #hunter_add_package(Assimp)
 #find_package(Assimp CONFIG REQUIRED)
 
+hunter_add_package(spdlog)
+find_package(spdlog CONFIG REQUIRED)
+
 hunter_add_package(glm)
 find_package(glm REQUIRED)
 
 add_subdirectory(dep)
 set(PROJECT_LIBS SDL2::SDL2main SDL2::SDL2 stb::stb
-    assimp glm gli)
+    assimp glm gli spdlog::spdlog)
 
 if(WIN32)
     hunter_add_package(glew)
