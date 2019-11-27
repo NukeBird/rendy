@@ -18,6 +18,7 @@ namespace Rendy
 			virtual void set_min_filter(MinFilter filter) override;
 			virtual void set_mag_filter(MagFilter filter) override;
 			virtual void set_wrap_mode(WrapMode mode) override;
+			virtual bool uses_transparency() const override;
 			virtual MinFilter get_min_filter() const override;
 			virtual MagFilter get_mag_filter() const override;
 			virtual WrapMode get_wrap_mode() const override;

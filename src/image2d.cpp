@@ -90,6 +90,11 @@ bool Rendy::Image2D::validate() const
 	return true;
 }
 
+bool Rendy::Image2D::uses_transparency() const
+{
+	return has_useful_alpha;
+}
+
 void Rendy::Image2D::load_image(const char* memory, uint32_t length)
 {
 	OPTICK_EVENT();
@@ -136,10 +141,33 @@ void Rendy::Image2D::load_image(const char* memory, uint32_t length)
 		size.y = static_cast<uint32_t>(gli_tex.extent(gli_tex.base_level()).y);
 		channel_count = 4; //TODO
 		type = TextureType::HalfFloat; //TODO
-
 	}
 
 	OPTICK_TAG("width", size.x);
 	OPTICK_TAG("height", size.y);
 	OPTICK_TAG("channel count", channel_count);
+	analyze_alpha_channel();
+}
+
+void Rendy::Image2D::analyze_alpha_channel()
+{
+	OPTICK_EVENT();
+
+	if (channel_count == 4 && data_ptr)
+	{
+		for (uint32_t i = 0; i < size.x * size.y; ++i)
+		{
+			if (static_cast<glm::u8vec4*>(data_ptr)[i].a < 255.0f)
+			{
+				has_useful_alpha = true;
+				break;
+			}
+		}
+	}
+	else
+	{
+		has_useful_alpha = false;
+	}
+
+	printf("Has useful alpha: %d\n", has_useful_alpha);
 }

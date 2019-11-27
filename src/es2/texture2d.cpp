@@ -109,36 +109,49 @@ void Rendy::ES2::Texture2D::unbind(uint32_t slot)
 
 void Rendy::ES2::Texture2D::set_min_filter(MinFilter filter)
 {
+	OPTICK_EVENT();
 	sampler->set_min_filter(filter);
 }
 
 void Rendy::ES2::Texture2D::set_mag_filter(MagFilter filter)
 {
+	OPTICK_EVENT();
 	sampler->set_mag_filter(filter);
 }
 
 void Rendy::ES2::Texture2D::set_wrap_mode(WrapMode mode)
 {
+	OPTICK_EVENT();
 	sampler->set_wrap_mode(mode);
+}
+
+bool Rendy::ES2::Texture2D::uses_transparency() const
+{
+	OPTICK_EVENT();
+	return image->uses_transparency();
 }
 
 Rendy::MinFilter Rendy::ES2::Texture2D::get_min_filter() const
 {
+	OPTICK_EVENT();
 	return sampler->get_min_filter();
 }
 
 Rendy::MagFilter Rendy::ES2::Texture2D::get_mag_filter() const
 {
+	OPTICK_EVENT();
 	return sampler->get_mag_filter();
 }
 
 Rendy::WrapMode Rendy::ES2::Texture2D::get_wrap_mode() const
 {
-	return  sampler->get_wrap_mode();
+	OPTICK_EVENT();
+	return sampler->get_wrap_mode();
 }
 
 Rendy::AbstractSampler2DRef Rendy::ES2::Texture2D::get_sampler()
 {
+	OPTICK_EVENT();
 	return sampler;
 }
 
@@ -166,7 +179,6 @@ bool Rendy::ES2::Texture2D::load_from_image()
 	
 	type = TextureType::UnsignedByte; //TODO?
 	format = parse_format(image->get_channel_count());
-
 
 	OPTICK_TAG("id", id);
 	OPTICK_TAG("type", to_string(type).c_str());

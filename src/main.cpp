@@ -129,7 +129,7 @@ int main(int argc, char** argv)
 	engine->add_stage(std::make_shared<DumbStage>());
 	Rendy::ModelFactory model_factory(engine, vfs);
 
-	auto model = model_factory.make("assets/dude.glb");
+	auto model = model_factory.make("assets/doll.glb");
 	std::cout << "Material count: " << model->get_material_count() << std::endl;
 	std::cout << "Node count: " << model->get_node_count() << std::endl;
 	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;

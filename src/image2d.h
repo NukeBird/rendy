@@ -22,8 +22,10 @@ namespace Rendy
 		uint32_t get_channel_count() const;
 		virtual void reload() override;
 		virtual bool validate() const override;
+		bool uses_transparency() const;
 	private:
 		void load_image(const char* memory, uint32_t length);
+		void analyze_alpha_channel();
 
 		void* data_ptr = nullptr;
 		gli::texture gli_tex;
@@ -31,6 +33,7 @@ namespace Rendy
 		//uint32_t length = 0;
 		glm::uvec2 size{ 0, 0 };
 		uint32_t channel_count = 0;
+		bool has_useful_alpha = false;
 	};
 
 	using Image2DRef = std::shared_ptr<Image2D>;
