@@ -1,5 +1,4 @@
 #include "vfs.h"
-#include <iostream>
 
 Rendy::VFS::VFS(FSRef default_fs)
 {
@@ -44,9 +43,6 @@ Rendy::FileRef Rendy::VFS::open_file(const std::string& path, FileMode mode)
 {
 	auto alias = get_alias(path);
 	auto fs_path = path.substr(alias.size() + (alias.empty() ? 0 : 1));
-	
-	std::cout << "alias: " << alias << std::endl;
-	std::cout << "fs_path: " << fs_path << std::endl;
 
 	for (auto fs: get_filesystem_list(alias))
 	{
