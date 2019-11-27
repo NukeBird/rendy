@@ -23,10 +23,10 @@ Rendy::ES2::Engine::Engine(VFSRef vfs)
 
 	iem = make_texture_cube(static_cast<uint32_t>(iem_data.size()), iem_data.data());
 
-	printf("IEM max level: %d\n", iem->get_max_level());
+	Log::info("IEM max level: {0}\n", iem->get_max_level());
 
 	generic_shader = make_shader(default_vertex_shader, default_fragment_shader);
-	printf("GENERIC SHADER STATUS: %d\n", generic_shader->validate());
+	Log::info("GENERIC SHADER STATUS: {0}\n", generic_shader->validate());
 }
 
 void Rendy::ES2::Engine::reload()

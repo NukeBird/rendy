@@ -3,6 +3,7 @@
 #include <stb/stb_image.h>
 #include <optick.h>
 #include "common.h"
+#include "log.h"
 
 Rendy::Image2D::Image2D(const char* memory, uint32_t length)
 {
@@ -97,6 +98,7 @@ bool Rendy::Image2D::uses_transparency() const
 
 void Rendy::Image2D::load_image(const char* memory, uint32_t length)
 {
+	Log::info("Loading image...");
 	OPTICK_EVENT();
 	int w, h, c;
 
@@ -109,9 +111,11 @@ void Rendy::Image2D::load_image(const char* memory, uint32_t length)
 		size.x = static_cast<uint32_t>(w);
 		size.y = static_cast<uint32_t>(h);
 		channel_count = static_cast<uint32_t>(c);
+		Log::info("Image loaded using stbi_image");
 	}
 	else
 	{
+		Log::warn("Can't load image using stbi_image, let's try gli...");
 		bool fail = false;
 
 		gli_tex = gli::load(memory, length);
@@ -133,9 +137,12 @@ void Rendy::Image2D::load_image(const char* memory, uint32_t length)
 
 		if (fail)
 		{
+			Log::error("Can't load image using gli");
 			gli_tex.clear();
 			return;
 		}
+
+		Log::info("Image loaded using gli");
 
 		size.x = static_cast<uint32_t>(gli_tex.extent(gli_tex.base_level()).x);
 		size.y = static_cast<uint32_t>(gli_tex.extent(gli_tex.base_level()).y);
@@ -143,10 +150,17 @@ void Rendy::Image2D::load_image(const char* memory, uint32_t length)
 		type = TextureType::HalfFloat; //TODO
 	}
 
+	analyze_alpha_channel();
+	Log::info
+	(
+		"Image parameters:\n"
+		"Size: {0}x{1}\n"
+		"Channel count: {2}",
+		size.x, size.y, channel_count
+	);
 	OPTICK_TAG("width", size.x);
 	OPTICK_TAG("height", size.y);
 	OPTICK_TAG("channel count", channel_count);
-	analyze_alpha_channel();
 }
 
 void Rendy::Image2D::analyze_alpha_channel()
@@ -169,5 +183,5 @@ void Rendy::Image2D::analyze_alpha_channel()
 		has_useful_alpha = false;
 	}
 
-	printf("Has useful alpha: %d\n", has_useful_alpha);
+	Log::info("Image uses alpha: {0}", has_useful_alpha);
 }

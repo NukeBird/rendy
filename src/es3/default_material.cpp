@@ -4,6 +4,7 @@
 #include "../bind_texture_cube.h"
 #include "../set_uniform.h"
 #include <optick.h>
+#include "../log.h"
 
 Rendy::ES3::DefaultMaterial::DefaultMaterial(AbstractTexture2DRef albedo_texture,
 	AbstractTexture2DRef ambient_metallic_roughness_texture, 
@@ -55,7 +56,7 @@ bool Rendy::ES3::DefaultMaterial::validate() const
 	{
 		if(!albedo_texture->validate())
 		{
-			printf("Invalid albedo texture\n");
+			Log::info("Invalid albedo texture\n");
 			return false;
 		}
 	}
@@ -64,7 +65,7 @@ bool Rendy::ES3::DefaultMaterial::validate() const
 	{
 		if (!ambient_metallic_roughness_texture->validate())
 		{
-			printf("Invalid ambient metallic roughness texture\n");
+			Log::info("Invalid ambient metallic roughness texture\n");
 			return false;
 		}
 	}
@@ -73,14 +74,14 @@ bool Rendy::ES3::DefaultMaterial::validate() const
 	{
 		if (!normal_texture->validate())
 		{
-			printf("Invalid normal texture\n");
+			Log::info("Invalid normal texture\n");
 			return false;
 		}
 	}
 
 	if (!shader->validate())
 	{
-		printf("Invalid shader\n");
+		Log::info("Invalid shader\n");
 		return false;
 	}
 

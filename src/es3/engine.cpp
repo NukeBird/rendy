@@ -19,7 +19,7 @@ Rendy::ES3::Engine::Engine(VFSRef vfs)
 	iem = read_texture_cube("assets/iem.dds");
 	pmrem = read_texture_cube("assets/pmrem.dds");
 
-	printf("PMREM max level: %d\n", pmrem->get_max_level());
+	Log::info("PMREM max level: {0}", pmrem->get_max_level());
 
 
 	auto file = vfs->open_file("assets/lut.dds", Rendy::FileMode::Read);
@@ -33,10 +33,10 @@ Rendy::ES3::Engine::Engine(VFSRef vfs)
 	lut->set_min_filter(MinFilter::Linear);
 	lut->set_mag_filter(MagFilter::Linear);
 	
-	printf("LUT status: %d\n", lut->validate());
+	Log::info("LUT status: {0}", lut->validate());
 
 	generic_shader = make_shader(default_vertex_shader, default_fragment_shader);
-	printf("GENERIC SHADER STATUS: %d\n", generic_shader->validate());
+	Log::info("GENERIC SHADER STATUS: {0}", generic_shader->validate());
 }
 
 void Rendy::ES3::Engine::reload()

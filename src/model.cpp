@@ -4,6 +4,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include "es2/texture_cube.h"
 #include "common.h"
+#include "log.h"
 
 void Rendy::Mesh::reload()
 {
@@ -72,7 +73,7 @@ void Rendy::Model::update(float dt)
 
 			if (it == name_to_node.end())
 			{
-				printf("Can't find %s node\n", channel->name.c_str());
+				Log::warn("Can't find {0} node", channel->name);
 				continue;
 			}
 
@@ -160,12 +161,6 @@ std::vector<glm::mat4> Rendy::Model::calculate_bone_transforms(const Mesh& mesh,
 		auto& bone_node = nodes[bone_node_id];
 		transforms[i] = (inverse_transform * get_world_transform(bone_node) *
 			bone.offset_matrix);
-
-		/*if (bone_node_id >= 120)
-		{
-			printf("REE\n");
-		}*/
-
 		++i;
 	}
 
@@ -277,7 +272,7 @@ glm::vec3 Rendy::Model::calculate_position(AnimationNodeRef animation, float tim
 	{
 		dt = animation->position_keys[0].time;
 		factor = time / dt;
-		//printf("%f < %f\n", time, animation->position_keys[0].time);
+
 		const auto& start = animation->position_keys[animation->position_keys.size() - 1].value;
 		const auto& end = animation->position_keys[0].value;
 		const auto delta_position = end - start;
@@ -387,12 +382,12 @@ void Rendy::Model::calculate_cache()
 
 		if (it != name_to_node.end())
 		{
-			printf("NODE NAME DUPLICATION: %s\n", node.name.c_str());
+			Log::info("NODE NAME DUPLICATION: {0}", node.name);
 		}
 		else
 		{
 			name_to_node[node.name] = i;
-			printf("Node %s cached\n", node.name.c_str());
+			Log::info("Node {0} cached\n", node.name);
 		}
 	}
 }

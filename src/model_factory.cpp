@@ -6,6 +6,7 @@
 #include <stack>
 #include <assimp/material.h>
 #include <optick.h>
+#include "log.h"
 
 unsigned Rendy::ModelFactory::get_import_flags() const 
 {
@@ -41,33 +42,33 @@ uint32_t Rendy::ModelFactory::parse_mesh_flags(const aiMesh* mesh) const
 	if (mesh->HasPositions())
 	{
 		flags |= Rendy::USE_VERTEX_POSITION;
-		printf("USE_VERTEX_POSITION\n");
+		Log::info("USE_VERTEX_POSITION");
 	}
 
 	if (mesh->HasTextureCoords(0))
 	{
 		flags |= Rendy::USE_VERTEX_COORD;
-		printf("USE_VERTEX_COORD\n");
+		Log::info("USE_VERTEX_COORD");
 	}
 
 	if (mesh->HasVertexColors(0))
 	{
 		flags |= Rendy::USE_VERTEX_COLOR;
-		printf("USE_VERTEX_COLOR\n");
+		Log::info("USE_VERTEX_COLOR");
 	}
 
 	if (mesh->HasNormals())
 	{
 		flags |= Rendy::USE_VERTEX_NORMAL;
-		printf("USE_VERTEX_NORMAL\n");
+		Log::info("USE_VERTEX_NORMAL");
 	}
 
 	if (mesh->HasTangentsAndBitangents())
 	{
 		flags |= Rendy::USE_VERTEX_TANGENT;
 		flags |= Rendy::USE_VERTEX_BITANGENT;
-		printf("USE_VERTEX_TANGENT\n");
-		printf("USE_VERTEX_BITANGENT\n");
+		Log::info("USE_VERTEX_TANGENT");
+		Log::info("USE_VERTEX_BITANGENT");
 	}
 
 	/*if ((flags & USE_VERTEX_TANGENT) && 
@@ -81,10 +82,8 @@ uint32_t Rendy::ModelFactory::parse_mesh_flags(const aiMesh* mesh) const
 	if (mesh->HasBones())
 	{
 		flags |= USE_VERTEX_BONES;
-		printf("USE_VERTEX_BONES\n");
+		Log::info("USE_VERTEX_BONES");
 	}
-
-	printf("\n");
 
 	return flags;
 }
@@ -214,7 +213,6 @@ Rendy::BufferLayoutRef Rendy::ModelFactory::parse_buffer_layout(uint32_t flags) 
 	//BONES
 	if (flags & Rendy::USE_VERTEX_BONES)
 	{
-		printf("BLAB\n");
 		buffer_elements.emplace_back(Rendy::ShaderDataType::Float4, "a_bone_id");
 		buffer_elements.emplace_back(Rendy::ShaderDataType::Float4, "a_weight");
 	}
@@ -420,11 +418,11 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 	}
 	//TODO
 
-	printf("MIN %f %f %f\n", min.x, min.y, min.z);
-	printf("MAX %f %f %f\n", max.x, max.y, max.z);
+	Log::info("MIN ({0};{1};{2})", min.x, min.y, min.z);
+	Log::info("MAX ({0};{1};{2})", max.x, max.y, max.z);
 
-	printf("MMIN %f %f %f\n", mmin.x, mmin.y, mmin.z);
-	printf("MMAX %f %f %f\n", mmax.x, mmax.y, mmax.z);
+	Log::info("MMIN ({0};{1};{2})", mmin.x, mmin.y, mmin.z);
+	Log::info("MMAX ({0};{1};{2})", mmax.x, mmax.y, mmax.z);
 
 	uint32_t size = 0;
 
@@ -532,17 +530,19 @@ Rendy::Animation Rendy::ModelFactory::parse_animation
 
 	Animation result;
 
-	printf("DURATION %f\n", assimp_animation->mDuration);
-	printf("PS %f\n", assimp_animation->mTicksPerSecond);
+	Log::info("DURATION {0} (Assimp)", assimp_animation->mDuration);
+	Log::info("TICKS PER SECOND {0} (Assimp)", assimp_animation->mTicksPerSecond);
 
 	result.duration = static_cast<float>(assimp_animation->mDuration);
 	result.name = std::string(assimp_animation->mName.data,
 		assimp_animation->mName.length); //TODO: legit?
 	result.ticks_per_second = static_cast<float>(assimp_animation->mTicksPerSecond);
 	result.ticks_per_second = result.ticks_per_second != 0.0f ? 
-		result.ticks_per_second * 15.0f : 25.0f;
+		result.ticks_per_second * 24.0f : 25.0f; //TODO
 	//result.ticks_per_second = 750.0f;
-	printf("PS %f\n", result.ticks_per_second);
+	Log::info("DURATION {0}", result.duration);
+	Log::info("TICKS PER SECOND {0}", result.ticks_per_second);
+
 	result.channels = parse_animation_channels(assimp_animation->mChannels, 
 		assimp_animation->mNumChannels);
 
@@ -783,33 +783,6 @@ Rendy::ImageSetRef Rendy::ModelFactory::form_image_set(const aiScene* scene,
 
 	auto& mat = *material;
 
-	{
-		aiColor4D base_color_factor;
-		if (mat.Get(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR,
-			base_color_factor) == AI_SUCCESS)
-		{
-			printf("Base color factor: %f %f %f %f\n",
-				base_color_factor.r,
-				base_color_factor.g,
-				base_color_factor.b,
-				base_color_factor.a);
-		}
-
-		float metallic_factor;
-		if (mat.Get(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLIC_FACTOR,
-			metallic_factor) == AI_SUCCESS)
-		{
-			printf("Metallic factor: %f\n", metallic_factor);
-		}
-
-		float roughness_factor;
-		if (mat.Get(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR,
-			roughness_factor) == AI_SUCCESS)
-		{
-			printf("Roughness factor: %f\n", roughness_factor);
-		}
-	}
-
 	//DIFFUSE
 	{
 		aiString path;
@@ -862,12 +835,6 @@ Rendy::ImageSetRef Rendy::ModelFactory::form_image_set(const aiScene* scene,
 	}
 
 	//AO_METALLIC_ROUGHNESS
-
-	float ior;
-	mat.Get(AI_MATKEY_SHININESS, ior);
-
-	printf("IOR %f\n", ior);
-
 	{
 		aiString path;
 		if (mat.GetTexture(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLICROUGHNESS_TEXTURE,
@@ -921,7 +888,7 @@ Rendy::ModelRef Rendy::ModelFactory::make(const char* filename)
 	memory.resize(static_cast<size_t>(file->get_size()));
 	file->read(memory.data(), file->get_size());
 
-	printf("file size %d\n", file->get_size());
+	Log::info("file size {0}", file->get_size());
 	OPTICK_POP();
 
 	return make(memory.data(), static_cast<uint32_t>(memory.size()));
@@ -968,27 +935,27 @@ Rendy::ModelRef Rendy::ModelFactory::make(const void* memory, uint32_t size)
 
 		if (!scene)
 		{
-			printf("%s\n", importer.GetErrorString());
+			Log::error(importer.GetErrorString());
 			return nullptr;
 		}
 
-		printf("(BEFORE)\n");
+		Log::info("(BEFORE)");
 		auto model = std::make_shared<Model>();
-		printf("NODES\n");
+		Log::info("NODES");
 		model->nodes = std::move(parse_nodes(scene));
 		model->calculate_cache();
-		printf("MESHES\n");
+		Log::info("MESHES");
 		model->meshes = std::move(parse_meshes(scene));
-		printf("IMAGES\n");
+		Log::info("IMAGES");
 		model->images = std::move(parse_images(scene));
-		printf("MATERIALS\n");
+		Log::info("MATERIALS");
 		model->materials = std::move(parse_materials(scene, model->images));
-		printf("BONES\n");
+		Log::info("BONES");
 		model->name_to_bones = std::move(parse_bones(scene));
-		printf("ANIMATIONS\n");
+		Log::info("ANIMATIONS");
 		model->animations = std::move(parse_animations(scene));
-		printf("Animation count: %d\n", scene->mNumAnimations); //TODO
-		printf("DONE\n");
+		Log::info("Animation count: {0}", scene->mNumAnimations); //TODO
+		Log::info("DONE");
 
 		return model;
 	}

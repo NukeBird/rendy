@@ -1,5 +1,6 @@
 #include "vertex_array.h"
 #include <optick.h>
+#include "../log.h"
 
 Rendy::ES3::VertexArray::VertexArray(AbstractBufferRef vbo,
 	AbstractBufferRef ibo, const BufferLayoutRef& layout)
@@ -154,7 +155,7 @@ void Rendy::ES3::VertexArray::bind_layout(const ShaderVariantRef& shader)
 
 		if (index >= 0)
 		{
-			printf("(%p) %s : %d\n", this, e.name.c_str(), index);
+			Log::info("({0}){1}: {2}", (unsigned)this, e.name.c_str(), index);
 
 			glEnableVertexAttribArray(index);
 			glVertexAttribPointer(index, e.get_component_count(), get_gl_type(e), 
@@ -163,10 +164,9 @@ void Rendy::ES3::VertexArray::bind_layout(const ShaderVariantRef& shader)
 		}
 		else
 		{
-			printf("(NOT FOUND) %s\n", e.name.c_str());
+			Log::info("(NOT FOUND) {0}", e.name.c_str());
 		}
 	}
-	printf("\n");
 }
 
 GLenum Rendy::ES3::VertexArray::get_gl_type(const BufferElement& element)

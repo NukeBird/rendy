@@ -1,6 +1,7 @@
 #include "shader_variant.h"
 #include "../common.h"
 #include <optick.h>
+#include "../log.h"
 
 Rendy::ES2::ShaderVariant::ShaderVariant(const std::string& vtx, const std::string& frg)
 {
@@ -159,12 +160,10 @@ void Rendy::ES2::ShaderVariant::set_uniform(const std::string& name,
 
 	if (location == -1)
 	{
-		//printf("NO");
 		//TODO: warning
 	}
 	else
 	{
-		//printf("YES");
 		glUniformMatrix4fv(location, static_cast<GLsizei>(mat_array.size()), 
 			false, glm::value_ptr(mat_array[0]));
 	}
@@ -326,27 +325,14 @@ void Rendy::ES2::ShaderVariant::cache_uniform_locations()
 	{
 		glGetActiveUniform(program_id, (GLuint)i, buffer_size, &length, &size, &type, name);
 
-		printf(
-			"i %d\n"
-			"length %d\n"
-			"size %d\n"
-			"type %d\n"
-			"name %s\n\n",
-			i,
-			length,
-			size,
-			type,
-			name
-		);
-
 		int location = glGetUniformLocation(program_id, name);
 		uniform_cache[std::string(name, length)] = location;
 	}
 
-	printf("CACHED UNIFORMS\n");
+	Log::info("CACHED UNIFORMS");
 	for (auto& i : uniform_cache)
 	{
-		printf("%s : %d\n", i.first.c_str(), i.second);
+		Log::info("{0} : {1}", i.first, i.second);
 	}
 }
 

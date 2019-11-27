@@ -1,4 +1,3 @@
-#include <iostream>
 #include <SDL.h>
 #include "rendy.h"
 #include <regex>
@@ -19,13 +18,14 @@ void GLAPIENTRY message_callback(GLenum source,
 	if (type == GL_DEBUG_TYPE_ERROR)
 	{
 		message_string = "(OpenGL error)" + std::string(message);
+		Rendy::Log::error(message_string);
 	}
 	else
 	{
 		message_string = "(OpenGL other)" + std::string(message);
 	}
 
-	std::cout << message_string << std::endl;
+	Rendy::Log::info(message_string);
 }
 
 #include "es2/engine.h"
@@ -55,37 +55,38 @@ int main(int argc, char** argv)
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
 	{
-		std::cout << "Error while initializing SDL: " << SDL_GetError() << std::endl;
+		Rendy::Log::info("Error while initializing SDL: {0}" , SDL_GetError());
 		SDL_Quit();
 		return -1;
 	}
 
 	#ifdef _WIN32
-		std::cout << "SDL_GL_CONTEXT_MAJOR_VERSION " <<
-			!SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4) << std::endl;
-		std::cout << "SDL_GL_CONTEXT_MINOR_VERSION " <<
-			!SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3) << std::endl;
-		std::cout << "SDL_GL_CONTEXT_PROFILE_MASK " <<
-			!SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, 
-				SDL_GL_CONTEXT_PROFILE_COMPATIBILITY) << std::endl;
-		std::cout << "SDL_GL_RED_SIZE " <<
-			!SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8) << std::endl;
-		std::cout << "SDL_GL_GREEN_SIZE " <<
-			!SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8) << std::endl;
-		std::cout << "SDL_GL_BLUE_SIZE " <<
-			!SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8) << std::endl;
-		std::cout << "SDL_GL_DEPTH_SIZE " <<
-			!SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16) << std::endl;
-		std::cout << "SDL_GL_DOUBLEBUFFER " <<
-			!SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) << std::endl;
-		std::cout << "SDL_GL_ACCELERATED_VISUAL " <<
-			!SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1) << std::endl;
-		std::cout << "SDL_GL_MULTISAMPLEBUFFERS " <<
-			!SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1) << std::endl;
-		std::cout << "SDL_GL_MULTISAMPLESAMPLES " << 
-			!SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4) << std::endl;
-		std::cout << "SDL_GL_CONTEXT_FLAGS " <<
-			!SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG) << std::endl;
+		Rendy::Log::info("SDL_GL_CONTEXT_MAJOR_VERSION {0}",
+			!SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4));
+		Rendy::Log::info("SDL_GL_CONTEXT_MINOR_VERSION {0}",
+			!SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3));
+		Rendy::Log::info("SDL_GL_CONTEXT_PROFILE_MASK {0}",
+			!SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
+				SDL_GL_CONTEXT_PROFILE_COMPATIBILITY));
+		Rendy::Log::info("SDL_GL_RED_SIZE {0}",
+			!SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8));
+		Rendy::Log::info("SDL_GL_GREEN_SIZE {0}",
+			!SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8));
+		Rendy::Log::info("SDL_GL_BLUE_SIZE {0}",
+			!SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8));
+		Rendy::Log::info("SDL_GL_DEPTH_SIZE {0}",
+			!SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16));
+		Rendy::Log::info("SDL_GL_DOUBLEBUFFER {0}",
+			!SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1));
+		Rendy::Log::info("SDL_GL_ACCELERATED_VISUAL {0}",
+			!SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1));
+		Rendy::Log::info("SDL_GL_MULTISAMPLEBUFFERS {0}",
+			!SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1));
+		Rendy::Log::info("SDL_GL_MULTISAMPLESAMPLES {0}",
+			!SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4));
+		Rendy::Log::info("SDL_GL_CONTEXT_FLAGS {0}",
+			!SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 
+				SDL_GL_CONTEXT_DEBUG_FLAG));
 		//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
 	#else
@@ -113,7 +114,7 @@ int main(int argc, char** argv)
 		auto init_res = glewInit();
 		if (init_res != GLEW_OK)
 		{
-			std::cout << glewGetErrorString(glewInit()) << std::endl;
+			Rendy::Log::info(glewGetErrorString(glewInit()));
 		}
 
 		if (SDL_GL_SetSwapInterval(-1) != 0) //adaptive v-sync
@@ -132,9 +133,9 @@ int main(int argc, char** argv)
 	Rendy::ModelFactory model_factory(engine, vfs);
 
 	auto model = model_factory.make("assets/doll.glb");
-	std::cout << "Material count: " << model->get_material_count() << std::endl;
-	std::cout << "Node count: " << model->get_node_count() << std::endl;
-	std::cout << "Mesh count: " << model->get_mesh_count() << std::endl;
+	Rendy::Log::info("Material count: {0}", model->get_material_count());
+	Rendy::Log::info("Node count: {0}", model->get_node_count());
+	Rendy::Log::info("Mesh count: {0}", model->get_mesh_count());
 
 	GLuint fucking_vao; //should be active at least one _REAL_ vao
 	glGenVertexArrays(1, &fucking_vao);
