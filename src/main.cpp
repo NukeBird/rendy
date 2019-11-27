@@ -50,7 +50,6 @@ struct DumbStage: public Rendy::AbstractRenderStage
 
 int main(int argc, char** argv) 
 {
-	//OPTICK_APP("RendySandbox");
 	Rendy::Log::init_logger();
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
