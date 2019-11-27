@@ -387,7 +387,7 @@ void Rendy::Model::calculate_cache()
 		else
 		{
 			name_to_node[node.name] = i;
-			Log::info("Node {0} cached\n", node.name);
+			Log::info("Node {0} cached", node.name);
 		}
 	}
 }

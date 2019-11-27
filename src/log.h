@@ -8,7 +8,7 @@ namespace Rendy
 	namespace Log
 	{
 		void init_logger();
-		/*static*/std::shared_ptr<spdlog::logger> get_logger();
+		std::shared_ptr<spdlog::logger> get_logger();
 
 		template<class T>
 		void info(const T& msg)
