@@ -922,12 +922,14 @@ Rendy::ModelRef Rendy::ModelFactory::make(const void* memory, uint32_t size)
 
 		{
 			OPTICK_PUSH("importer.ReadFileFromMemory (glb)");
+			Log::info("Loading glb model...");
 			scene = importer.ReadFileFromMemory(memory, static_cast<size_t>(size), get_import_flags(), "glb");
 			OPTICK_POP();
 		}
 
 		if (!scene)
 		{
+			Log::warn("Can't load glb model, maybe it's a fbx one?");
 			OPTICK_PUSH("importer.ReadFileFromMemory (fbx)");
 			scene = importer.ReadFileFromMemory(memory, static_cast<size_t>(size), get_import_flags(), "fbx");
 			OPTICK_POP();
@@ -935,9 +937,12 @@ Rendy::ModelRef Rendy::ModelFactory::make(const void* memory, uint32_t size)
 
 		if (!scene)
 		{
-			Log::error(importer.GetErrorString());
+			Log::error("Can't load model: {0}", importer.GetErrorString());
 			return nullptr;
 		}
+
+		Log::info("Assimp model loaded");
+		Log::info("Parsing assimp model...");
 
 		Log::info("(BEFORE)");
 		auto model = std::make_shared<Model>();
