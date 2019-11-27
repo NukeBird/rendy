@@ -6,7 +6,7 @@ static std::shared_ptr<spdlog::logger> spd_logger;
 
 void Rendy::Log::init_logger()
 {
-	spdlog::set_pattern("%^[%T] %n: %v%$");
+	spdlog::set_pattern("%^[%T][%t]%v%$");
 	spd_logger = spdlog::stdout_color_mt("Rendy");
 	spd_logger->set_level(spdlog::level::trace);
 }
