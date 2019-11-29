@@ -1,12 +1,12 @@
 #pragma once
 #include "abstract_resource.h"
 #include "buffer/abstract_buffer.h"
-#include "abstract_shader_variant.h"
+#include "shader/abstract_shader_variant.h"
 #include "buffer_layout.h"
 
 namespace Rendy
 {
-	struct AbstractVertexArray : public AbstractResource
+	struct AbstractVertexArray: public AbstractResource
 	{
 		virtual void bind(const ShaderVariantRef& shader) = 0;
 		virtual void draw() = 0;

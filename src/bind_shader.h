@@ -1,5 +1,5 @@
 #pragma once
-#include "abstract_shader.h"
+#include "shader/abstract_shader.h"
 #include "abstract_command.h"
 
 namespace Rendy

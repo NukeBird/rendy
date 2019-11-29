@@ -7,7 +7,7 @@ namespace Rendy
 {
 	namespace ES2
 	{
-		class Shader final : public AbstractShader
+		class Shader final: public AbstractShader
 		{
 		public:
 			Shader(const std::string& vertex_source,

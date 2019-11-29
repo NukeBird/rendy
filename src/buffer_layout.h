@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <vector>
 #include <memory>
-#include "shader_data_type.h"
+#include "shader/shader_data_type.h"
 #include <string>
 
 namespace Rendy

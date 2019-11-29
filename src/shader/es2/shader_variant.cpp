@@ -1,7 +1,7 @@
 #include "shader_variant.h"
-#include "../common.h"
+#include "../../common.h"
+#include "../../log.h"
 #include <optick.h>
-#include "../log.h"
 
 Rendy::ES2::ShaderVariant::ShaderVariant(const std::string& vtx, const std::string& frg)
 {

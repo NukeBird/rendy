@@ -4,7 +4,7 @@
 #include "abstract_drawable.h"
 #include "abstract_vfs.h"
 #include "material/abstract_material.h"
-#include "abstract_shader.h"
+#include "shader/abstract_shader.h"
 #include "texture/texture2d/abstract_texture2d.h"
 #include "texture/texture_cube/abstract_texture_cube.h"
 #include "abstract_render_pass.h"
