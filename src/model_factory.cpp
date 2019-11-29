@@ -1,7 +1,7 @@
 #include "model_factory.h"
 #include "shader/shader_flags.h"
 #include "image2d.h"
-#include "thread_pool.h"
+#include "util/thread_pool.h"
 #include <unordered_map>
 #include <stack>
 #include <assimp/material.h>
