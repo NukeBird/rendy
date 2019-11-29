@@ -1,12 +1,12 @@
 #pragma once
 #include "../abstract_texture2d.h"
-#include "sampler2d.h"
+#include "../sampler2d/es2/sampler2d.h"
 
 namespace Rendy
 {
 	namespace ES2
 	{
-		class Texture2D final : public AbstractTexture2D
+		class Texture2D final: public AbstractTexture2D
 		{
 		public:
 			Texture2D(Image2DRef image);

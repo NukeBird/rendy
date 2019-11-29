@@ -1,5 +1,5 @@
 #pragma once
-#include "abstract_resource.h"
+#include "../abstract_resource.h"
 #include "min_filter.h"
 #include "mag_filter.h"
 #include "wrap_mode.h"
