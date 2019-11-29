@@ -60,7 +60,7 @@ uint32_t Rendy::AbstractEngine::get_stage_count() const
 	return static_cast<uint32_t>(render_stages.size());
 }
 
-Rendy::AbstractRenderStageRef Rendy::AbstractEngine::get_stage(uint32_t index)
+Rendy::AbstractRenderPassRef Rendy::AbstractEngine::get_stage(uint32_t index)
 {
 	OPTICK_EVENT();
 
@@ -68,7 +68,7 @@ Rendy::AbstractRenderStageRef Rendy::AbstractEngine::get_stage(uint32_t index)
 	return render_stages[index];
 }
 
-void Rendy::AbstractEngine::add_stage(AbstractRenderStageRef stage)
+void Rendy::AbstractEngine::add_stage(AbstractRenderPassRef stage)
 {
 	OPTICK_EVENT();
 	render_stages.emplace_back(stage);

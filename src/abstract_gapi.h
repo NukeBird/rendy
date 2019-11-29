@@ -7,7 +7,7 @@
 #include "abstract_shader.h"
 #include "abstract_texture2d.h"
 #include "abstract_texture_cube.h"
-#include "abstract_render_stage.h"
+#include "abstract_render_pass.h"
 #include <memory>
 
 namespace Rendy

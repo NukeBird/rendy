@@ -32,7 +32,7 @@ void GLAPIENTRY message_callback(GLenum source,
 #include "es3/engine.h"
 #include "vfs.h"
 
-struct DumbStage: public Rendy::AbstractRenderStage
+struct DumbStage: public Rendy::AbstractRenderPass
 {
 	virtual void execute(const Rendy::BatchList& batches) override
 	{

@@ -17,8 +17,8 @@ namespace Rendy
 		
 		virtual AbstractGAPIRef get_gapi() const = 0;
 		uint32_t get_stage_count() const;
-		AbstractRenderStageRef get_stage(uint32_t index);
-		void add_stage(AbstractRenderStageRef stage);
+		AbstractRenderPassRef get_stage(uint32_t index);
+		void add_stage(AbstractRenderPassRef stage);
 
 		virtual AbstractShaderRef make_shader(const std::string& vtx, 
 			const std::string& frg);
@@ -32,7 +32,7 @@ namespace Rendy
 		virtual AbstractBufferRef make_ibo(uint32_t size, const void* ptr);
 		virtual IndexType get_index_type() const;
 	private:
-		RenderStageList render_stages;
+		RenderPassList render_stages;
 		BatchList batches;
 	};
 

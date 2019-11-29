@@ -6,13 +6,13 @@
 
 namespace Rendy
 {
-	struct AbstractRenderStage: public AbstractResource
+	struct AbstractRenderPass: public AbstractResource
 	{
 		virtual void execute(const BatchList& batches) = 0;
 		virtual void reload() override;
 		virtual bool validate() const override;
 	};
 
-	using AbstractRenderStageRef = std::shared_ptr<AbstractRenderStage>;
-	using RenderStageList = std::vector<AbstractRenderStageRef>;
+	using AbstractRenderPassRef = std::shared_ptr<AbstractRenderPass>;
+	using RenderPassList = std::vector<AbstractRenderPassRef>;
 };
