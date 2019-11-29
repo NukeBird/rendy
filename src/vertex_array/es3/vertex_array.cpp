@@ -1,6 +1,6 @@
 #include "vertex_array.h"
 #include <optick.h>
-#include "../../log.h"
+#include "../../util/log.h"
 
 Rendy::ES3::VertexArray::VertexArray(AbstractBufferRef vbo,
 	AbstractBufferRef ibo, const BufferLayoutRef& layout)

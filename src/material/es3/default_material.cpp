@@ -3,7 +3,7 @@
 #include "../../bind_texture2d.h"
 #include "../../bind_texture_cube.h"
 #include "../../set_uniform.h"
-#include "../../log.h"
+#include "../../util/log.h"
 #include <optick.h>
 
 Rendy::ES3::DefaultMaterial::DefaultMaterial(AbstractTexture2DRef albedo_texture,

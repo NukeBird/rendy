@@ -3,7 +3,7 @@
 #include <regex>
 #include <chrono>
 #include <optick.h>
-#include "log.h"
+#include "util/log.h"
 
 void GLAPIENTRY message_callback(GLenum source,
 	GLenum type,

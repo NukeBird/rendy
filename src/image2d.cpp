@@ -3,7 +3,7 @@
 #include <stb/stb_image.h>
 #include <optick.h>
 #include "common.h"
-#include "log.h"
+#include "util/log.h"
 
 Rendy::Image2D::Image2D(const char* memory, uint32_t length)
 {
