@@ -1,7 +1,7 @@
 #pragma once
 #include "abstract_vertex_array.h"
 #include "abstract_command.h"
-#include "abstract_material.h"
+#include "material/abstract_material.h"
 #include "set_uniform.h"
 #include <glm/glm.hpp>
 #include <vector>

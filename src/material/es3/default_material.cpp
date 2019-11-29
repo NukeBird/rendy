@@ -1,10 +1,10 @@
 #include "default_material.h"
-#include "../bind_shader.h"
-#include "../bind_texture2d.h"
-#include "../bind_texture_cube.h"
-#include "../set_uniform.h"
+#include "../../bind_shader.h"
+#include "../../bind_texture2d.h"
+#include "../../bind_texture_cube.h"
+#include "../../set_uniform.h"
+#include "../../log.h"
 #include <optick.h>
-#include "../log.h"
 
 Rendy::ES3::DefaultMaterial::DefaultMaterial(AbstractTexture2DRef albedo_texture,
 	AbstractTexture2DRef ambient_metallic_roughness_texture, 

@@ -1,6 +1,6 @@
 #pragma once
 #include "abstract_drawable.h"
-#include "abstract_material.h"
+#include "material/abstract_material.h"
 #include "abstract_vertex_array.h"
 #include "abstract_texture2d.h"
 #include "abstract_shader.h"

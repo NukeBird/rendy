@@ -1,6 +1,6 @@
 #include "es2.h"
 #include "engine.h"
-#include "default_material.h"
+#include "../material/es2/default_material.h"
 #include <optick.h>
 #include <cassert>
 #include <vector>
