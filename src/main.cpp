@@ -30,7 +30,7 @@ void GLAPIENTRY message_callback(GLenum source,
 
 #include "es2/engine.h"
 #include "es3/engine.h"
-#include "vfs.h"
+#include "util/vfs/vfs.h"
 
 struct DumbStage: public Rendy::AbstractRenderPass
 {

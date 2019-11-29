@@ -2,7 +2,7 @@
 #include "index_type.h"
 #include "buffer/abstract_buffer.h"
 #include "abstract_drawable.h"
-#include "abstract_vfs.h"
+#include "util/vfs/abstract_vfs.h"
 #include "material/abstract_material.h"
 #include "shader/abstract_shader.h"
 #include "texture/texture2d/abstract_texture2d.h"
