@@ -354,7 +354,7 @@ int main(int argc, char** argv)
 
 		glm::mat4 transform = glm::translate(cam_target + glm::vec3(0, height, 0)) *
 			//glm::rotate(glm::radians(angle), glm::vec3(0, 1, 0)) *
-			glm::scale(glm::vec3{ 0.015f });
+			glm::scale(glm::vec3{ 0.35f });
 
 		glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
