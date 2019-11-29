@@ -2,7 +2,6 @@
 #include <stack>
 #include <optick.h>
 #include <glm/gtx/quaternion.hpp>
-#include "es2/texture_cube.h"
 #include "common.h"
 #include "log.h"
 

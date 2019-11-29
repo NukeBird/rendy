@@ -2,7 +2,7 @@
 #include "../../abstract_resource.h"
 #include "../texture_format.h"
 #include "../texture_type.h"
-#include "../../sampler2d/abstract_sampler2d.h"
+#include "../sampler2d/abstract_sampler2d.h"
 #include "../../image2d.h"
 #include <glm/glm.hpp>
 #include <memory>

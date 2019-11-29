@@ -1,6 +1,6 @@
 #pragma once
 #include "../buffer/es2/buffer.h"
-#include "../sampler2d/es2/sampler2d.h"
+#include "../texture/sampler2d/es2/sampler2d.h"
 #include "shader.h"
 #include "shader_variant.h"
 #include "../texture/texture_cube/es2/texture_cube.h"
