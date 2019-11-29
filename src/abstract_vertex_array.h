@@ -1,6 +1,6 @@
 #pragma once
 #include "abstract_resource.h"
-#include "abstract_buffer.h"
+#include "buffer/abstract_buffer.h"
 #include "abstract_shader_variant.h"
 #include "buffer_layout.h"
 

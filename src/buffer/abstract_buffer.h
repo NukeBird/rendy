@@ -1,5 +1,5 @@
 #pragma once
-#include "abstract_resource.h"
+#include "../abstract_resource.h"
 #include <memory>
 #include <string>
 

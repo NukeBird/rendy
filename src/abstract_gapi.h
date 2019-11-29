@@ -1,6 +1,6 @@
 #pragma once
 #include "index_type.h"
-#include "abstract_buffer.h"
+#include "buffer/abstract_buffer.h"
 #include "abstract_drawable.h"
 #include "abstract_vfs.h"
 #include "abstract_material.h"
