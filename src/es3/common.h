@@ -3,5 +3,5 @@
 #include "shader.h"
 #include "shader_variant.h"
 #include "texture_cube.h"
-#include "texture2d.h"
+#include "../texture/texture2d/es3/texture2d.h"
 #include "vertex_array.h"
