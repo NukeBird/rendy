@@ -1,5 +1,5 @@
 #pragma once
-#include "abstract_texture_cube.h"
+#include "texture/texture_cube/abstract_texture_cube.h"
 #include "abstract_command.h"
 
 namespace Rendy

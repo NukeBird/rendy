@@ -1,7 +1,7 @@
 #pragma once
 #include "../abstract_material.h"
 #include "../../texture/texture2d/abstract_texture2d.h"
-#include "../../abstract_texture_cube.h"
+#include "../../texture/texture_cube/abstract_texture_cube.h"
 
 namespace Rendy
 {

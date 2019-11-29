@@ -1,7 +1,7 @@
 #pragma once
-#include "abstract_resource.h"
-#include "texture/texture_format.h"
-#include "texture/texture_type.h"
+#include "../../abstract_resource.h"
+#include "../texture_format.h"
+#include "../texture_type.h"
 #include <glm/glm.hpp>
 #include <memory>
 
