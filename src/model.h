@@ -1,7 +1,7 @@
 #pragma once
 #include "abstract_drawable.h"
 #include "material/abstract_material.h"
-#include "abstract_vertex_array.h"
+#include "vertex_array/abstract_vertex_array.h"
 #include "texture/texture2d/abstract_texture2d.h"
 #include "shader/abstract_shader.h"
 #include "image2d.h"

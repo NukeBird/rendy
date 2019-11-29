@@ -1,5 +1,5 @@
 #pragma once
-#include "abstract_vertex_array.h"
+#include "vertex_array/abstract_vertex_array.h"
 #include "abstract_command.h"
 #include "material/abstract_material.h"
 #include "set_uniform.h"

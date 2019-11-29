@@ -1,8 +1,8 @@
 #pragma once
-#include "abstract_resource.h"
-#include "buffer/abstract_buffer.h"
-#include "shader/abstract_shader_variant.h"
-#include "buffer_layout.h"
+#include "../abstract_resource.h"
+#include "../buffer/abstract_buffer.h"
+#include "../shader/abstract_shader_variant.h"
+#include "../buffer/buffer_layout.h"
 
 namespace Rendy
 {

@@ -1,6 +1,6 @@
 #pragma once
 #include "../abstract_vertex_array.h"
-#include "../common.h"
+#include "../../common.h"
 
 namespace Rendy
 {
