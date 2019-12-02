@@ -1,5 +1,5 @@
 #pragma once
-#include "../es2/texture2d.h"
+#include "texture2d_es2.h"
 
 namespace Rendy
 {
