@@ -2,8 +2,8 @@
 #include <cstdint>
 #include <glm/glm.hpp>
 #include <memory>
-#include "abstract_resource.h"
-#include "texture/texture_type.h"
+#include "../abstract_resource.h"
+#include "../texture/texture_type.h"
 #include <gli/gli.hpp>
 
 namespace Rendy

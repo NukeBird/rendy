@@ -1,6 +1,6 @@
 #pragma once
 #include "abstract_gapi.h"
-#include "image_set.h"
+#include "image/image_set.h"
 #include <vector>
 #include <string>
 #include <memory>

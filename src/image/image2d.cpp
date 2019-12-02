@@ -2,8 +2,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 #include <optick.h>
-#include "common.h"
-#include "util/log.h"
+#include "../common.h"
+#include "../util/log.h"
 
 Rendy::Image2D::Image2D(const char* memory, uint32_t length)
 {
