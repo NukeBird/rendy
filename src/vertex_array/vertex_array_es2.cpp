@@ -1,4 +1,4 @@
-#include "vertex_array.h"
+#include "vertex_array_es2.h"
 #include <optick.h>
 
 Rendy::ES2::VertexArray::VertexArray(AbstractBufferRef vbo,
