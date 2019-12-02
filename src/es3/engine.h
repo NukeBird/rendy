@@ -11,12 +11,12 @@ namespace Rendy
 		public:
 			Engine(VFSRef vfs);
 			virtual void reload() override;
-			virtual AbstractGAPIRef get_gapi() const override;
+			virtual GAPIRef get_gapi() const override;
 			virtual AbstractMaterialRef make_material(ImageSetRef image_set) override;
 		private:
 			AbstractTextureCubeRef read_texture_cube(const std::string& path);
 
-			AbstractGAPIRef gapi;
+			GAPIRef gapi;
 			AbstractShaderRef generic_shader;
 			AbstractTextureCubeRef iem;
 			AbstractTextureCubeRef pmrem;

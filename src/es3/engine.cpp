@@ -1,6 +1,5 @@
 #include "engine.h"
 #include "../material/es3/default_material.h"
-#include "es3.h"
 #include <optick.h>
 #include <cassert>
 #include <vector>
@@ -14,7 +13,7 @@ Rendy::ES3::Engine::Engine(VFSRef vfs)
 	glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
 	glHint(GL_FRAGMENT_SHADER_DERIVATIVE_HINT, GL_NICEST);
 
-	this->gapi = std::make_shared<ES3::GAPI>();
+	this->gapi = std::make_shared<GAPI>(OGL::ES31);
 	this->vfs = vfs;
 	iem = read_texture_cube("assets/iem.dds");
 	pmrem = read_texture_cube("assets/pmrem.dds");
@@ -47,7 +46,7 @@ void Rendy::ES3::Engine::reload()
 	iem->reload();
 }
 
-Rendy::AbstractGAPIRef Rendy::ES3::Engine::get_gapi() const
+Rendy::GAPIRef Rendy::ES3::Engine::get_gapi() const
 {
 	return gapi;
 }

@@ -1,4 +1,3 @@
-#include "es2.h"
 #include "engine.h"
 #include "../material/es2/default_material.h"
 #include <optick.h>
@@ -11,7 +10,7 @@ Rendy::ES2::Engine::Engine(VFSRef vfs)
 {
 	OPTICK_EVENT();
 
-	this->gapi = std::make_shared<ES2::GAPI>();
+	this->gapi = std::make_shared<GAPI>(OGL::ES20);
 	this->vfs = vfs;
 
 	auto iem_file = vfs->open_file("assets/iem_ldr.dds", FileMode::Read);
@@ -37,7 +36,7 @@ void Rendy::ES2::Engine::reload()
 	iem->reload();
 }
 
-Rendy::AbstractGAPIRef Rendy::ES2::Engine::get_gapi() const
+Rendy::GAPIRef Rendy::ES2::Engine::get_gapi() const
 {
 	return gapi;
 }

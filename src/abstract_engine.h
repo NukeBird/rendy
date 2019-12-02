@@ -1,5 +1,5 @@
 #pragma once
-#include "abstract_gapi.h"
+#include "gapi.h"
 #include "image/image_set.h"
 #include <vector>
 #include <string>
@@ -15,7 +15,7 @@ namespace Rendy
 		virtual void reload();
 		virtual bool validate();
 		
-		virtual AbstractGAPIRef get_gapi() const = 0;
+		virtual GAPIRef get_gapi() const = 0;
 		uint32_t get_stage_count() const;
 		AbstractRenderPassRef get_stage(uint32_t index);
 		void add_stage(AbstractRenderPassRef stage);
