@@ -1,5 +1,5 @@
 #pragma once
-#include "../buffer/es2/buffer.h"
+#include "../buffer/buffer_es2.h"
 #include "../texture/sampler2d/es2/sampler2d.h"
 #include "../shader/es2/shader.h"
 #include "../shader/es2/shader_variant.h"

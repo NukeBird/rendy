@@ -1,5 +1,5 @@
 #pragma once
-#include "../es2/buffer.h"
+#include "buffer_es2.h"
 
 namespace Rendy
 {

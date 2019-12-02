@@ -1,4 +1,4 @@
-#include "buffer.h"
+#include "buffer_es2.h"
 #include <optick.h>
 
 Rendy::ES2::Buffer::Buffer(BufferTarget target, uint32_t size, const void* ptr)

@@ -1,7 +1,7 @@
 #pragma once
-#include "../abstract_buffer.h"
+#include "abstract_buffer.h"
 #include <vector>
-#include "../../common.h"
+#include "../common.h"
 
 namespace Rendy
 {

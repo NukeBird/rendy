@@ -1,5 +1,5 @@
 #pragma once
-#include "../buffer/es3/buffer.h"
+#include "../buffer/buffer_es3.h"
 #include "../shader/es3/shader.h"
 #include "../shader/es3/shader_variant.h"
 #include "../texture/texture_cube/es3/texture_cube.h"
