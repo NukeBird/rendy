@@ -1,4 +1,4 @@
-#include "sampler2d.h"
+#include "sampler2d_es2.h"
 
 void Rendy::ES2::Sampler2D::reload()
 {

@@ -1,6 +1,5 @@
 #pragma once
-#include "../abstract_sampler2d.h"
-#include "../es2/sampler2d.h
+#include "sampler2d_es2.h"
 
 namespace Rendy
 {
