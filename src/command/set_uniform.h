@@ -1,6 +1,6 @@
 #pragma once
 #include "abstract_command.h"
-#include "shader/abstract_shader_variant.h"
+#include "../shader/abstract_shader_variant.h"
 
 namespace Rendy
 {

@@ -6,7 +6,7 @@
 #include <stack>
 #include <assimp/material.h>
 #include <optick.h>
-#include "log.h"
+#include "util/log.h"
 
 unsigned Rendy::ModelFactory::get_import_flags() const 
 {

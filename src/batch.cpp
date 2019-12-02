@@ -1,7 +1,7 @@
 #include "batch.h"
-#include "bind_shader.h"
-#include "set_uniform.h"
-#include "bind_vertex_array.h"
+#include "command/bind_shader.h"
+#include "command/set_uniform.h"
+#include "command/bind_vertex_array.h"
 #include "draw.h"
 #include <memory>
 

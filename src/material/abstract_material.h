@@ -1,7 +1,7 @@
 #pragma once
 #include "../abstract_resource.h"
 #include "../shader/abstract_shader.h"
-#include "../abstract_command.h"
+#include "../command/abstract_command.h"
 #include <memory>
 #include <vector>
 

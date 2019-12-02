@@ -1,8 +1,8 @@
 #include "default_material.h"
-#include "../../bind_shader.h"
-#include "../../bind_texture2d.h"
-#include "../../bind_texture_cube.h"
-#include "../../set_uniform.h"
+#include "../../command/bind_shader.h"
+#include "../../command/bind_texture2d.h"
+#include "../../command/bind_texture_cube.h"
+#include "../../command/set_uniform.h"
 #include "../../util/log.h"
 #include <optick.h>
 
