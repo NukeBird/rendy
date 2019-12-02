@@ -1,7 +1,7 @@
 #pragma once
 #include "index_type.h"
 #include "buffer/abstract_buffer.h"
-#include "abstract_drawable.h"
+#include "drawable/abstract_drawable.h"
 #include "util/vfs/abstract_vfs.h"
 #include "material/abstract_material.h"
 #include "shader/abstract_shader.h"

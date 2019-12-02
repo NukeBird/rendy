@@ -1,12 +1,12 @@
 #include "model_factory.h"
-#include "shader/shader_flags.h"
-#include "image2d.h"
-#include "util/thread_pool.h"
-#include <unordered_map>
-#include <stack>
+#include "../shader/shader_flags.h"
+#include "../image2d.h"
+#include "../util/thread_pool.h"
+#include "../util/log.h"
 #include <assimp/material.h>
+#include <unordered_map>
 #include <optick.h>
-#include "util/log.h"
+#include <stack>
 
 unsigned Rendy::ModelFactory::get_import_flags() const 
 {

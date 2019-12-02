@@ -1,6 +1,6 @@
 #pragma once
 #include "abstract_resource.h"
-#include "batch.h"
+#include "drawable/batch.h"
 #include <memory>
 #include <vector>
 

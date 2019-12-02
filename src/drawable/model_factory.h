@@ -1,10 +1,10 @@
 #pragma once
 #include "model.h"
-#include "util/thread_pool.h"
-#include "util/vfs/abstract_vfs.h"
-#include "image_set.h"
-#include "common.h"
-#include "abstract_engine.h"
+#include "../util/thread_pool.h"
+#include "../util/vfs/abstract_vfs.h"
+#include "../image_set.h"
+#include "../common.h"
+#include "../abstract_engine.h"
 #include <assimp/Importer.hpp>
 #include <assimp/cimport.h>
 #include <assimp/config.h>

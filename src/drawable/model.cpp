@@ -2,8 +2,8 @@
 #include <stack>
 #include <optick.h>
 #include <glm/gtx/quaternion.hpp>
-#include "common.h"
-#include "util/log.h"
+#include "../common.h"
+#include "../util/log.h"
 
 void Rendy::Mesh::reload()
 {

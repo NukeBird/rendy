@@ -1,5 +1,5 @@
 #pragma once
-#include "abstract_resource.h"
+#include "../abstract_resource.h"
 #include "batch.h"
 #include <glm/glm.hpp>
 #include <vector>

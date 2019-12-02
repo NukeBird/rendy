@@ -1,8 +1,8 @@
 #include "batch.h"
-#include "command/bind_shader.h"
-#include "command/set_uniform.h"
-#include "command/bind_vertex_array.h"
-#include "draw.h"
+#include "../command/bind_shader.h"
+#include "../command/set_uniform.h"
+#include "../command/bind_vertex_array.h"
+#include "../command/draw.h"
 #include <memory>
 
 Rendy::CommandList Rendy::Batch::to_command_list() const
