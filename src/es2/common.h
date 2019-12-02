@@ -1,8 +1,8 @@
 #pragma once
 #include "../buffer/buffer_es2.h"
 #include "../texture/sampler2d/es2/sampler2d.h"
-#include "../shader/es2/shader.h"
-#include "../shader/es2/shader_variant.h"
+#include "../shader/shader_es2.h"
+#include "../shader/shader_variant_es2.h"
 #include "../texture/texture_cube/es2/texture_cube.h"
 #include "../texture/texture2d/es2/texture2d.h"
 #include "../vertex_array/es2/vertex_array.h"

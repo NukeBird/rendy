@@ -1,5 +1,5 @@
 #pragma once
-#include "../es2/shader.h"
+#include "shader_es2.h"
 
 namespace Rendy
 {

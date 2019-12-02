@@ -1,6 +1,6 @@
-#include "shader.h"
-#include "shader_variant.h"
-#include "../../common.h"
+#include "shader_es2.h"
+#include "shader_variant_es2.h"
+#include "../common.h"
 #include <optick.h>
 
 Rendy::ES2::Shader::Shader(const std::string& vertex_source, const std::string& fragment_source)
