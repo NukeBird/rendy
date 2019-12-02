@@ -1,5 +1,5 @@
-#include "texture_cube.h"
-#include "../../../common.h"
+#include "texture_cube_es2.h"
+#include "../../common.h"
 #include <optick.h>
 
 Rendy::ES2::TextureCube::TextureCube(const std::string& filename)

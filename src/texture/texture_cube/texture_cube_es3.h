@@ -1,5 +1,5 @@
 #pragma once
-#include "../abstract_texture_cube.h"
+#include "abstract_texture_cube.h"
 #include <gli/gli.hpp>
 #include <string>
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "../abstract_texture_cube.h"
+#include "abstract_texture_cube.h"
 #include <gli/gli.hpp>
 #include <string>
 
@@ -7,7 +7,7 @@ namespace Rendy
 {
 	namespace ES2
 	{
-		class TextureCube final : public AbstractTextureCube
+		class TextureCube final: public AbstractTextureCube
 		{
 		public:
 			TextureCube(const std::string& filename);
