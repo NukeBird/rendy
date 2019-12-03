@@ -1,7 +1,10 @@
 #include "vfs.h"
+#include <optick.h>
 
 Rendy::VFS::VFS(FSRef default_fs)
 {
+	OPTICK_EVENT();
+
 	this->default_fs = default_fs;
 	mount("", default_fs);
 	mount(".", default_fs);
@@ -9,6 +12,8 @@ Rendy::VFS::VFS(FSRef default_fs)
 
 void Rendy::VFS::mount(const std::string& alias, FSRef filesystem)
 {
+	OPTICK_EVENT();
+
 	if (filesystem->validate())
 	{
 		filesystem_map[alias].push_back(filesystem);
@@ -17,6 +22,8 @@ void Rendy::VFS::mount(const std::string& alias, FSRef filesystem)
 
 Rendy::FSRef Rendy::VFS::get_filesystem(const std::string& alias)
 {
+	OPTICK_EVENT();
+
 	auto fs_list = get_filesystem_list(alias);
 
 	if (!fs_list.empty())
@@ -29,6 +36,8 @@ Rendy::FSRef Rendy::VFS::get_filesystem(const std::string& alias)
 
 std::vector<Rendy::FSRef> Rendy::VFS::get_filesystem_list(const std::string& alias)
 {
+	OPTICK_EVENT();
+
 	auto it = filesystem_map.find(alias);
 
 	if (it != filesystem_map.end())
@@ -41,6 +50,8 @@ std::vector<Rendy::FSRef> Rendy::VFS::get_filesystem_list(const std::string& ali
 
 Rendy::FileRef Rendy::VFS::open_file(const std::string& path, FileMode mode)
 {
+	OPTICK_EVENT();
+
 	auto alias = get_alias(path);
 	auto fs_path = path.substr(alias.size() + (alias.empty() ? 0 : 1));
 
@@ -57,6 +68,8 @@ Rendy::FileRef Rendy::VFS::open_file(const std::string& path, FileMode mode)
 
 std::string Rendy::VFS::get_alias(const std::string& text) const
 {
+	OPTICK_EVENT();
+
 	auto slash_it = text.find_first_of("/");
 
 	if (slash_it != std::string::npos)
