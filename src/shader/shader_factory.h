@@ -15,4 +15,6 @@ namespace Rendy
 	private:
 		OGL version;
 	};
+
+	using ShaderFactoryRef = std::shared_ptr<ShaderFactory>;
 };
