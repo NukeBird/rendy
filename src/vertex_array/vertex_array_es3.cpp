@@ -16,6 +16,8 @@ Rendy::ES3::VertexArray::VertexArray(AbstractBufferRef vbo,
 
 Rendy::ES3::VertexArray::~VertexArray()
 {
+	OPTICK_EVENT();
+
 	if (glIsVertexArray(id))
 	{
 		glDeleteVertexArrays(1, &id);
@@ -93,7 +95,6 @@ void Rendy::ES3::VertexArray::draw()
 void Rendy::ES3::VertexArray::unbind()
 {
 	OPTICK_EVENT();
-
 	glBindVertexArray(0);
 }
 
