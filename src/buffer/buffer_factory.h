@@ -14,4 +14,6 @@ namespace Rendy
 	private:
 		OGL version;
 	};
+
+	using BufferFactoryRef = std::shared_ptr<BufferFactory>;
 };
