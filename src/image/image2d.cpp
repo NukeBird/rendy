@@ -55,6 +55,7 @@ uint32_t Rendy::Image2D::get_height() const
 
 Rendy::TextureType Rendy::Image2D::get_type() const
 {
+	OPTICK_EVENT();
 	return type;
 }
 
@@ -73,6 +74,7 @@ void Rendy::Image2D::reload()
 bool Rendy::Image2D::validate() const
 {
 	OPTICK_EVENT();
+
 	if ((data_ptr == nullptr) && gli_tex.empty())
 	{
 		return false;
@@ -93,13 +95,16 @@ bool Rendy::Image2D::validate() const
 
 bool Rendy::Image2D::uses_transparency() const
 {
+	OPTICK_EVENT();
 	return has_useful_alpha;
 }
 
 void Rendy::Image2D::load_image(const char* memory, uint32_t length)
 {
-	Log::info("Loading image...");
 	OPTICK_EVENT();
+
+	Log::info("Loading image...");
+
 	int w, h, c;
 
 	data_ptr = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(memory),
