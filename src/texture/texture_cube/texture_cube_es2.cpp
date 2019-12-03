@@ -5,6 +5,7 @@
 Rendy::ES2::TextureCube::TextureCube(const std::string& filename)
 {
 	OPTICK_EVENT();
+
 	gli_tex = gli::load(filename);
 	process();
 }
@@ -12,6 +13,7 @@ Rendy::ES2::TextureCube::TextureCube(const std::string& filename)
 Rendy::ES2::TextureCube::TextureCube(const void* memory, uint32_t size)
 {
 	OPTICK_EVENT();
+
 	gli_tex = gli::load(reinterpret_cast<const char*>(memory), 
 		static_cast<size_t>(size));
 	process();
@@ -26,6 +28,7 @@ Rendy::ES2::TextureCube::~TextureCube()
 void Rendy::ES2::TextureCube::reload()
 {
 	OPTICK_EVENT();
+
 	if (!validate())
 	{
 		reset();
@@ -36,6 +39,7 @@ void Rendy::ES2::TextureCube::reload()
 bool Rendy::ES2::TextureCube::validate() const
 {
 	OPTICK_EVENT();
+
 	if (gli_tex.empty())
 	{
 		return false;
@@ -57,6 +61,7 @@ bool Rendy::ES2::TextureCube::validate() const
 void Rendy::ES2::TextureCube::bind(uint32_t slot)
 {
 	OPTICK_EVENT();
+
 	assert(slot < 8);
 	glActiveTexture(GL_TEXTURE0 + slot);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, id);
@@ -70,6 +75,7 @@ void Rendy::ES2::TextureCube::bind(uint32_t slot)
 void Rendy::ES2::TextureCube::unbind(uint32_t slot)
 {
 	OPTICK_EVENT();
+
 	assert(slot < 8);
 	glActiveTexture(GL_TEXTURE0 + slot);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
@@ -77,12 +83,14 @@ void Rendy::ES2::TextureCube::unbind(uint32_t slot)
 
 uint32_t Rendy::ES2::TextureCube::get_max_level() const
 {
+	OPTICK_EVENT();
 	return static_cast<uint32_t>(gli_tex.max_level());
 }
 
 glm::uvec3 Rendy::ES2::TextureCube::get_size() const
 {
 	OPTICK_EVENT();
+
 	const auto t = gli_tex.extent(0);
 	return glm::uvec3
 	{
@@ -107,6 +115,7 @@ glm::uvec3 Rendy::ES2::TextureCube::get_size() const
 bool Rendy::ES2::TextureCube::load()
 {
 	OPTICK_EVENT();
+
 	if (gli_tex.empty())
 	{
 		return false;
@@ -175,6 +184,7 @@ bool Rendy::ES2::TextureCube::load()
 void Rendy::ES2::TextureCube::reset()
 {
 	OPTICK_EVENT();
+
 	if (glIsTexture(id))
 	{
 		glDeleteTextures(1, &id);
@@ -186,6 +196,7 @@ void Rendy::ES2::TextureCube::reset()
 void Rendy::ES2::TextureCube::process()
 {
 	OPTICK_EVENT();
+
 	if (!gli_tex.empty())
 	{
 		if (gli_tex.target() != gli::texture::target_type::TARGET_CUBE)
