@@ -14,4 +14,6 @@ namespace Rendy
 	private:
 		OGL version;
 	};
+
+	using Texture2DFactoryRef = std::shared_ptr<Texture2DFactory>;
 };
