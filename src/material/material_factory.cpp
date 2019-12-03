@@ -4,12 +4,15 @@
 #include "default_material_es3.h"
 #include "default_shader_sources_es3.hpp"
 #include <cassert>
+#include <optick.h>
 
 Rendy::MaterialFactory::MaterialFactory(OGL version, 
 	Texture2DFactoryRef texture_factory, ShaderFactoryRef shader_factory,
 	AbstractTextureCubeRef iem, AbstractTextureCubeRef pmrem, 
 	AbstractTexture2DRef lut)
 {
+	OPTICK_EVENT();
+
 	this->version = version;
 	this->texture_factory = texture_factory;
 	this->iem = iem;
@@ -32,6 +35,8 @@ Rendy::MaterialFactory::MaterialFactory(OGL version,
 
 Rendy::AbstractMaterialRef Rendy::MaterialFactory::make(ImageSetRef image_set)
 {
+	OPTICK_EVENT();
+
 	switch (version)
 	{
 		case Rendy::OGL::ES20:
@@ -50,6 +55,8 @@ Rendy::AbstractMaterialRef Rendy::MaterialFactory::make(ImageSetRef image_set)
 
 void Rendy::MaterialFactory::load_shader(ShaderFactoryRef shader_factory)
 {
+	OPTICK_EVENT();
+
 	switch (version)
 	{
 		case Rendy::OGL::ES20:
@@ -73,6 +80,8 @@ void Rendy::MaterialFactory::load_shader(ShaderFactoryRef shader_factory)
 
 Rendy::AbstractMaterialRef Rendy::MaterialFactory::make_es2(ImageSetRef image_set)
 {
+	OPTICK_EVENT();
+
 	AbstractTexture2DRef color;
 	AbstractTexture2DRef normal;
 
@@ -92,6 +101,8 @@ Rendy::AbstractMaterialRef Rendy::MaterialFactory::make_es2(ImageSetRef image_se
 
 Rendy::AbstractMaterialRef Rendy::MaterialFactory::make_es3(ImageSetRef image_set)
 {
+	OPTICK_EVENT();
+
 	AbstractTexture2DRef albedo;
 	AbstractTexture2DRef normal;
 	AbstractTexture2DRef metallic_roughness;
