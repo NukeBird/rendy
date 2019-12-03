@@ -225,7 +225,7 @@ Rendy::BufferLayoutRef Rendy::ModelFactory::parse_buffer_layout(uint32_t flags) 
 }
 
 template<class T>
-static Rendy::AbstractBufferRef parse_ibo(aiMesh* assimp_mesh, Rendy::AbstractEngineRef engine)
+static Rendy::AbstractBufferRef parse_ibo(aiMesh* assimp_mesh, Rendy::EngineRef engine)
 {
 	OPTICK_EVENT();
 
@@ -872,7 +872,7 @@ Rendy::Image2DRef Rendy::ModelFactory::get_image(int index, std::vector<Image2DR
 	return images[index];
 }
 
-Rendy::ModelFactory::ModelFactory(AbstractEngineRef engine, VFSRef vfs, ThreadPoolRef thread_pool)
+Rendy::ModelFactory::ModelFactory(EngineRef engine, VFSRef vfs, ThreadPoolRef thread_pool)
 {
 	OPTICK_EVENT();
 	this->engine = engine;

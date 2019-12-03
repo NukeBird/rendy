@@ -4,7 +4,7 @@
 #include "../util/vfs/abstract_vfs.h"
 #include "../image/image_set.h"
 #include "../common.h"
-#include "../abstract_engine.h"
+#include "../engine.h"
 #include <assimp/Importer.hpp>
 #include <assimp/cimport.h>
 #include <assimp/config.h>
@@ -21,7 +21,7 @@ namespace Rendy
 	class ModelFactory
 	{
 	public:
-		ModelFactory(AbstractEngineRef engine, VFSRef vfs, ThreadPoolRef thread_pool 
+		ModelFactory(EngineRef engine, VFSRef vfs, ThreadPoolRef thread_pool 
 			= std::make_shared<ThreadPool>());
 		ModelRef make(const char* filename);
 		ModelRef make(const void* memory, uint32_t size);
@@ -60,7 +60,7 @@ namespace Rendy
 			const std::unordered_map<const aiTexture*, int>& aitex_to_index) const;
 		Image2DRef get_image(int index, std::vector<Image2DRef>& images) const;
 
-		AbstractEngineRef engine;
+		EngineRef engine;
 		ThreadPoolRef thread_pool;
 		VFSRef vfs;
 	};

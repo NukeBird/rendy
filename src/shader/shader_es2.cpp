@@ -35,8 +35,8 @@ Rendy::ShaderVariantRef Rendy::ES2::Shader::compile(const ShaderSettings& settin
 	if (it == variants.end())
 	{
 		const std::string meta = 
-			"#version 330 core\n" //TODO
-			"#define MAX_BONES 120\n"
+			"#version 430\n" //TODO
+			"#define MAX_BONES 120\n" //TODO
 			+ settings.generate_definitions();
 		const std::string vertex_source_variant = meta + vertex_source;
 		const std::string fragment_source_variant = meta + fragment_source;
