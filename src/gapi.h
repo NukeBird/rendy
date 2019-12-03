@@ -27,6 +27,11 @@ namespace Rendy
 			AbstractBufferRef ibo, BufferLayoutRef layout);
 		AbstractBufferRef make_vbo(uint32_t size, const void* ptr);
 		AbstractBufferRef make_ibo(uint32_t size, const void* ptr);
+		BufferFactoryRef get_buffer_factory() const;
+		ShaderFactoryRef get_shader_factory() const;
+		Texture2DFactoryRef get_texture2d_factory() const;
+		TextureCubeFactoryRef get_texture_cube_factory() const;
+		VertexArrayFactoryRef get_vertex_array_factory() const;
 		IndexType get_index_type() const;
 	private:
 		BufferFactoryRef buffer_factory;

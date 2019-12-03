@@ -43,6 +43,31 @@ Rendy::AbstractBufferRef Rendy::GAPI::make_ibo(uint32_t size, const void* ptr)
 	return buffer_factory->make(BufferTarget::IBO, size, ptr);
 }
 
+Rendy::BufferFactoryRef Rendy::GAPI::get_buffer_factory() const
+{
+	return buffer_factory;
+}
+
+Rendy::ShaderFactoryRef Rendy::GAPI::get_shader_factory() const
+{
+	return shader_factory;
+}
+
+Rendy::Texture2DFactoryRef Rendy::GAPI::get_texture2d_factory() const
+{
+	return tex2d_factory;
+}
+
+Rendy::TextureCubeFactoryRef Rendy::GAPI::get_texture_cube_factory() const
+{
+	return tex_cube_factory;
+}
+
+Rendy::VertexArrayFactoryRef Rendy::GAPI::get_vertex_array_factory() const
+{
+	return vao_factory;
+}
+
 Rendy::IndexType Rendy::GAPI::get_index_type() const
 {
 	switch (version)
