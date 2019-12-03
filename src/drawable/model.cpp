@@ -86,6 +86,7 @@ void Rendy::Model::update(float dt)
 void Rendy::Model::reload()
 {
 	OPTICK_EVENT();
+
 	for (auto& material: materials)
 	{
 		material->reload();
@@ -100,6 +101,7 @@ void Rendy::Model::reload()
 bool Rendy::Model::validate() const
 {
 	OPTICK_EVENT();
+
 	for (auto& material: materials)
 	{
 		if (!material->validate())
@@ -125,6 +127,7 @@ Rendy::BatchList Rendy::Model::generate_batch_list(const glm::mat4& model, const
 	const glm::mat4& proj)
 {
 	OPTICK_EVENT();
+
 	BatchList calls;
 	if (get_node_count() > 0)
 	{
@@ -135,6 +138,8 @@ Rendy::BatchList Rendy::Model::generate_batch_list(const glm::mat4& model, const
 
 glm::mat4 Rendy::Model::get_world_transform(const Node& node) const
 {
+	OPTICK_EVENT();
+
 	if (node.root_id == -1)
 	{
 		return node.transform;
@@ -146,6 +151,8 @@ glm::mat4 Rendy::Model::get_world_transform(const Node& node) const
 std::vector<glm::mat4> Rendy::Model::calculate_bone_transforms(const Mesh& mesh,
 	const glm::mat4& inverse_transform)
 {
+	OPTICK_EVENT();
+
 	std::vector<glm::mat4> transforms;
 
 	auto& mesh_bones = name_to_bones[mesh.name];
@@ -170,6 +177,7 @@ void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_t
 	const glm::mat4& model, const glm::mat4& view, const glm::mat4& proj, BatchList& calls)
 {
 	OPTICK_EVENT();
+
 	auto& node = nodes[node_id];
 
 	glm::mat4 transform = base_transform * node.transform;
@@ -254,6 +262,7 @@ uint32_t Rendy::Model::find_key_index(const std::vector<QuatKey>& keys, float ti
 glm::vec3 Rendy::Model::calculate_position(AnimationNodeRef animation, float time)
 {
 	OPTICK_EVENT();
+
 	if (animation->position_keys.size() == 1)
 	{
 		return animation->position_keys[0].value;
@@ -290,6 +299,7 @@ glm::vec3 Rendy::Model::calculate_position(AnimationNodeRef animation, float tim
 glm::quat Rendy::Model::calculate_rotation(AnimationNodeRef animation, float time)
 {
 	OPTICK_EVENT();
+
 	if (animation->rotation_keys.size() == 1)
 	{
 		return animation->rotation_keys[0].value;
@@ -322,6 +332,7 @@ glm::quat Rendy::Model::calculate_rotation(AnimationNodeRef animation, float tim
 glm::vec3 Rendy::Model::calculate_scale(AnimationNodeRef animation, float time)
 {
 	OPTICK_EVENT();
+
 	if (animation->scaling_keys.size() == 1)
 	{
 		return animation->scaling_keys[0].value;
