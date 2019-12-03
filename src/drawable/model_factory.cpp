@@ -37,6 +37,7 @@ unsigned Rendy::ModelFactory::get_import_flags() const
 uint32_t Rendy::ModelFactory::parse_mesh_flags(const aiMesh* mesh) const
 {
 	OPTICK_EVENT();
+
 	uint32_t flags = 0;
 
 	if (mesh->HasPositions())
@@ -90,6 +91,8 @@ uint32_t Rendy::ModelFactory::parse_mesh_flags(const aiMesh* mesh) const
 
 std::vector<Rendy::Bone> Rendy::ModelFactory::parse_mesh_bones(const aiMesh* mesh) const
 {
+	OPTICK_EVENT();
+
 	std::vector<Bone> bones;
 	bones.reserve(static_cast<size_t>(mesh->mNumBones));
 
@@ -172,6 +175,7 @@ uint32_t Rendy::ModelFactory::parse_mesh_size(uint32_t flags) const
 Rendy::BufferLayoutRef Rendy::ModelFactory::parse_buffer_layout(uint32_t flags) const
 {
 	OPTICK_EVENT();
+
 	std::vector<Rendy::BufferElement> buffer_elements;
 
 	//POSITION
@@ -224,6 +228,7 @@ template<class T>
 static Rendy::AbstractBufferRef parse_ibo(aiMesh* assimp_mesh, Rendy::AbstractEngineRef engine)
 {
 	OPTICK_EVENT();
+
 	std::vector<T> indices; //TODO: sometimes uint32_t?
 
 	for (unsigned j = 0; j < assimp_mesh->mNumFaces; ++j)
@@ -242,6 +247,7 @@ static Rendy::AbstractBufferRef parse_ibo(aiMesh* assimp_mesh, Rendy::AbstractEn
 std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 {
 	OPTICK_EVENT();
+
 	std::vector<Rendy::Mesh> result;
 	result.reserve(static_cast<size_t>(scene->mNumMeshes));
 
@@ -626,6 +632,7 @@ void Rendy::ModelFactory::link_nodes(std::vector<Rendy::Node>& node_list,
 std::vector<Rendy::Node> Rendy::ModelFactory::parse_nodes(const aiScene* scene)
 {
 	OPTICK_EVENT();
+
 	std::vector<Rendy::Node> result;
 
 	std::stack<const aiNode*> unhandled_nodes;
@@ -710,6 +717,7 @@ std::unordered_map<const aiTexture*, int>
 Rendy::ModelFactory::generate_image_map(const aiScene* scene)
 {
 	OPTICK_EVENT();
+
 	std::unordered_map<const aiTexture*, int> map;
 
 	for (uint32_t i = 0; i < scene->mNumTextures; ++i)
@@ -723,6 +731,7 @@ Rendy::ModelFactory::generate_image_map(const aiScene* scene)
 Rendy::Image2DRef Rendy::ModelFactory::parse_image(const aiTexture* assimp_texture)
 {
 	OPTICK_EVENT();
+
 	const char* texture_ptr =
 		reinterpret_cast<const char*>(assimp_texture->pcData);
 	uint32_t texture_size = assimp_texture->mWidth;
