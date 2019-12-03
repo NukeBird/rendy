@@ -13,6 +13,8 @@ std::string Rendy::ShaderSettings::generate_definitions() const
 
 bool Rendy::ShaderSettings::operator==(const ShaderSettings& s) const
 {
+	OPTICK_EVENT();
+
 	if (flags == s.flags)
 	{
 		return true;
