@@ -4,6 +4,7 @@
 Rendy::BufferLayout::BufferLayout(const std::vector<BufferElement>& elements)
 {
 	OPTICK_EVENT();
+
 	this->elements = elements;
 	calculate();
 }
@@ -44,6 +45,7 @@ std::vector<Rendy::BufferElement>::const_iterator Rendy::BufferLayout::end() con
 void Rendy::BufferLayout::calculate()
 {
 	OPTICK_EVENT();
+
 	uint32_t offset = 0;
 	stride = 0;
 
@@ -61,6 +63,7 @@ void Rendy::BufferLayout::calculate()
 Rendy::BufferElement::BufferElement(ShaderDataType type, const std::string& name)
 {
 	OPTICK_EVENT();
+
 	this->name = name;
 	this->type = type;
 	this->size = get_shader_data_type_size(type);
@@ -74,6 +77,7 @@ Rendy::BufferElement::BufferElement(ShaderDataType type, const std::string& name
 uint32_t Rendy::BufferElement::get_component_count() const
 {
 	OPTICK_EVENT();
+
 	switch (type)
 	{
 		case ShaderDataType::Float:   return 1;
