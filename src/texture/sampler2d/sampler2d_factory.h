@@ -14,4 +14,6 @@ namespace Rendy
 	private:
 		OGL version;
 	};
+
+	using Sampler2DFactoryRef = std::shared_ptr<Sampler2DFactory>;
 };
