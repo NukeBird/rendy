@@ -1,7 +1,10 @@
 #include "native_file.h"
+#include <optick.h>
 
 Rendy::NativeFile::NativeFile(const std::string& path, FileMode mode)
 {
+	OPTICK_EVENT();
+
 	this->mode = mode;
 	this->size = 0;
 
@@ -38,26 +41,32 @@ Rendy::NativeFile::NativeFile(const std::string& path, FileMode mode)
 
 uint64_t Rendy::NativeFile::get_size() const
 {
+	OPTICK_EVENT();
 	return size;
 }
 
 bool Rendy::NativeFile::is_read_only() const
 {
+	OPTICK_EVENT();
 	return mode == FileMode::Read;
 }
 
 bool Rendy::NativeFile::is_open() const
 {
+	OPTICK_EVENT();
 	return stream.is_open();
 }
 
 bool Rendy::NativeFile::validate()
 {
+	OPTICK_EVENT();
 	return stream.good();
 }
 
 uint64_t Rendy::NativeFile::seek(uint64_t offset, SeekOrigin origin)
 {
+	OPTICK_EVENT();
+
 	std::ios_base::seekdir way = std::ios_base::beg;
 
 	switch (origin)
@@ -87,11 +96,14 @@ uint64_t Rendy::NativeFile::seek(uint64_t offset, SeekOrigin origin)
 
 uint64_t Rendy::NativeFile::tell()
 {
+	OPTICK_EVENT();
 	return static_cast<uint64_t>(stream.tellg());
 }
 
 uint64_t Rendy::NativeFile::read(void* buffer, uint64_t size)
 {
+	OPTICK_EVENT();
+
 	if (!validate())
 	{
 		return 0;
@@ -110,6 +122,8 @@ uint64_t Rendy::NativeFile::read(void* buffer, uint64_t size)
 
 uint64_t Rendy::NativeFile::write(void* buffer, uint64_t size)
 {
+	OPTICK_EVENT();
+
 	if (!validate())
 	{
 		return 0;
@@ -132,6 +146,8 @@ uint64_t Rendy::NativeFile::write(void* buffer, uint64_t size)
 
 void Rendy::NativeFile::calculate_size()
 {
+	OPTICK_EVENT();
+
 	seek(0, SeekOrigin::End);
 	size = tell();
 	seek(0, SeekOrigin::Begin);
