@@ -17,7 +17,6 @@ Rendy::ES2::ShaderVariant::ShaderVariant(const std::string& vtx, const std::stri
 Rendy::ES2::ShaderVariant::~ShaderVariant()
 {
 	OPTICK_EVENT();
-
 	reset();
 }
 
