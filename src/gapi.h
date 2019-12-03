@@ -29,11 +29,11 @@ namespace Rendy
 		AbstractBufferRef make_ibo(uint32_t size, const void* ptr);
 		IndexType get_index_type() const;
 	private:
-		BufferFactory buffer_factory;
-		ShaderFactory shader_factory;
-		Texture2DFactory tex2d_factory;
-		TextureCubeFactory tex_cube_factory;
-		VertexArrayFactory vao_factory;
+		BufferFactoryRef buffer_factory;
+		ShaderFactoryRef shader_factory;
+		Texture2DFactoryRef tex2d_factory;
+		TextureCubeFactoryRef tex_cube_factory;
+		VertexArrayFactoryRef vao_factory;
 		OGL version;
 	};
 
