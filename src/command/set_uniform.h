@@ -1,6 +1,7 @@
 #pragma once
 #include "abstract_command.h"
 #include "../shader/abstract_shader_variant.h"
+#include <optick.h>
 
 namespace Rendy
 {
@@ -24,6 +25,8 @@ namespace Rendy
 	template<class T>
 	inline SetUniform<T>::SetUniform(ShaderVariantRef shader_variant, const std::string& uniform_name, const T& value)
 	{
+		OPTICK_EVENT();
+
 		this->shader_variant = shader_variant;
 		this->uniform_name = uniform_name;
 		this->value = value;
@@ -32,6 +35,8 @@ namespace Rendy
 	template<class T>
 	inline void SetUniform<T>::execute()
 	{
+		OPTICK_EVENT();
+
 		if (shader_variant)
 		{
 			shader_variant->set_uniform(uniform_name, value);
