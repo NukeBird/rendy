@@ -1,14 +1,18 @@
 #include "texture2d_factory.h"
 #include "texture2d_es2.h"
 #include "texture2d_es3.h"
+#include <optick.h>
 
 Rendy::Texture2DFactory::Texture2DFactory(OGL version)
 {
+	OPTICK_EVENT();
 	this->version = version;
 }
 
 Rendy::AbstractTexture2DRef Rendy::Texture2DFactory::make(Image2DRef image)
 {
+	OPTICK_EVENT();
+
 	switch (version)
 	{
 		case Rendy::OGL::ES20:
