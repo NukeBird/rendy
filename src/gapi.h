@@ -9,7 +9,6 @@
 #include "texture/texture2d/texture2d_factory.h"
 #include "texture/texture_cube/texture_cube_factory.h"
 #include "vertex_array/vertex_array_factory.h"
-#include "abstract_render_pass.h"
 #include <memory>
 
 namespace Rendy

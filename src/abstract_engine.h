@@ -1,6 +1,7 @@
 #pragma once
 #include "gapi.h"
 #include "image/image_set.h"
+#include "pipeline/pipeline.h"
 #include <vector>
 #include <string>
 #include <memory>
@@ -16,9 +17,8 @@ namespace Rendy
 		virtual bool validate();
 		
 		virtual GAPIRef get_gapi() const = 0;
-		uint32_t get_stage_count() const;
-		AbstractRenderPassRef get_stage(uint32_t index);
-		void add_stage(AbstractRenderPassRef stage);
+		PipelineRef get_pipeline() const;
+		void set_pipeline(PipelineRef pipeline);
 
 		virtual AbstractShaderRef make_shader(const std::string& vtx, 
 			const std::string& frg);
@@ -32,7 +32,7 @@ namespace Rendy
 		virtual AbstractBufferRef make_ibo(uint32_t size, const void* ptr);
 		virtual IndexType get_index_type() const;
 	private:
-		RenderPassList render_stages;
+		PipelineRef pipeline;
 		BatchList batches;
 	};
 

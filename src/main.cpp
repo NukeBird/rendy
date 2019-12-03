@@ -31,22 +31,7 @@ void GLAPIENTRY message_callback(GLenum source,
 #include "es2/engine.h"
 #include "es3/engine.h"
 #include "util/vfs/vfs.h"
-
-struct DumbStage: public Rendy::AbstractRenderPass
-{
-	virtual void execute(const Rendy::BatchList& batches) override
-	{
-		for (auto& batch: batches)
-		{
-			auto command_list = batch.to_command_list();
-
-			for (auto& command: command_list)
-			{
-				command->execute();
-			}
-		}
-	}
-};
+#include "pipeline/render_pass/self_sufficient_pass.h"
 
 int main(int argc, char** argv) 
 {
@@ -128,7 +113,11 @@ int main(int argc, char** argv)
 
 	Rendy::VFSRef vfs = std::make_shared<Rendy::VFS>();
 	Rendy::AbstractEngineRef engine = std::make_shared<Rendy::ES3::Engine>(vfs);
-	engine->add_stage(std::make_shared<DumbStage>());
+
+	auto pipe = std::make_shared<Rendy::Pipeline>();
+	pipe->add_pass(std::make_shared<Rendy::SelfSufficientPass>());
+	engine->set_pipeline(pipe);
+
 	Rendy::ModelFactory model_factory(engine, vfs);
 
 	auto model = model_factory.make("assets/doll.glb");

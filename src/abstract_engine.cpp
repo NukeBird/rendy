@@ -18,10 +18,9 @@ void Rendy::AbstractEngine::flush()
 {
 	OPTICK_EVENT();
 
-	//TODO: set default states?
-	for (auto& stage : render_stages)
+	if (pipeline)
 	{
-		stage->execute(batches);
+		pipeline->execute(batches);
 	}
 
 	batches.clear();
@@ -31,9 +30,9 @@ void Rendy::AbstractEngine::reload()
 {
 	OPTICK_EVENT();
 
-	for (auto& stage: render_stages)
+	if (pipeline)
 	{
-		stage->reload();
+		pipeline->reload();
 	}
 
 	batches.clear();
@@ -43,35 +42,22 @@ bool Rendy::AbstractEngine::validate()
 {
 	OPTICK_EVENT();
 
-	for (auto& stage: render_stages)
+	if (pipeline)
 	{
-		if (!stage->validate())
-		{
-			return false;
-		}
+		return pipeline->validate();
 	}
 
 	return true;
 }
 
-uint32_t Rendy::AbstractEngine::get_stage_count() const
+Rendy::PipelineRef Rendy::AbstractEngine::get_pipeline() const
 {
-	OPTICK_EVENT();
-	return static_cast<uint32_t>(render_stages.size());
+	return pipeline;
 }
 
-Rendy::AbstractRenderPassRef Rendy::AbstractEngine::get_stage(uint32_t index)
+void Rendy::AbstractEngine::set_pipeline(PipelineRef pipeline)
 {
-	OPTICK_EVENT();
-
-	assert(static_cast<size_t>(index) < render_stages.size());
-	return render_stages[index];
-}
-
-void Rendy::AbstractEngine::add_stage(AbstractRenderPassRef stage)
-{
-	OPTICK_EVENT();
-	render_stages.emplace_back(stage);
+	this->pipeline = pipeline;
 }
 
 Rendy::AbstractShaderRef Rendy::AbstractEngine::make_shader(const std::string & vtx, const std::string & frg)
