@@ -1,10 +1,7 @@
 #include "engine.h"
-#include "../material/es3/default_material.h"
 #include <optick.h>
 #include <cassert>
 #include <vector>
-
-#include "default_shader_sources.hpp"
 
 Rendy::ES3::Engine::Engine(VFSRef vfs)
 {
@@ -20,7 +17,6 @@ Rendy::ES3::Engine::Engine(VFSRef vfs)
 
 	Log::info("PMREM max level: {0}", pmrem->get_max_level());
 
-
 	auto file = vfs->open_file("assets/lut.dds", Rendy::FileMode::Read);
 	std::vector<uint8_t> content;
 	content.resize(file->get_size());
@@ -34,8 +30,9 @@ Rendy::ES3::Engine::Engine(VFSRef vfs)
 	
 	Log::info("LUT status: {0}", lut->validate());
 
-	generic_shader = make_shader(default_vertex_shader, default_fragment_shader);
-	Log::info("GENERIC SHADER STATUS: {0}", generic_shader->validate());
+	this->material_factory = std::make_shared<MaterialFactory>(OGL::ES31,
+		gapi->get_texture2d_factory(), gapi->get_shader_factory(), iem, pmrem, 
+		lut);
 }
 
 void Rendy::ES3::Engine::reload()
@@ -54,31 +51,7 @@ Rendy::GAPIRef Rendy::ES3::Engine::get_gapi() const
 Rendy::AbstractMaterialRef Rendy::ES3::Engine::make_material(ImageSetRef image_set)
 {
 	OPTICK_EVENT();
-
-	AbstractMaterialRef material;
-
-	AbstractTexture2DRef albedo;
-	AbstractTexture2DRef normal;
-	AbstractTexture2DRef metallic_roughness;
-
-	if (image_set->color)
-	{
-		albedo = make_texture2d(image_set->color);
-	}
-
-	if (image_set->normal)
-	{
-		normal = make_texture2d(image_set->normal);
-	}
-
-	if (image_set->metallic_roughness)
-	{
-		metallic_roughness = make_texture2d(image_set->metallic_roughness);
-	}
-
-	material = std::make_shared<DefaultMaterial>(albedo, metallic_roughness, normal, iem, pmrem, lut, generic_shader);
-
-	return material;
+	return material_factory->make(image_set);
 }
 
 Rendy::AbstractTextureCubeRef Rendy::ES3::Engine::read_texture_cube(const std::string& path)

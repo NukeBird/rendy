@@ -1,12 +1,9 @@
 #include "engine.h"
-#include "../material/es2/default_material.h"
 #include <optick.h>
 #include <cassert>
 #include <vector>
 
-#include "default_shader_sources.hpp"
-
-Rendy::ES2::Engine::Engine(VFSRef vfs)
+Rendy::ES2::Engine::Engine(VFSRef vfs) 
 {
 	OPTICK_EVENT();
 
@@ -24,13 +21,14 @@ Rendy::ES2::Engine::Engine(VFSRef vfs)
 
 	Log::info("IEM max level: {0}\n", iem->get_max_level());
 
-	generic_shader = make_shader(default_vertex_shader, default_fragment_shader);
-	Log::info("GENERIC SHADER STATUS: {0}\n", generic_shader->validate());
+	this->material_factory = std::make_shared<MaterialFactory>(OGL::ES20,
+		gapi->get_texture2d_factory(), gapi->get_shader_factory(), iem);
 }
 
 void Rendy::ES2::Engine::reload()
 {
 	OPTICK_EVENT();
+
 	AbstractEngine::reload();
 	generic_shader->reload();
 	iem->reload();
@@ -38,29 +36,12 @@ void Rendy::ES2::Engine::reload()
 
 Rendy::GAPIRef Rendy::ES2::Engine::get_gapi() const
 {
+	OPTICK_EVENT();
 	return gapi;
 }
 
 Rendy::AbstractMaterialRef Rendy::ES2::Engine::make_material(ImageSetRef image_set)
 {
 	OPTICK_EVENT();
-
-	AbstractMaterialRef material;
-
-	AbstractTexture2DRef color;
-	AbstractTexture2DRef normal;
-
-	if (image_set->color)
-	{
-		color = make_texture2d(image_set->color);
-	}
-
-	if (image_set->normal)
-	{
-		normal = make_texture2d(image_set->normal);
-	}
-
-	material = std::make_shared<DefaultMaterial>(color, normal, iem, generic_shader);
-
-	return material;
+	return material_factory->make(image_set);
 }

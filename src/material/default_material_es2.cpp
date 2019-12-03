@@ -1,8 +1,8 @@
-#include "default_material.h"
-#include "../../command/bind_shader.h"
-#include "../../command/bind_texture2d.h"
-#include "../../command/bind_texture_cube.h"
-#include "../../command/set_uniform.h"
+#include "default_material_es2.h"
+#include "../command/bind_shader.h"
+#include "../command/bind_texture2d.h"
+#include "../command/bind_texture_cube.h"
+#include "../command/set_uniform.h"
 #include <optick.h>
 
 Rendy::ES2::DefaultMaterial::DefaultMaterial(AbstractTexture2DRef diffuse_texture,

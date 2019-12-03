@@ -1,5 +1,6 @@
 #pragma once
 #include "../rendy.h"
+#include "../material/material_factory.h"
 #include <vector>
 
 namespace Rendy
@@ -17,6 +18,7 @@ namespace Rendy
 			GAPIRef gapi;
 			AbstractShaderRef generic_shader;
 			AbstractTextureCubeRef iem;
+			MaterialFactoryRef material_factory;
 			VFSRef vfs;
 		};
 	};

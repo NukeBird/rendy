@@ -1,5 +1,6 @@
 #pragma once
 #include "../rendy.h"
+#include "../material/material_factory.h"
 #include <vector>
 
 namespace Rendy
@@ -21,6 +22,7 @@ namespace Rendy
 			AbstractTextureCubeRef iem;
 			AbstractTextureCubeRef pmrem;
 			AbstractTexture2DRef lut;
+			MaterialFactoryRef material_factory;
 			VFSRef vfs;
 		};
 	};
