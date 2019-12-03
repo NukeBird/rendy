@@ -15,4 +15,6 @@ namespace Rendy
 	private:
 		OGL version;
 	};
+
+	using TextureCubeFactoryRef = std::shared_ptr<TextureCubeFactory>;
 };
