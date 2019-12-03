@@ -29,6 +29,7 @@ Rendy::ES2::Texture2D::~Texture2D()
 void Rendy::ES2::Texture2D::reload()
 {
 	OPTICK_EVENT();
+
 	if (!validate())
 	{
 		if (!load_from_image())
@@ -43,6 +44,7 @@ void Rendy::ES2::Texture2D::reload()
 bool Rendy::ES2::Texture2D::validate() const
 {
 	OPTICK_EVENT();
+
 	if (!image)
 	{
 		return false;
@@ -224,6 +226,7 @@ bool Rendy::ES2::Texture2D::load_from_image()
 Rendy::TextureFormat Rendy::ES2::Texture2D::parse_format(int c) const
 {
 	OPTICK_EVENT();
+
 	switch (c)
 	{
 		case 3: return TextureFormat::RGB;
@@ -236,6 +239,7 @@ Rendy::TextureFormat Rendy::ES2::Texture2D::parse_format(int c) const
 void Rendy::ES2::Texture2D::reset()
 {
 	OPTICK_EVENT();
+
 	format = TextureFormat::Invalid;
 	type = TextureType::Invalid;
 
