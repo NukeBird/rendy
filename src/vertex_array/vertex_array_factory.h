@@ -15,4 +15,6 @@ namespace Rendy
 	private:
 		OGL version;
 	};
+
+	using VertexArrayFactoryRef = std::shared_ptr<VertexArrayFactory>;
 };
