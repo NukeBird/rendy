@@ -1,7 +1,10 @@
 #include "shader_data_type.h"
+#include <optick.h>
 
 std::string Rendy::to_string(ShaderDataType type)
 {
+	OPTICK_EVENT();
+
 	switch (type)
 	{
 		case ShaderDataType::Float:
@@ -33,6 +36,8 @@ std::string Rendy::to_string(ShaderDataType type)
 
 uint32_t Rendy::get_shader_data_type_size(ShaderDataType type)
 {
+	OPTICK_EVENT();
+
 	uint32_t size = 0;
 
 	switch (type)
