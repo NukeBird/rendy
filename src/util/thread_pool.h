@@ -39,6 +39,8 @@ namespace Rendy
 	inline ThreadPool::ThreadPool(size_t threads)
 		: stop(false)
 	{
+		OPTICK_EVENT();
+
 		for (size_t i = 0; i < threads; ++i)
 			workers.emplace_back(
 				[this]
@@ -68,6 +70,8 @@ namespace Rendy
 	auto ThreadPool::enqueue(F&& f, Args&&... args)
 		-> std::shared_future<typename std::result_of<F(Args...)>::type>
 	{
+		OPTICK_EVENT();
+
 		using return_type = typename std::result_of<F(Args...)>::type;
 
 		auto task = std::make_shared< std::packaged_task<return_type()> >(
@@ -91,6 +95,8 @@ namespace Rendy
 	// the destructor joins all threads
 	inline ThreadPool::~ThreadPool()
 	{
+		OPTICK_EVENT();
+
 		{
 			std::unique_lock<std::mutex> lock(queue_mutex);
 			stop = true;
