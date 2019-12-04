@@ -8,7 +8,7 @@ namespace Rendy
 {
 	struct ShaderSettings
 	{
-		uint32_t flags;
+		uint32_t flags = 0;
 
 		std::string generate_definitions() const;
 

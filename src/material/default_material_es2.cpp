@@ -87,18 +87,16 @@ uint32_t Rendy::ES2::DefaultMaterial::get_flags() const
 	return flags;
 }
 
-std::vector<Rendy::CommandRef> Rendy::ES2::DefaultMaterial::to_command_list(uint32_t extra_flags)
+std::vector<Rendy::CommandRef> Rendy::ES2::DefaultMaterial::to_command_list(const ShaderSettings& settings)
 {
 	OPTICK_EVENT();
 
-	ShaderSettings settings;
-	settings.flags = extra_flags | get_flags();
-
-	auto shader_variant = get_shader_variant(extra_flags);
+	auto shader_variant = get_shader_variant(settings);
+	auto processed_settings = process_settings(settings);
 
 	std::vector<CommandRef> list;
 
-	list.emplace_back(std::make_shared<BindShader>(shader, settings));
+	list.emplace_back(std::make_shared<BindShader>(shader, processed_settings));
 
 	list.emplace_back(std::make_shared<SetUniform<int>>(shader_variant,
 		"color_texture", 0));
@@ -119,7 +117,7 @@ void Rendy::ES2::DefaultMaterial::bind(const ShaderSettings& settings)
 {
 	OPTICK_EVENT();
 
-	auto shader_variant = shader->compile(settings);
+	auto shader_variant = get_shader_variant(settings);
 	shader_variant->bind();
 
 	if (diffuse_texture)
@@ -133,13 +131,11 @@ void Rendy::ES2::DefaultMaterial::bind(const ShaderSettings& settings)
 	}
 }
 
-void Rendy::ES2::DefaultMaterial::unbind(uint32_t extra_flags)
+void Rendy::ES2::DefaultMaterial::unbind(const ShaderSettings& settings)
 {
 	OPTICK_EVENT();
 
-	ShaderSettings settings; //TODO: lights
-	settings.flags = get_flags() | extra_flags;
-	auto shader_variant = shader->compile(settings);
+	auto shader_variant = get_shader_variant(settings);
 	shader_variant->unbind();
 
 	if (diffuse_texture)

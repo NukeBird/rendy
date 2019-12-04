@@ -118,34 +118,32 @@ uint32_t Rendy::ES3::DefaultMaterial::get_flags() const
 	return flags;
 }
 
-std::vector<Rendy::CommandRef> Rendy::ES3::DefaultMaterial::to_command_list(uint32_t extra_flags)
+std::vector<Rendy::CommandRef> Rendy::ES3::DefaultMaterial::to_command_list(const ShaderSettings& settings)
 {
 	OPTICK_EVENT();
 
-	ShaderSettings settings;
-	settings.flags = extra_flags | get_flags();
-
-	auto shader_variant = shader->compile(settings);
+	auto shader_variant = get_shader_variant(settings);
+	auto processed_settings = process_settings(settings);
 
 	std::vector<CommandRef> list;
 
-	list.emplace_back(std::make_shared<BindShader>(shader, settings));
+	list.emplace_back(std::make_shared<BindShader>(shader, processed_settings));
 
-	if (settings.flags & USE_COLOR_TEXTURE)
+	if (processed_settings.flags & USE_COLOR_TEXTURE)
 	{
 		list.emplace_back(std::make_shared<SetUniform<int>>(shader_variant,
 			"color_texture", 0));
 		list.emplace_back(std::make_shared<BindTexture2D>(albedo_texture, 0));
 	}
 
-	if (settings.flags & USE_NORMAL_TEXTURE)
+	if (processed_settings.flags & USE_NORMAL_TEXTURE)
 	{
 		list.emplace_back(std::make_shared<SetUniform<int>>(shader_variant,
 			"normal_texture", 1));
 		list.emplace_back(std::make_shared<BindTexture2D>(normal_texture, 1));
 	}
 
-	if (settings.flags & USE_METALLIC_ROUGHNESS_TEXTURE)
+	if (processed_settings.flags & USE_METALLIC_ROUGHNESS_TEXTURE)
 	{
 		list.emplace_back(std::make_shared<SetUniform<int>>(shader_variant,
 			"metallic_roughness_texture", 2));
@@ -174,7 +172,7 @@ void Rendy::ES3::DefaultMaterial::bind(const ShaderSettings& settings)
 {
 	OPTICK_EVENT();
 
-	auto shader_variant = shader->compile(settings);
+	auto shader_variant = get_shader_variant(settings);
 
 	shader_variant->bind();
 
@@ -197,13 +195,11 @@ void Rendy::ES3::DefaultMaterial::bind(const ShaderSettings& settings)
 	}
 }
 
-void Rendy::ES3::DefaultMaterial::unbind(uint32_t extra_flags)
+void Rendy::ES3::DefaultMaterial::unbind(const ShaderSettings& settings)
 {
 	OPTICK_EVENT();
 
-	ShaderSettings settings; //TODO: lights
-	settings.flags = get_flags() | extra_flags;
-	auto shader_variant = shader->compile(settings);
+	auto shader_variant = get_shader_variant(settings);
 	shader_variant->unbind();
 
 	if (albedo_texture)

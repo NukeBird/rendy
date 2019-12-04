@@ -18,9 +18,9 @@ namespace Rendy
 			virtual bool validate() const override;
 			virtual AbstractShaderRef get_shader() override;
 			virtual uint32_t get_flags() const override;
-			virtual std::vector<CommandRef> to_command_list(uint32_t extra_flags) override;
+			virtual std::vector<CommandRef> to_command_list(const ShaderSettings& settings) override;
 			virtual void bind(const ShaderSettings& settings) override;
-			virtual void unbind(uint32_t extra_flags) override;
+			virtual void unbind(const ShaderSettings& settings) override;
 		private:
 			AbstractTexture2DRef diffuse_texture;
 			AbstractTexture2DRef normal_texture;

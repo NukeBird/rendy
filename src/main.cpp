@@ -19,6 +19,7 @@ void GLAPIENTRY message_callback(GLenum source,
 	{
 		message_string = "(OpenGL error)" + std::string(message);
 		Rendy::Log::error(message_string);
+		system("PAUSE");
 		return;
 	}
 	else
