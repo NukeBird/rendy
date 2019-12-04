@@ -12,10 +12,8 @@ namespace Rendy
 	{
 		AbstractVertexArrayRef vao;
 		AbstractMaterialRef material;
-
+		ShaderSettings shader_settings;
 		std::vector<AbstractSetUniformRef> uniforms;
-
-		uint32_t extra_flags = 0;
 
 		CommandList to_command_list() const;
 	};

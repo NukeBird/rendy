@@ -199,13 +199,10 @@ void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_t
 			calls.emplace_back();
 			auto& call = calls[calls.size() - 1];
 			call.vao = mesh.vao;
-			call.extra_flags = mesh.flags; //TODO
+			call.shader_settings.flags = mesh.flags;
 			call.material = material;
 
-			ShaderSettings settings; //TODO
-			settings.flags = mesh.flags; //TODO
-
-			auto shader_variant = material->get_shader_variant(settings);
+			auto shader_variant = material->get_shader_variant(call.shader_settings);
 
 			call.uniforms.emplace_back(std::make_shared<SetUniformMat4Array>
 				(shader_variant, "u_bones[0]", bones));
