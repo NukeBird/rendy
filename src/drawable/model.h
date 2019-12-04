@@ -7,8 +7,9 @@
 #include "../image/image2d.h"
 #include <memory>
 #include <vector>
-#include <glm/glm.hpp>
 #include <string>
+#include <glm/glm.hpp>
+#include <unordered_map>
 
 namespace Rendy
 {

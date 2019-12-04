@@ -78,5 +78,5 @@ std::string Rendy::shader_flags_to_defines(uint32_t flags)
 		result += "#define USE_METALLIC_ROUGHNESS_TEXTURE\n";
 	}
 
-	return result;
+	return std::move(result);
 }

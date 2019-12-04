@@ -200,6 +200,8 @@ void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_t
 			auto& call = calls[calls.size() - 1];
 			call.vao = mesh.vao;
 			call.shader_settings.flags = mesh.flags;
+			call.shader_settings.custom_definitions["MAX_BONES"] =
+				static_cast<uint32_t>(bones.size());
 			call.material = material;
 
 			auto shader_variant = material->get_shader_variant(call.shader_settings);
