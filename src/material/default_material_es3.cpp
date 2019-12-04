@@ -94,15 +94,6 @@ Rendy::AbstractShaderRef Rendy::ES3::DefaultMaterial::get_shader()
 	return shader;
 }
 
-Rendy::ShaderVariantRef Rendy::ES3::DefaultMaterial::get_shader_variant(uint32_t extra_flags)
-{
-	OPTICK_EVENT();
-
-	ShaderSettings settings;
-	settings.flags = extra_flags | get_flags();
-	return shader->compile(settings);
-}
-
 uint32_t Rendy::ES3::DefaultMaterial::get_flags() const
 {
 	OPTICK_EVENT();
