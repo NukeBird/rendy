@@ -15,6 +15,7 @@ namespace Rendy
 		virtual std::vector<CommandRef> to_command_list(const ShaderSettings& settings) = 0;
 		virtual void bind(const ShaderSettings& settings) = 0;
 		virtual void unbind(const ShaderSettings& settingss) = 0;
+		virtual bool uses_transparency() const = 0;
 		virtual ShaderSettings process_settings(const ShaderSettings& settings);
 	};
 

@@ -148,3 +148,13 @@ void Rendy::ES2::DefaultMaterial::unbind(const ShaderSettings& settings)
 		normal_texture->unbind(1); //TODO: get slot by texture name
 	}
 }
+
+bool Rendy::ES2::DefaultMaterial::uses_transparency() const
+{
+	if (diffuse_texture)
+	{
+		return diffuse_texture->uses_transparency();
+	}
+
+	return false;
+}

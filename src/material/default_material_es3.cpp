@@ -217,3 +217,13 @@ void Rendy::ES3::DefaultMaterial::unbind(const ShaderSettings& settings)
 		ambient_metallic_roughness_texture->unbind(2); //TODO: get slot by texture name
 	}
 }
+
+bool Rendy::ES3::DefaultMaterial::uses_transparency() const
+{
+	if (albedo_texture)
+	{
+		return albedo_texture->uses_transparency();
+	}
+
+	return false;
+}

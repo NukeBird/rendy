@@ -21,6 +21,7 @@ namespace Rendy
 			virtual std::vector<CommandRef> to_command_list(const ShaderSettings& settings) override;
 			virtual void bind(const ShaderSettings& settings) override;
 			virtual void unbind(const ShaderSettings& settings) override;
+			virtual bool uses_transparency() const override;
 		private:
 			AbstractTexture2DRef diffuse_texture;
 			AbstractTexture2DRef normal_texture;
