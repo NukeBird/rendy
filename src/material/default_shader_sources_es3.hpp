@@ -31,12 +31,10 @@ namespace Rendy
 
 			#ifdef USE_VERTEX_TANGENT
 				in vec3 a_tangent;
-				out vec3 v_tangent;
 			#endif
 
 			#ifdef USE_VERTEX_BITANGENT 
 				in vec3 a_bitangent;
-				out vec3 v_bitangent;
 			#endif
 
 			#ifdef USE_VERTEX_NORMAL
@@ -102,12 +100,12 @@ namespace Rendy
 			#endif
 
 			#ifdef USE_VERTEX_TANGENT
-				v_tangent = normalize(vec3(u_transform * bone_transform * 
+				vec3 v_tangent = normalize(vec3(u_transform * bone_transform * 
 					vec4(a_tangent, 0.0)));
 			#endif
 
 			#ifdef USE_VERTEX_BITANGENT
-				v_bitangent = normalize(vec3(u_transform * bone_transform * 
+				vec3 v_bitangent = normalize(vec3(u_transform * bone_transform * 
 					vec4(a_bitangent, 0.0)));
 			#endif
 
@@ -119,6 +117,7 @@ namespace Rendy
 
 		const std::string default_fragment_shader =
 		R"(
+			layout(early_fragment_tests) in;
 			precision highp float;
 
 			#ifdef USE_VERTEX_POSITION
