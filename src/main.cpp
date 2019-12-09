@@ -104,10 +104,11 @@ int main(int argc, char** argv)
 			Rendy::Log::info(glewGetErrorString(glewInit()));
 		}
 
-		if (SDL_GL_SetSwapInterval(-1) != 0) //adaptive v-sync
+		/*if (SDL_GL_SetSwapInterval(-1) != 0) //adaptive v-sync
 		{
-			SDL_GL_SetSwapInterval(1); //enable v-sync
-		}
+			SDL_GL_SetSwapInterval(0); //enable v-sync
+		}*/
+		SDL_GL_SetSwapInterval(0); //disable v-sync
 
 		glEnable(GL_DEBUG_OUTPUT);
 		glDebugMessageCallback(message_callback, 0);
