@@ -34,6 +34,7 @@ void GLAPIENTRY message_callback(GLenum source,
 #include "pipeline/render_pass/self_sufficient_pass.h"
 #include "pipeline/render_pass/depth_prepass.h"
 #include "pipeline/render_pass/opaque_pass.h"
+#include "pipeline/render_pass/transparent_pass.h"
 
 int main(int argc, char** argv) 
 {
@@ -120,6 +121,7 @@ int main(int argc, char** argv)
 	auto pipe = std::make_shared<Rendy::Pipeline>();
 	pipe->add_pass(std::make_shared<Rendy::DepthPrepass>(false));
 	pipe->add_pass(std::make_shared<Rendy::OpaquePass>(true));
+	pipe->add_pass(std::make_shared<Rendy::TransparentPass>());
 	engine->set_pipeline(pipe);
 
 	Rendy::ModelFactory model_factory(engine, vfs);
