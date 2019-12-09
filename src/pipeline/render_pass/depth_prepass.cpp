@@ -13,6 +13,7 @@ void Rendy::DepthPrepass::execute(const BatchList& batches)
 {
 	OPTICK_EVENT();
 
+	glDisable(GL_BLEND);
 	glDepthFunc(GL_LESS);
 	glColorMask(0, 0, 0, 0);
 	glDepthMask(GL_TRUE);

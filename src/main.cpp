@@ -113,6 +113,7 @@ int main(int argc, char** argv)
 		glEnable(GL_DEBUG_OUTPUT);
 		glDebugMessageCallback(message_callback, 0);
 		//glBindTexture(-24, -3);
+		glDisable(GL_POLYGON_SMOOTH);
 	#endif // _WIN32
 
 	Rendy::VFSRef vfs = std::make_shared<Rendy::VFS>();
@@ -140,8 +141,6 @@ int main(int argc, char** argv)
 	glEnable(GL_DEPTH_TEST);
 	//glDepthFunc(GL_ALWAYS);
 	//glEnable(GL_CULL_FACE);
-	glEnable(GL_BLEND); 
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	auto last = std::chrono::steady_clock::now();
 
