@@ -9,8 +9,6 @@ Rendy::DepthPrepass::DepthPrepass(bool prepass_transparency)
 
 void Rendy::DepthPrepass::execute(const BatchList& batches)
 {
-	glEnable(GL_DEPTH_TEST);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glDepthFunc(GL_LESS);
 	glColorMask(0, 0, 0, 0);
 	glDepthMask(GL_TRUE);

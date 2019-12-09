@@ -5,7 +5,10 @@ namespace Rendy
 {
 	class OpaquePass: public AbstractRenderPass
 	{
-	public:
+	public: 
+		OpaquePass(bool depth_prepassed = false);
 		virtual void execute(const BatchList& batches);
+	private:
+		bool depth_prepassed;
 	};
 };
