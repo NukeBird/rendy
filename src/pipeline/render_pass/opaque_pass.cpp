@@ -1,14 +1,18 @@
 #include "../../common.h"
 #include "opaque_pass.h"
 #include <algorithm>
+#include <optick.h>
 
 Rendy::OpaquePass::OpaquePass(bool depth_prepassed)
 {
+	OPTICK_EVENT();
 	this->depth_prepassed = depth_prepassed;
 }
 
 void Rendy::OpaquePass::execute(const BatchList& batches)
 {
+	OPTICK_EVENT();
+
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glDepthFunc(depth_prepassed ? GL_EQUAL : GL_LESS);
 	glColorMask(1, 1, 1, 1);
