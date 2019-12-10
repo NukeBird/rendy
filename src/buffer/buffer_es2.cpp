@@ -1,4 +1,5 @@
 #include "buffer_es2.h"
+#include "../util/log.h"
 #include <optick.h>
 
 Rendy::ES2::Buffer::Buffer(BufferTarget target, uint32_t size, const void* ptr)
@@ -55,6 +56,16 @@ void Rendy::ES2::Buffer::bind()
 	OPTICK_EVENT();
 	OPTICK_TAG("id", id);
 	glBindBuffer(get_gl_target(), id);
+}
+
+void Rendy::ES2::Buffer::bind(uint32_t index)
+{
+	OPTICK_EVENT();
+	OPTICK_TAG("id", id);
+	OPTICK_TAG("index", index);
+
+	Log::error("You can't use glBindBufferBase at ES2!");
+	assert(0);
 }
 
 void Rendy::ES2::Buffer::unbind()

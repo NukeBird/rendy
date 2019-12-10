@@ -5,6 +5,10 @@ namespace Rendy
 {
 	namespace ES3
 	{
-		using ES2::Buffer;
+		class Buffer: public ES2::Buffer
+		{
+		public:
+			virtual void bind(uint32_t index) override;
+		};
 	};
 };

@@ -20,6 +20,7 @@ namespace Rendy
 		virtual uint32_t get_size() const = 0;
 		virtual BufferTarget get_target() const = 0;
 		virtual void bind() = 0;
+		virtual void bind(uint32_t index) = 0;
 		virtual void unbind() = 0;
 	};
 
