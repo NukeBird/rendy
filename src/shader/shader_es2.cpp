@@ -41,7 +41,7 @@ Rendy::ShaderVariantRef Rendy::ES2::Shader::compile(const ShaderSettings& settin
 		const std::string vertex_source_variant = meta + vertex_source;
 		const std::string fragment_source_variant = meta + fragment_source;
 
-		variants[settings] = std::make_shared<ShaderVariant>(vertex_source_variant,
+		variants[settings] = std::make_shared<ES2::ShaderVariant>(vertex_source_variant,
 			fragment_source_variant);
 			
 		it = variants.find(settings);
