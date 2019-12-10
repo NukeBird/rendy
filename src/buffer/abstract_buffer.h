@@ -11,6 +11,7 @@ namespace Rendy
 	{
 		VBO,
 		IBO,
+		SBO,
 		Invalid
 	};
 

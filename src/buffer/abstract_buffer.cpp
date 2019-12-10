@@ -8,9 +8,17 @@ std::string Rendy::to_string(BufferTarget target)
 	switch(target)
 	{
 		case BufferTarget::VBO:
+		{
 			return "VBO";
+		}
 		case BufferTarget::IBO:
+		{
 			return "IBO";
+		}
+		case BufferTarget::SBO:
+		{
+			return "SBO";
+		}
 	}
 
 	return "Invalid";
@@ -108,4 +116,23 @@ GLenum Rendy::AbstractBuffer::get_gl_target() const
 	OPTICK_EVENT();
 	return (target == BufferTarget::VBO) ? GL_ARRAY_BUFFER :
 		GL_ELEMENT_ARRAY_BUFFER;
+
+	switch (target)
+	{
+		case Rendy::BufferTarget::VBO:
+		{
+			return GL_ARRAY_BUFFER;
+		}
+		case Rendy::BufferTarget::IBO:
+		{
+			return GL_ELEMENT_ARRAY_BUFFER;
+		}
+		case Rendy::BufferTarget::SBO:
+		{
+			return GL_SHADER_STORAGE_BUFFER;
+		}
+	}
+
+	assert(0);
+	return GL_INVALID_ENUM; //WTF?
 }
