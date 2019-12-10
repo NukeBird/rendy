@@ -287,21 +287,34 @@ void Rendy::ES3::ShaderVariant::cache_attribute_locations()
 
 	assert(program_id > 0);
 
-	int count = 0;
-	glGetProgramiv(program_id, GL_ACTIVE_ATTRIBUTES, &count);
+	int attribute_count, attribute_name_max_len;
+	glGetProgramInterfaceiv(program_id, GL_PROGRAM_INPUT,
+		GL_ACTIVE_RESOURCES, &attribute_count);
+	glGetProgramInterfaceiv(program_id, GL_PROGRAM_INPUT,
+		GL_MAX_NAME_LENGTH, &attribute_name_max_len);
 
-	GLint size;
-	GLenum type;
-	const GLsizei buffer_size = 32;
-	GLchar name[buffer_size];
-	GLsizei length;
+	std::string name_buffer;
+	name_buffer.resize(attribute_name_max_len);
 
-	for (int i = 0; i < count; ++i)
+	for (int i = 0; i < attribute_count; i++) {
+
+		GLsizei str_length;
+		glGetProgramResourceName(program_id, GL_PROGRAM_INPUT,
+			i, attribute_name_max_len, &str_length, &name_buffer[0]);
+
+		// get resource index of the shader storage block
+		GLint location = glGetProgramResourceLocation(program_id,
+			GL_PROGRAM_INPUT, &name_buffer[0]);
+
+		const std::string name = name_buffer.substr(0, str_length);
+
+		attribute_cache[name] = location;
+	}
+
+	Log::info("CACHED ATTRIBUTES");
+	for (auto& i : attribute_cache)
 	{
-		glGetActiveAttrib(program_id, (GLuint)i, buffer_size, &length, &size, &type, name);
-
-		int location = glGetAttribLocation(program_id, name);
-		attribute_cache[std::string(name, length)] = location;
+		Log::info("{0}: {1}", i.first, i.second);
 	}
 }
 
