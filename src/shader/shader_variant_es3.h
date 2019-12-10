@@ -29,11 +29,11 @@ namespace Rendy
 				const std::vector<float>& float_array) override;
 			virtual void set_uniform(const std::string& name,
 				const std::vector<int>& int_array) override;
+			virtual int get_uniform_location(const std::string& name) const override;
 			virtual int get_attribute_location(const std::string& name) const override;
 			virtual void bind() override;
 			virtual void unbind() override;
 		private:
-			int get_uniform_location(const std::string& name) const;
 			void cache_attribute_locations();
 			void cache_uniform_locations();
 			void compile_shader();

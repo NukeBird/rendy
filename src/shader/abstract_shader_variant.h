@@ -23,7 +23,8 @@ namespace Rendy
 		virtual void set_uniform(const std::string& name, 
 			const std::vector<float>& float_array) = 0;
 		virtual void set_uniform(const std::string& name, 
-			const std::vector<int>& int_array) = 0;
+			const std::vector<int>& int_array) = 0; 
+		virtual int get_uniform_location(const std::string& name) const = 0;
 		virtual int get_attribute_location(const std::string& name) const = 0;
 		virtual void bind() = 0;
 		virtual void unbind() = 0;
