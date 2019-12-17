@@ -1,13 +1,20 @@
 #include "abstract_shader.h"
 #include <optick.h>
 
-Rendy::AbstractShader::AbstractShader(const std::string& vertex_source, 
-	const std::string& fragment_source)
+Rendy::AbstractShader::AbstractShader(ShaderSourceRef source)
+{
+	OPTICK_EVENT();
+	this->source = source;
+}
+
+Rendy::AbstractShader::AbstractShader(const std::string& vertex_shader, 
+	const std::string& fragment_shader)
 {
 	OPTICK_EVENT();
 
-	this->vertex_source = vertex_source;
-	this->fragment_source = fragment_source;
+	source = std::make_shared<ShaderSource>();
+	source->set_source(ShaderType::VertexShader, vertex_shader);
+	source->set_source(ShaderType::FragmentShader, fragment_shader);
 }
 
 void Rendy::AbstractShader::reload()
@@ -44,8 +51,10 @@ Rendy::ShaderVariantRef Rendy::AbstractShader::compile(const ShaderSettings& set
 	if (it == variants.end())
 	{
 		const std::string meta = generate_meta(settings);
-		const std::string vertex_source_variant = meta + vertex_source;
-		const std::string fragment_source_variant = meta + fragment_source;
+		const std::string vertex_source_variant = meta + 
+			source->get_source(ShaderType::VertexShader);
+		const std::string fragment_source_variant = meta +
+			source->get_source(ShaderType::FragmentShader);
 
 		variants[settings] = make_variant(vertex_source_variant,
 			fragment_source_variant);

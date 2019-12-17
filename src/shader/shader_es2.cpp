@@ -3,6 +3,11 @@
 #include "../common.h"
 #include <optick.h>
 
+Rendy::ES2::Shader::Shader(ShaderSourceRef source): AbstractShader(source)
+{
+	OPTICK_EVENT();
+}
+
 Rendy::ES2::Shader::Shader(const std::string& vertex_source, const std::string& fragment_source):
 	AbstractShader(vertex_source, fragment_source)
 {

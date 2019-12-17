@@ -3,6 +3,7 @@
 #include "../abstract_resource.h"
 #include "shader_settings.h"
 #include "shader_flags.h"
+#include "shader_source.h"
 #include <unordered_map>
 #include <memory>
 #include <string>
@@ -12,8 +13,9 @@ namespace Rendy
 	class AbstractShader : public AbstractResource
 	{
 	public:
-		AbstractShader(const std::string& vertex_source,
-			const std::string& fragment_source);
+		AbstractShader(ShaderSourceRef source);
+		AbstractShader(const std::string& vertex_shader,
+			const std::string& fragment_shader);
 		virtual ~AbstractShader() = default;
 		virtual void reload() override;
 		virtual bool validate() const override;
@@ -25,8 +27,7 @@ namespace Rendy
 			const std::string& fragment_source) = 0;
 
 		std::unordered_map<ShaderSettings, ShaderVariantRef> variants;
-		std::string vertex_source;
-		std::string fragment_source;
+		ShaderSourceRef source;
 	};
 
 	using AbstractShaderRef = std::shared_ptr<AbstractShader>;
