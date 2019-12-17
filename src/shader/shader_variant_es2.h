@@ -12,7 +12,7 @@ namespace Rendy
 		public:
 			ShaderVariant(const std::string& vtx, const std::string& frg);
 			virtual void cache_attribute_locations() override;
-			virtual void cache_uniform_locations() override;
+			virtual void cache_uniform_locations() override; 
 		};
 	};
 };

@@ -29,12 +29,14 @@ namespace Rendy
 		bool validate() const override;
 		int get_uniform_location(const std::string& name) const;
 		int get_attribute_location(const std::string& name) const;
+		int get_buffer_binding_point(const std::string& name) const;
 		void bind();
 		void unbind();
 	protected:
 		virtual void cache_stuff();
 		virtual void cache_attribute_locations() = 0;
 		virtual void cache_uniform_locations() = 0;
+		virtual void cache_buffer_binding_points() {};
 		void compile_shader();
 		void reset();
 
@@ -43,6 +45,7 @@ namespace Rendy
 		uint32_t program_id = 0;
 
 		std::unordered_map<std::string, int> attribute_cache;
+		std::unordered_map<std::string, int> buffer_cache;
 		std::unordered_map<std::string, int> uniform_cache;
 
 		const OGL version;

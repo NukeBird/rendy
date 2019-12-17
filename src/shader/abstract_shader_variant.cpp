@@ -179,6 +179,24 @@ int Rendy::AbstractShaderVariant::get_attribute_location(const std::string& name
 	return location;
 }
 
+int Rendy::AbstractShaderVariant::get_buffer_binding_point(const std::string & name) const
+{
+	OPTICK_EVENT();
+
+	int location = -1;
+	auto it = buffer_cache.find(name);
+
+	if (it != buffer_cache.end())
+	{
+		location = (*it).second;
+	}
+
+	OPTICK_TAG("name", name.c_str());
+	OPTICK_TAG("location", location);
+
+	return location;
+}
+
 void Rendy::AbstractShaderVariant::bind()
 {
 	OPTICK_EVENT();
@@ -199,17 +217,33 @@ void Rendy::AbstractShaderVariant::cache_stuff()
 {
 	cache_uniform_locations();
 	cache_attribute_locations();
+	cache_buffer_binding_points();
 
-	Log::info("CACHED ATTRIBUTES");
-	for (auto& i : attribute_cache)
+	if (!attribute_cache.empty())
 	{
-		Log::info("{0}: {1}", i.first, i.second);
+		Log::info("CACHED ATTRIBUTES");
+		for (auto& i : attribute_cache)
+		{
+			Log::info("{0}: {1}", i.first, i.second);
+		}
 	}
 
-	Log::info("CACHED UNIFORMS");
-	for (auto& i : uniform_cache)
+	if (!uniform_cache.empty())
 	{
-		Log::info("{0}: {1}", i.first, i.second);
+		Log::info("CACHED UNIFORMS");
+		for (auto& i : uniform_cache)
+		{
+			Log::info("{0}: {1}", i.first, i.second);
+		}
+	}
+
+	if (!buffer_cache.empty())
+	{
+		Log::info("BUFFER BINDING POINTS");
+		for (auto& i : buffer_cache)
+		{
+			Log::info("{0}: {1}", i.first, i.second);
+		}
 	}
 }
 

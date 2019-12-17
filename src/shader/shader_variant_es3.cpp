@@ -1,4 +1,4 @@
-#include "shader_variant_es3.h"
+﻿#include "shader_variant_es3.h"
 #include "../common.h"
 #include "../util/log.h"
 #include <optick.h>
@@ -24,8 +24,8 @@ void Rendy::ES3::ShaderVariant::cache_attribute_locations()
 	std::string name_buffer;
 	name_buffer.resize(attribute_name_max_len);
 
-	for (int i = 0; i < attribute_count; i++) {
-
+	for (int i = 0; i < attribute_count; i++) 
+	{
 		GLsizei str_length;
 		glGetProgramResourceName(program_id, GL_PROGRAM_INPUT,
 			i, attribute_name_max_len, &str_length, &name_buffer[0]);
@@ -55,8 +55,8 @@ void Rendy::ES3::ShaderVariant::cache_uniform_locations()
 	std::string name_buffer;
 	name_buffer.resize(uniform_name_max_len);
 
-	for (int i = 0; i < uniform_count; i++) {
-
+	for (int i = 0; i < uniform_count; i++) 
+	{
 		GLsizei str_length;
 		glGetProgramResourceName(program_id, GL_UNIFORM,
 			i, uniform_name_max_len, &str_length, &name_buffer[0]);
@@ -68,5 +68,41 @@ void Rendy::ES3::ShaderVariant::cache_uniform_locations()
 		const std::string name = name_buffer.substr(0, str_length);
 		
 		uniform_cache[name] = location;
+	}
+}
+
+void Rendy::ES3::ShaderVariant::cache_buffer_binding_points()
+{
+	OPTICK_EVENT();
+	assert(program_id > 0);
+
+	int buffer_count, buffer_name_max_len;
+	glGetProgramInterfaceiv(program_id, GL_SHADER_STORAGE_BLOCK,
+		GL_ACTIVE_RESOURCES, &buffer_count);
+	glGetProgramInterfaceiv(program_id, GL_SHADER_STORAGE_BLOCK,
+		GL_MAX_NAME_LENGTH, &buffer_name_max_len);
+
+	std::string name_buffer;
+	name_buffer.resize(buffer_name_max_len);
+
+	for (int i = 0; i < buffer_count; i++)
+	{ 
+		GLsizei str_length;
+		glGetProgramResourceName(program_id, GL_SHADER_STORAGE_BLOCK,
+			i, buffer_name_max_len, &str_length, &name_buffer[0]);
+
+		// get resource index of the shader storage block
+		GLint index = glGetProgramResourceIndex(program_id,
+			GL_SHADER_STORAGE_BLOCK, &name_buffer[0]);
+
+		GLenum prop = GL_BUFFER_BINDING;
+		int binding_point = -1;
+
+		glGetProgramResourceiv(program_id, GL_SHADER_STORAGE_BLOCK,
+			index, 1, &prop, 1, nullptr, &binding_point);
+
+		const std::string name = name_buffer.substr(0, str_length);
+
+		buffer_cache[name] = binding_point;
 	}
 }
