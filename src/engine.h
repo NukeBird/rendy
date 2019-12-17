@@ -33,6 +33,7 @@ namespace Rendy
 			AbstractBufferRef ibo, BufferLayoutRef layout);
 		AbstractBufferRef make_vbo(uint32_t size, const void* ptr);
 		AbstractBufferRef make_ibo(uint32_t size, const void* ptr);
+		AbstractBufferRef make_sbo(uint32_t size, const void* ptr);
 		IndexType get_index_type() const; 
 	private:
 		GAPIRef gapi;
