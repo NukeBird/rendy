@@ -29,3 +29,18 @@ Rendy::ShaderSourceRef Rendy::ShaderSource::combine(ShaderSource& source)
 
 	return result;
 }
+
+bool Rendy::ShaderSource::operator==(ShaderSource& s)
+{
+	if (get_source(ShaderType::VertexShader) != s.get_source(ShaderType::VertexShader))
+	{
+		return false;
+	}
+
+	if (get_source(ShaderType::FragmentShader) != s.get_source(ShaderType::FragmentShader))
+	{
+		return false;
+	}
+
+	return true;
+}

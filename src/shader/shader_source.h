@@ -18,6 +18,7 @@ namespace Rendy
 		const std::string& get_source(ShaderType type);
 		ShaderSourceRef combine(ShaderSourceRef source);
 		ShaderSourceRef combine(ShaderSource& source);
+		bool operator==(ShaderSource& s);
 	private:
 		std::unordered_map<ShaderType, std::string> sources;
 	};
