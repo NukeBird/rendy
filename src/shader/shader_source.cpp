@@ -1,6 +1,12 @@
 #include "shader_source.h"
 #include <cassert>
 
+Rendy::ShaderSource::ShaderSource(const std::string& vtx, const std::string& frg)
+{
+	set_source(ShaderType::VertexShader, vtx);
+	set_source(ShaderType::FragmentShader, frg);
+}
+
 void Rendy::ShaderSource::set_source(ShaderType type, const std::string& source)
 {
 	sources[type] = source;

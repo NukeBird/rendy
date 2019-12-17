@@ -14,6 +14,8 @@ namespace Rendy
 	class ShaderSource final
 	{
 	public:
+		ShaderSource() = default;
+		ShaderSource(const std::string& vtx, const std::string& frg);
 		void set_source(ShaderType type, const std::string& source);
 		const std::string& get_source(ShaderType type);
 		ShaderSourceRef combine(ShaderSourceRef source);
