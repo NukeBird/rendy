@@ -9,8 +9,6 @@ Rendy::ShaderFactory::ShaderFactory(OGL version)
 	this->version = version;
 }
 
-#include "../util/log.h"
-
 Rendy::AbstractShaderRef Rendy::ShaderFactory::make(ShaderSourceRef source)
 {
 	OPTICK_EVENT();
@@ -34,10 +32,6 @@ Rendy::AbstractShaderRef Rendy::ShaderFactory::make(ShaderSourceRef source)
 		}
 
 		shader_map[source] = shader;
-	}
-	else
-	{
-		Log::warn("CACHE HIT");
 	}
 
 	//TODO: choose best
