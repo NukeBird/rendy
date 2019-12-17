@@ -6,6 +6,11 @@ void Rendy::ShaderSource::set_source(ShaderType type, const std::string& source)
 	sources[type] = source;
 }
 
+const std::string& Rendy::ShaderSource::get_source(ShaderType type)
+{
+	return sources[type];
+}
+
 Rendy::ShaderSourceRef Rendy::ShaderSource::combine(ShaderSourceRef source)
 {
 	assert(source != nullptr);

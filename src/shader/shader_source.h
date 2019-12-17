@@ -15,6 +15,7 @@ namespace Rendy
 	{
 	public:
 		void set_source(ShaderType type, const std::string& source);
+		const std::string& get_source(ShaderType type);
 		ShaderSourceRef combine(ShaderSourceRef source);
 		ShaderSourceRef combine(ShaderSource& source);
 	private:

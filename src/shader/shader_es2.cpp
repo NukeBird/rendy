@@ -3,71 +3,26 @@
 #include "../common.h"
 #include <optick.h>
 
-Rendy::ES2::Shader::Shader(const std::string& vertex_source, const std::string& fragment_source)
+Rendy::ES2::Shader::Shader(const std::string& vertex_source, const std::string& fragment_source):
+	AbstractShader(vertex_source, fragment_source)
 {
 	OPTICK_EVENT();
-
-	this->vertex_source = vertex_source;
-	this->fragment_source = fragment_source;
-
-	ShaderSettings settings;
-	settings.flags = EVERYTHING;
-	settings.custom_definitions["MAX_BONES"] = 120;
-
-	compile(settings);
 }
 
-void Rendy::ES2::Shader::reload()
+std::string Rendy::ES2::Shader::generate_meta(const ShaderSettings& settings)
 {
 	OPTICK_EVENT();
 
-	for (auto& v : variants)
-	{
-		v.second->reload();
-	}
+	std::string meta = 
+		"#version 430\n" //TODO
+		+ settings.generate_definitions();
+
+	return meta;
 }
 
-Rendy::ShaderVariantRef Rendy::ES2::Shader::compile(const ShaderSettings& settings)
+Rendy::ShaderVariantRef Rendy::ES2::Shader::make_variant(const std::string& vertex_source, 
+	const std::string& fragment_source)
 {
 	OPTICK_EVENT();
-
-	auto it = variants.find(settings);
-
-	if (it == variants.end())
-	{
-		const std::string meta = 
-			"#version 430\n" //TODO
-			+ settings.generate_definitions();
-		const std::string vertex_source_variant = meta + vertex_source;
-		const std::string fragment_source_variant = meta + fragment_source;
-
-		variants[settings] = std::make_shared<ES2::ShaderVariant>(vertex_source_variant,
-			fragment_source_variant);
-			
-		it = variants.find(settings);
-	}
-
-	return it->second;
-}
-
-bool Rendy::ES2::Shader::validate() const
-{
-	OPTICK_EVENT();
-
-	for (auto& v : variants)
-	{
-		if (!v.second->validate())
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-uint32_t Rendy::ES2::Shader::get_variant_count() const
-{
-	OPTICK_EVENT();
-
-	return static_cast<uint32_t>(variants.size());
+	return std::make_shared<ES2::ShaderVariant>(vertex_source, fragment_source);
 }
