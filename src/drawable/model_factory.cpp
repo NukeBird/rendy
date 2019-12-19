@@ -864,7 +864,7 @@ Rendy::Image2DRef Rendy::ModelFactory::get_image(int index, std::vector<Image2DR
 {
 	OPTICK_EVENT();
 
-	if (index >= images.size() || index < 0)
+	if (static_cast<size_t>(index) >= images.size() || index < 0)
 	{
 		return nullptr;
 	}

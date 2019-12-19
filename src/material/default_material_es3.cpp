@@ -4,15 +4,17 @@
 #include "../command/bind_texture_cube.h"
 #include "../command/set_uniform.h"
 #include "../util/log.h"
+#include "../engine.h"
 #include <optick.h>
 
-Rendy::ES3::DefaultMaterial::DefaultMaterial(AbstractTexture2DRef albedo_texture,
+Rendy::ES3::DefaultMaterial::DefaultMaterial(ShaderFactoryRef shader_factory,
+	AbstractTexture2DRef albedo_texture,
 	AbstractTexture2DRef ambient_metallic_roughness_texture, 
 	AbstractTexture2DRef normal_texture,
 	AbstractTextureCubeRef iem,
 	AbstractTextureCubeRef pmrem,
 	AbstractTexture2DRef lut,
-	AbstractShaderRef shader)
+	ShaderSourceRef source): AbstractMaterial(shader_factory)
 {
 	OPTICK_EVENT();
 
@@ -23,14 +25,53 @@ Rendy::ES3::DefaultMaterial::DefaultMaterial(AbstractTexture2DRef albedo_texture
 	this->iem = iem;
 	this->pmrem = pmrem;
 	this->lut = lut;
-	this->shader = shader;
+	this->source = source;
+
+	flags = 0;
+
+	if (albedo_texture)
+	{
+		flags |= USE_COLOR_TEXTURE;
+	}
+
+	if (ambient_metallic_roughness_texture)
+	{
+		flags |= USE_METALLIC_ROUGHNESS_TEXTURE;
+	}
+
+	if (normal_texture)
+	{
+		flags |= USE_NORMAL_TEXTURE;
+	}
 }
 
 void Rendy::ES3::DefaultMaterial::reload()
 {
 	OPTICK_EVENT();
 
-	shader->reload();
+	get_shader()->reload();
+
+	if (albedo_texture)
+	{
+		albedo_texture->reload();
+	}
+
+	if (ambient_metallic_roughness_texture)
+	{
+		ambient_metallic_roughness_texture->reload();
+	}
+
+	if (normal_texture)
+	{
+		normal_texture->reload();
+	}
+}
+
+void Rendy::ES3::DefaultMaterial::reload(ShaderSourceRef extra_source)
+{
+	OPTICK_EVENT();
+
+	get_shader(extra_source)->reload();
 
 	if (albedo_texture)
 	{
@@ -79,7 +120,7 @@ bool Rendy::ES3::DefaultMaterial::validate() const
 		}
 	}
 
-	if (!shader->validate())
+	if (!get_shader()->validate())
 	{
 		Log::info("Invalid shader\n");
 		return false;
@@ -88,46 +129,57 @@ bool Rendy::ES3::DefaultMaterial::validate() const
 	return true;
 }
 
-Rendy::AbstractShaderRef Rendy::ES3::DefaultMaterial::get_shader()
-{
-	OPTICK_EVENT();
-	return shader;
-}
-
-uint32_t Rendy::ES3::DefaultMaterial::get_flags() const
+bool Rendy::ES3::DefaultMaterial::validate(ShaderSourceRef extra_source) const
 {
 	OPTICK_EVENT();
 
-	uint32_t flags = 0; 
-	
 	if (albedo_texture)
 	{
-		flags |= USE_COLOR_TEXTURE;
+		if (!albedo_texture->validate())
+		{
+			Log::info("Invalid albedo texture\n");
+			return false;
+		}
 	}
-	 
+
 	if (ambient_metallic_roughness_texture)
 	{
-		flags |= USE_METALLIC_ROUGHNESS_TEXTURE;
+		if (!ambient_metallic_roughness_texture->validate())
+		{
+			Log::info("Invalid ambient metallic roughness texture\n");
+			return false;
+		}
 	}
 
 	if (normal_texture)
 	{
-		flags |= USE_NORMAL_TEXTURE;
+		if (!normal_texture->validate())
+		{
+			Log::info("Invalid normal texture\n");
+			return false;
+		}
 	}
 
-	return flags;
+	if (!get_shader(extra_source)->validate())
+	{
+		Log::info("Invalid shader\n");
+		return false;
+	}
+
+	return true;
 }
 
-std::vector<Rendy::CommandRef> Rendy::ES3::DefaultMaterial::to_command_list(const ShaderSettings& settings)
+std::vector<Rendy::CommandRef> Rendy::ES3::DefaultMaterial::to_command_list(const ShaderSettings& settings,
+	ShaderSourceRef extra_source)
 {
 	OPTICK_EVENT();
 
-	auto shader_variant = get_shader_variant(settings);
+	auto shader_variant = get_shader_variant(settings, extra_source);
 	auto processed_settings = process_settings(settings);
 
 	std::vector<CommandRef> list;
 
-	list.emplace_back(std::make_shared<BindShader>(shader, processed_settings));
+	list.emplace_back(std::make_shared<BindShader>(get_shader(extra_source), processed_settings));
 
 	if (processed_settings.flags & USE_COLOR_TEXTURE)
 	{
@@ -166,56 +218,6 @@ std::vector<Rendy::CommandRef> Rendy::ES3::DefaultMaterial::to_command_list(cons
 	list.emplace_back(std::make_shared<BindTexture2D>(lut, 5));
 
 	return list;
-}
-
-void Rendy::ES3::DefaultMaterial::bind(const ShaderSettings& settings)
-{
-	OPTICK_EVENT();
-
-	auto shader_variant = get_shader_variant(settings);
-
-	shader_variant->bind();
-
-	if (albedo_texture)
-	{
-		shader_variant->set_uniform("color_texture", 0);
-		albedo_texture->bind(0); //TODO: get slot by texture name
-	}
-
-	if (normal_texture)
-	{
-		shader_variant->set_uniform("normal_texture", 1);
-		normal_texture->bind(1); //TODO: get slot by texture name
-	}
-
-	if (ambient_metallic_roughness_texture)
-	{
-		shader_variant->set_uniform("metallic_roughness_texture", 2);
-		ambient_metallic_roughness_texture->bind(2); //TODO: get slot by texture name
-	}
-}
-
-void Rendy::ES3::DefaultMaterial::unbind(const ShaderSettings& settings)
-{
-	OPTICK_EVENT();
-
-	auto shader_variant = get_shader_variant(settings);
-	shader_variant->unbind();
-
-	if (albedo_texture)
-	{
-		albedo_texture->unbind(0); //TODO: get slot by texture name
-	}
-
-	if (normal_texture)
-	{
-		normal_texture->unbind(1); //TODO: get slot by texture name
-	}
-
-	if (ambient_metallic_roughness_texture)
-	{
-		ambient_metallic_roughness_texture->unbind(2); //TODO: get slot by texture name
-	}
 }
 
 bool Rendy::ES3::DefaultMaterial::uses_transparency() const

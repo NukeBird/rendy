@@ -25,6 +25,7 @@ namespace Rendy
 		void set_pipeline(PipelineRef pipeline);
 		AbstractShaderRef make_shader(const std::string& vtx, 
 			const std::string& frg);
+		AbstractShaderRef make_shader(ShaderSourceRef source);
 		AbstractMaterialRef make_material(ImageSetRef image_set);
 		AbstractTexture2DRef make_texture2d(Image2DRef image);
 		AbstractTextureCubeRef make_texture_cube(uint32_t size, const void* ptr);

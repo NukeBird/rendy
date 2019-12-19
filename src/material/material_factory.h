@@ -14,19 +14,19 @@ namespace Rendy
 	class MaterialFactory final
 	{
 	public:
-		MaterialFactory(OGL version, Texture2DFactoryRef texture_factory, 
-			ShaderFactoryRef shader_factory, AbstractTextureCubeRef iem,
-			AbstractTextureCubeRef pmrem = nullptr, 
+		MaterialFactory(OGL version, Texture2DFactoryRef texture_factory, ShaderFactoryRef shader_factory,
+			AbstractTextureCubeRef iem, AbstractTextureCubeRef pmrem = nullptr, 
 			AbstractTexture2DRef lut = nullptr);
 		AbstractMaterialRef make(ImageSetRef image_set);
 	private:
-		void load_shader(ShaderFactoryRef shader_factory);
+		void load_shader_source();
 		AbstractMaterialRef make_es2(ImageSetRef image_set);
 		AbstractMaterialRef make_es3(ImageSetRef image_set);
 
 		Texture2DFactoryRef texture_factory;
+		ShaderFactoryRef shader_factory;
 		AbstractTexture2DRef lut;
-		AbstractShaderRef shader;
+		ShaderSourceRef shader_source;
 		AbstractTextureCubeRef iem;
 		AbstractTextureCubeRef pmrem;
 		OGL version;

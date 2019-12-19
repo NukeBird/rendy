@@ -3,18 +3,19 @@
 #include "default_shader_sources_es2.hpp"
 #include "default_material_es3.h"
 #include "default_shader_sources_es3.hpp"
+#include "../engine.h"
 #include <cassert>
 #include <optick.h>
 
-Rendy::MaterialFactory::MaterialFactory(OGL version, 
-	Texture2DFactoryRef texture_factory, ShaderFactoryRef shader_factory,
-	AbstractTextureCubeRef iem, AbstractTextureCubeRef pmrem, 
+Rendy::MaterialFactory::MaterialFactory(OGL version, Texture2DFactoryRef texture_factory, 
+	ShaderFactoryRef shader_factory, AbstractTextureCubeRef iem, AbstractTextureCubeRef pmrem, 
 	AbstractTexture2DRef lut)
 {
 	OPTICK_EVENT();
 
 	this->version = version;
 	this->texture_factory = texture_factory;
+	this->shader_factory = shader_factory;
 	this->iem = iem;
 	this->pmrem = pmrem;
 	this->lut = lut;
@@ -22,8 +23,8 @@ Rendy::MaterialFactory::MaterialFactory(OGL version,
 	assert(texture_factory);
 	assert(shader_factory);
 
-	load_shader(shader_factory);
-	assert(shader);
+	load_shader_source();
+	assert(shader_source);
 	assert(iem);
 
 	if (version == OGL::ES31 || version == OGL::ChooseBest) //TODO: choose best
@@ -53,29 +54,30 @@ Rendy::AbstractMaterialRef Rendy::MaterialFactory::make(ImageSetRef image_set)
 	return make_es3(image_set);
 }
 
-void Rendy::MaterialFactory::load_shader(ShaderFactoryRef shader_factory)
+void Rendy::MaterialFactory::load_shader_source()
 {
 	OPTICK_EVENT();
+
+	shader_source = std::make_shared<ShaderSource>();
 
 	switch (version)
 	{
 		case Rendy::OGL::ES20:
 		{
-			shader = shader_factory->make(ES2::default_vertex_shader,
-				ES2::default_fragment_shader);
+			shader_source->set_source(ShaderType::VertexShader, ES2::default_vertex_shader);
+			shader_source->set_source(ShaderType::FragmentShader, ES2::default_fragment_shader);
 			return;
 		}
 		case Rendy::OGL::ES31:
 		{
-			shader = shader_factory->make(ES3::default_vertex_shader,
-				ES3::default_fragment_shader);
+			shader_source->set_source(ShaderType::VertexShader, ES3::default_vertex_shader);
+			shader_source->set_source(ShaderType::FragmentShader, ES3::default_fragment_shader);
 			return;
 		}
 	}
 
-	//TODO: choose best
-	shader = shader_factory->make(ES3::default_vertex_shader,
-		ES3::default_fragment_shader);
+	shader_source->set_source(ShaderType::VertexShader, ES3::default_vertex_shader);
+	shader_source->set_source(ShaderType::FragmentShader, ES3::default_fragment_shader);
 }
 
 Rendy::AbstractMaterialRef Rendy::MaterialFactory::make_es2(ImageSetRef image_set)
@@ -95,8 +97,8 @@ Rendy::AbstractMaterialRef Rendy::MaterialFactory::make_es2(ImageSetRef image_se
 		normal = texture_factory->make(image_set->normal);
 	}
 
-	return std::make_shared<ES2::DefaultMaterial>(color, normal, iem, 
-		shader);
+	return std::make_shared<ES2::DefaultMaterial>(shader_factory, color, normal, iem, 
+		shader_source);
 }
 
 Rendy::AbstractMaterialRef Rendy::MaterialFactory::make_es3(ImageSetRef image_set)
@@ -122,6 +124,6 @@ Rendy::AbstractMaterialRef Rendy::MaterialFactory::make_es3(ImageSetRef image_se
 		metallic_roughness = texture_factory->make(image_set->metallic_roughness);
 	}
 	
-	return std::make_shared<ES3::DefaultMaterial>(albedo, metallic_roughness, 
-		normal, iem, pmrem, lut, shader);
+	return std::make_shared<ES3::DefaultMaterial>(shader_factory, albedo, metallic_roughness,
+		normal, iem, pmrem, lut, shader_source);
 }

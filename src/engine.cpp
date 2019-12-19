@@ -33,9 +33,8 @@ Rendy::Engine::Engine(OGL version, VFSRef vfs)
 		Log::info("LUT status: {0}", lut->validate());
 	}
 
-	this->material_factory = std::make_shared<MaterialFactory>(version,
-		gapi->get_texture2d_factory(), gapi->get_shader_factory(), iem, pmrem,
-		lut);
+	this->material_factory = std::make_shared<MaterialFactory>(version, gapi->get_texture2d_factory(),
+		gapi->get_shader_factory(), iem, pmrem, lut);
 }
 
 Rendy::AbstractTextureCubeRef Rendy::Engine::make_texture_cube(const std::string& path)
@@ -114,11 +113,13 @@ bool Rendy::Engine::validate()
 
 Rendy::PipelineRef Rendy::Engine::get_pipeline() const
 {
+	OPTICK_EVENT();
 	return pipeline;
 }
 
 void Rendy::Engine::set_pipeline(PipelineRef pipeline)
 {
+	OPTICK_EVENT();
 	this->pipeline = pipeline;
 }
 
@@ -127,6 +128,12 @@ Rendy::AbstractShaderRef Rendy::Engine::make_shader(const std::string& vtx,
 {
 	OPTICK_EVENT();
 	return get_gapi()->make_shader(vtx, frg);
+}
+
+Rendy::AbstractShaderRef Rendy::Engine::make_shader(ShaderSourceRef source)
+{
+	OPTICK_EVENT();
+	return gapi->make_shader(source);
 }
 
 Rendy::AbstractTexture2DRef Rendy::Engine::make_texture2d(Image2DRef image)

@@ -10,20 +10,20 @@ namespace Rendy
 		class DefaultMaterial final : public AbstractMaterial
 		{
 		public:
-			DefaultMaterial(AbstractTexture2DRef albedo_texture,
+			DefaultMaterial(ShaderFactoryRef shader_factory,
+				AbstractTexture2DRef albedo_texture,
 				AbstractTexture2DRef ambient_metallic_roughness_texture,
 				AbstractTexture2DRef normal_texture,
 				AbstractTextureCubeRef iem,
 				AbstractTextureCubeRef pmrem,
 				AbstractTexture2DRef lut,
-				AbstractShaderRef shader);
+				ShaderSourceRef source);
 			virtual void reload() override;
+			virtual void reload(ShaderSourceRef extra_source) override;
 			virtual bool validate() const override;
-			virtual AbstractShaderRef get_shader() override;
-			virtual uint32_t get_flags() const override;
-			virtual std::vector<CommandRef> to_command_list(const ShaderSettings& settings) override;
-			virtual void bind(const ShaderSettings& settings) override;
-			virtual void unbind(const ShaderSettings& settings) override;
+			virtual bool validate(ShaderSourceRef extra_source) const override;
+			virtual std::vector<CommandRef> to_command_list(const ShaderSettings& settings,
+				ShaderSourceRef extra_source = nullptr) override;
 			virtual bool uses_transparency() const override;
 		private:
 			AbstractTexture2DRef albedo_texture;
@@ -32,7 +32,6 @@ namespace Rendy
 			AbstractTextureCubeRef iem;
 			AbstractTextureCubeRef pmrem;
 			AbstractTexture2DRef lut;
-			AbstractShaderRef shader;
 		};
 	};
 };

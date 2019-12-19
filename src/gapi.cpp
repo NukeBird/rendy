@@ -20,6 +20,12 @@ Rendy::AbstractShaderRef Rendy::GAPI::make_shader(const std::string& vtx,
 	return shader_factory->make(std::make_shared<ShaderSource>(vtx, frg));
 }
 
+Rendy::AbstractShaderRef Rendy::GAPI::make_shader(ShaderSourceRef source)
+{
+	OPTICK_EVENT();
+	return shader_factory->make(source);
+}
+
 Rendy::AbstractTexture2DRef Rendy::GAPI::make_texture2d(Image2DRef image)
 {
 	OPTICK_EVENT();
