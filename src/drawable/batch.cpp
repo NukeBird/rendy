@@ -6,12 +6,12 @@
 #include <memory>
 #include <optick.h>
 
-Rendy::CommandList Rendy::Batch::to_command_list() const
+Rendy::CommandList Rendy::Batch::to_command_list(ShaderSourceRef extra_source) const
 {
 	OPTICK_EVENT();
 
-	auto list = material->to_command_list(shader_settings);
-	auto shader_variant = material->get_shader_variant(shader_settings);
+	auto list = material->to_command_list(shader_settings, extra_source);
+	auto shader_variant = material->get_shader_variant(shader_settings, extra_source);
 	list.emplace_back(std::make_shared<BindVertexArray>(vao, shader_variant));
 
 	for (auto& u: uniforms)
