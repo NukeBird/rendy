@@ -119,8 +119,7 @@ int main(int argc, char** argv)
 	#endif // _WIN32
 
 	Rendy::VFSRef vfs = std::make_shared<Rendy::VFS>();
-	Rendy::EngineRef engine = std::make_shared<Rendy::Engine>(Rendy::OGL::ES31, 
-		vfs);
+	Rendy::EngineRef engine = std::make_shared<Rendy::Engine>(Rendy::OGL::ES31, vfs);
 
 	auto shader_executor = std::make_shared<Rendy::ShaderSource>(
 		Rendy::ES3::default_shader_executor_vertex,

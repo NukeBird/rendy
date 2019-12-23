@@ -204,8 +204,6 @@ void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_t
 				static_cast<uint32_t>(bones.size());
 			call.material = material;
 
-			auto shader_variant = material->get_shader_variant(call.shader_settings);
-
 			call.mat4_uniform_arrays["u_bones[0]"] = bones; //TODO: minimize copy count
 
 			call.mat4_uniforms["u_transform"] = model * transform; //TODO: minimize copy count
