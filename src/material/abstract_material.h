@@ -4,6 +4,7 @@
 #include "../command/abstract_command.h"
 #include "../shader/shader_source.h"
 #include "../shader/shader_factory.h"
+#include <unordered_map>
 #include <memory>
 #include <vector>
 

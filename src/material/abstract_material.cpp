@@ -20,7 +20,7 @@ Rendy::ShaderSourceRef Rendy::AbstractMaterial::get_source(ShaderSourceRef extra
 
 	if(extra_source)
 	{
-		return source->combine(extra_source);
+		return source->combine(extra_source); //TODO: cache?
 	}
 
 	return source;
