@@ -64,19 +64,16 @@ void Rendy::MaterialFactory::load_shader_source()
 	{
 		case Rendy::OGL::ES20:
 		{
-			shader_source->set_source(ShaderType::VertexShader, ES2::default_vertex_shader);
 			shader_source->set_source(ShaderType::FragmentShader, ES2::default_fragment_shader);
 			return;
 		}
 		case Rendy::OGL::ES31:
 		{
-			shader_source->set_source(ShaderType::VertexShader, ES3::default_vertex_shader);
 			shader_source->set_source(ShaderType::FragmentShader, ES3::default_fragment_shader);
 			return;
 		}
 	}
 
-	shader_source->set_source(ShaderType::VertexShader, ES3::default_vertex_shader);
 	shader_source->set_source(ShaderType::FragmentShader, ES3::default_fragment_shader);
 }
 

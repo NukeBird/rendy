@@ -156,7 +156,7 @@ void Rendy::ES3::VertexArray::bind_layout(const ShaderVariantRef& shader)
 
 		if (index >= 0)
 		{
-			Log::info("({0}){1}: {2}", (unsigned)this, e.name.c_str(), index);
+			//Log::info("({0}){1}: {2}", (unsigned)this, e.name.c_str(), index);
 
 			glEnableVertexAttribArray(index);
 			glVertexAttribPointer(index, e.get_component_count(), get_gl_type(e), 

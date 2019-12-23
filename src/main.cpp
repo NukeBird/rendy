@@ -4,6 +4,8 @@
 #include <chrono>
 #include <optick.h>
 #include "util/log.h"
+#include "shader/default_shader_executor_es3.hpp"
+#include "shader/shader_source.h"
 
 void GLAPIENTRY message_callback(GLenum source,
 	GLenum type,
@@ -120,10 +122,14 @@ int main(int argc, char** argv)
 	Rendy::EngineRef engine = std::make_shared<Rendy::Engine>(Rendy::OGL::ES31, 
 		vfs);
 
+	auto shader_executor = std::make_shared<Rendy::ShaderSource>(
+		Rendy::ES3::default_shader_executor_vertex,
+		Rendy::ES3::default_shader_executor_fragment);
+
 	auto pipe = std::make_shared<Rendy::Pipeline>();
-	pipe->add_pass(std::make_shared<Rendy::DepthPrepass>(false));
-	pipe->add_pass(std::make_shared<Rendy::OpaquePass>(true));
-	pipe->add_pass(std::make_shared<Rendy::TransparentPass>());
+	pipe->add_pass(std::make_shared<Rendy::DepthPrepass>(shader_executor, false));
+	pipe->add_pass(std::make_shared<Rendy::OpaquePass>(shader_executor, true));
+	pipe->add_pass(std::make_shared<Rendy::TransparentPass>(shader_executor));
 	engine->set_pipeline(pipe);
 
 	Rendy::ModelFactory model_factory(engine, vfs);

@@ -6,6 +6,9 @@ namespace Rendy
 	class SelfSufficientPass: public AbstractRenderPass
 	{
 	public:
+		SelfSufficientPass(ShaderSourceRef executor);
 		virtual void execute(const BatchList& batches);
+	private:
+		ShaderSourceRef executor;
 	};
 };

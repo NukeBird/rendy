@@ -3,10 +3,11 @@
 #include <algorithm>
 #include <optick.h>
 
-Rendy::OpaquePass::OpaquePass(bool depth_prepassed)
+Rendy::OpaquePass::OpaquePass(ShaderSourceRef executor, bool depth_prepassed)
 {
 	OPTICK_EVENT();
 	this->depth_prepassed = depth_prepassed;
+	this->executor = executor;
 }
 
 void Rendy::OpaquePass::execute(const BatchList& batches)
@@ -23,7 +24,7 @@ void Rendy::OpaquePass::execute(const BatchList& batches)
 	{
 		if (!batch.material->uses_transparency())
 		{
-			auto command_list = batch.to_command_list();
+			auto command_list = batch.to_command_list(executor);
 			for (auto& command : command_list)
 			{
 				command->execute();

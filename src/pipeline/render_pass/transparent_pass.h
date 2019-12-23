@@ -6,6 +6,9 @@ namespace Rendy
 	class TransparentPass: public AbstractRenderPass
 	{
 	public:
+		TransparentPass(ShaderSourceRef executor);
 		virtual void execute(const BatchList& batches);
+	private:
+		ShaderSourceRef executor;
 	};
 };

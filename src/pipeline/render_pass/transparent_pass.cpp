@@ -1,6 +1,11 @@
 #include "../../common.h"
 #include "transparent_pass.h"
 
+Rendy::TransparentPass::TransparentPass(ShaderSourceRef executor)
+{
+	this->executor = executor;
+}
+
 void Rendy::TransparentPass::execute(const BatchList& batches)
 {
 	glEnable(GL_BLEND);
@@ -14,7 +19,7 @@ void Rendy::TransparentPass::execute(const BatchList& batches)
 	{
 		if (batch.material->uses_transparency())
 		{
-			auto command_list = batch.to_command_list();
+			auto command_list = batch.to_command_list(executor);
 			for (auto& command : command_list)
 			{
 				command->execute();

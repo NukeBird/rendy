@@ -20,6 +20,7 @@ std::string Rendy::ES2::Shader::generate_meta(const ShaderSettings& settings)
 
 	std::string meta = 
 		"#version 430\n" //TODO
+		"precision highp float;\n" //TODO
 		+ settings.generate_definitions();
 
 	return meta;

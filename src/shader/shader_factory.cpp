@@ -1,6 +1,7 @@
 #include "shader_factory.h"
 #include "shader_es2.h"
 #include "shader_es3.h"
+#include "../util/log.h"
 #include <optick.h>
 
 Rendy::ShaderFactory::ShaderFactory(OGL version)

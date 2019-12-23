@@ -206,23 +206,18 @@ void Rendy::Model::generate_draw_calls(uint32_t node_id, const glm::mat4& base_t
 
 			auto shader_variant = material->get_shader_variant(call.shader_settings);
 
-			call.uniforms.emplace_back(std::make_shared<SetUniformMat4Array>
-				(shader_variant, "u_bones[0]", bones));
+			call.mat4_uniform_arrays["u_bones[0]"] = bones;
 
-			call.uniforms.emplace_back(std::make_shared<SetUniformMat4>
-				(shader_variant, "u_transform", model * transform));
-			call.uniforms.emplace_back(std::make_shared<SetUniformMat4>
-				(shader_variant, "u_view", view));
-			call.uniforms.emplace_back(std::make_shared<SetUniformMat4>
-				(shader_variant, "u_projection", proj));
-			call.uniforms.emplace_back(std::make_shared<SetUniformMat4>
-				(shader_variant, "u_view_projection", proj * view));	
+			call.mat4_uniforms["u_transform"] = model * transform;
+			call.mat4_uniforms["u_view"] = view;
+			call.mat4_uniforms["u_projection"] = proj;
+			call.mat4_uniforms["u_view_projection"] = proj * view;
 			
 			glm::mat3 view_rotation(view);
 			glm::vec3 camera_position = -view[3] * view_rotation;
 
-			call.uniforms.emplace_back(std::make_shared<SetUniform<glm::vec3>>(
-				shader_variant, "u_camera_position", camera_position));
+			call.vec3_uniforms["u_camera_position"] = camera_position;
+
 		}
 	}
 

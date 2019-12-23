@@ -29,6 +29,8 @@ Rendy::ShaderSourceRef Rendy::ShaderSource::combine(ShaderSourceRef source)
 	return combine(*source);
 }
 
+#include "../util/log.h"
+
 Rendy::ShaderSourceRef Rendy::ShaderSource::combine(ShaderSource& source)
 {
 	OPTICK_EVENT();
@@ -40,6 +42,10 @@ Rendy::ShaderSourceRef Rendy::ShaderSource::combine(ShaderSource& source)
 
 	result->sources[ShaderType::FragmentShader] = sources[ShaderType::FragmentShader] +
 		source.sources[ShaderType::FragmentShader];
+
+	/*Log::error("Vertex\n{0}\nFragment\n{1}", result->sources[ShaderType::VertexShader],
+		result->sources[ShaderType::FragmentShader]);
+	system("PAUSE");*/
 
 	return result;
 }
