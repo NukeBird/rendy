@@ -42,6 +42,8 @@ bool Rendy::AbstractShader::validate() const
 	return true;
 }
 
+#include "../util/log.h"
+
 Rendy::ShaderVariantRef Rendy::AbstractShader::compile(const ShaderSettings& settings)
 {
 	OPTICK_EVENT();

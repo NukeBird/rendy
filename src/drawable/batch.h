@@ -19,12 +19,12 @@ namespace Rendy
 		AbstractMaterialRef material;
 		ShaderSettings shader_settings;
 		//std::vector<AbstractSetUniformRef> uniforms;
-		UniformList<glm::vec3> vec3_uniforms;
-		UniformList<glm::mat4> mat4_uniforms;
-		UniformList<glm::mat3> mat3_uniforms;
-		UniformList<float> float_uniforms;
-		UniformList<int> int_uniforms;
-		UniformList<Mat4Array> mat4_uniform_arrays;
+		UniformList<glm::vec3> vec3_uniforms; //TODO: minimize copy count
+		UniformList<glm::mat4> mat4_uniforms; //TODO: minimize copy count
+		UniformList<glm::mat3> mat3_uniforms; //TODO: minimize copy count
+		UniformList<float> float_uniforms; //TODO: minimize copy count
+		UniformList<int> int_uniforms; //TODO: minimize copy count
+		UniformList<Mat4Array> mat4_uniform_arrays; //TODO: minimize copy count
 
 		CommandList to_command_list(ShaderSourceRef extra_source = nullptr) const;
 	};

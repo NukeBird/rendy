@@ -169,6 +169,8 @@ bool Rendy::ES3::DefaultMaterial::validate(ShaderSourceRef extra_source) const
 	return true;
 }
 
+#include "../util/log.h"
+
 std::vector<Rendy::CommandRef> Rendy::ES3::DefaultMaterial::to_command_list(const ShaderSettings& settings,
 	ShaderSourceRef extra_source)
 {
