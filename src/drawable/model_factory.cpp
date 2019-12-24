@@ -973,14 +973,14 @@ Rendy::ModelRef Rendy::ModelFactory::make(const void* memory, uint32_t size)
 
 		return model;
 	}
-	catch (const std::exception & e)
+	catch (const std::exception& e)
 	{
-		//TODO: error
+		Log::error(e.what());
 		return nullptr;
 	}
 	catch (...)
 	{
-		//TODO: error
+		Log::error("Some unhandled exception");
 		return nullptr;
 	}
 }
