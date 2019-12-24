@@ -10,7 +10,7 @@ namespace Rendy
 	enum class BufferTarget
 	{
 		VertexBuffer,
-		IBO,
+		ElementArray,
 		CBO,
 		SBO,
 		Invalid

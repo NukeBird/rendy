@@ -11,7 +11,7 @@ std::string Rendy::to_string(BufferTarget target)
 		{
 			return "VBO";
 		}
-		case BufferTarget::IBO:
+		case BufferTarget::ElementArray:
 		{
 			return "IBO";
 		}
@@ -126,7 +126,7 @@ GLenum Rendy::AbstractBuffer::get_gl_target() const
 		{
 			return GL_ARRAY_BUFFER;
 		}
-		case Rendy::BufferTarget::IBO:
+		case Rendy::BufferTarget::ElementArray:
 		{
 			return GL_ELEMENT_ARRAY_BUFFER;
 		}
