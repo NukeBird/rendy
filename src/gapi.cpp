@@ -49,7 +49,7 @@ Rendy::AbstractVertexArrayRef Rendy::GAPI::make_vao(AbstractBufferRef vbo,
 Rendy::AbstractBufferRef Rendy::GAPI::make_vbo(uint32_t size, const void* ptr)
 {
 	OPTICK_EVENT();
-	return buffer_factory->make(BufferTarget::VertexBuffer, size, ptr);
+	return buffer_factory->make(BufferTarget::VertexArray, size, ptr);
 }
 
 Rendy::AbstractBufferRef Rendy::GAPI::make_ibo(uint32_t size, const void* ptr)

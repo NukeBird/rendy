@@ -9,7 +9,7 @@ namespace Rendy
 {
 	enum class BufferTarget
 	{
-		VertexBuffer,
+		VertexArray,
 		ElementArray,
 		CBO,
 		SBO,
