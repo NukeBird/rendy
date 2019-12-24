@@ -61,7 +61,7 @@ Rendy::AbstractBufferRef Rendy::GAPI::make_ibo(uint32_t size, const void* ptr)
 Rendy::AbstractBufferRef Rendy::GAPI::make_sbo(uint32_t size, const void* ptr)
 {
 	OPTICK_EVENT();
-	return buffer_factory->make(BufferTarget::SBO, size, ptr);
+	return buffer_factory->make(BufferTarget::ShaderStorage, size, ptr);
 }
 
 Rendy::AbstractBufferRef Rendy::GAPI::make_cbo(uint32_t size, const void* ptr)

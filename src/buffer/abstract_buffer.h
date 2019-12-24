@@ -12,7 +12,7 @@ namespace Rendy
 		VertexArray,
 		ElementArray,
 		AtomicCounter,
-		SBO,
+		ShaderStorage,
 		Invalid
 	};
 

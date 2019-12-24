@@ -9,7 +9,7 @@ Rendy::ES2::Buffer::Buffer(BufferTarget target, uint32_t size,
 	OPTICK_TAG("target", to_string(target).c_str());
 	OPTICK_TAG("size", size);
 
-	assert(target != BufferTarget::SBO);
+	assert(target != BufferTarget::ShaderStorage);
 	assert(target != BufferTarget::AtomicCounter);
 }
 

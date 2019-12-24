@@ -18,7 +18,7 @@ Rendy::AbstractBufferRef Rendy::BufferFactory::make(BufferTarget target,
 	{
 		case Rendy::OGL::ES20:
 		{
-			assert(target != BufferTarget::SBO);
+			assert(target != BufferTarget::ShaderStorage);
 			return std::make_shared<ES2::Buffer>(target, size, ptr);
 		}
 		case Rendy::OGL::ES31:

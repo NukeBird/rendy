@@ -19,7 +19,7 @@ std::string Rendy::to_string(BufferTarget target)
 		{
 			return "CBO";
 		}
-		case BufferTarget::SBO:
+		case BufferTarget::ShaderStorage:
 		{
 			return "SBO";
 		}
@@ -134,7 +134,7 @@ GLenum Rendy::AbstractBuffer::get_gl_target() const
 		{
 			return GL_ATOMIC_COUNTER_BUFFER;
 		}
-		case Rendy::BufferTarget::SBO:
+		case Rendy::BufferTarget::ShaderStorage:
 		{
 			return GL_SHADER_STORAGE_BUFFER;
 		}
