@@ -385,19 +385,19 @@ std::vector<Rendy::Mesh> Rendy::ModelFactory::parse_meshes(const aiScene* scene)
 			{
 				assert(weight_map[j].size() <= 4);
 
-				for (uint32_t k = 0; k < weight_map[j].size(); ++k)
+				for (uint32_t k = 0; k < static_cast<uint32_t>(weight_map[j].size()); ++k)
 				{
 					verts.emplace_back(static_cast<float>(weight_map[j][k].mVertexId));
 				}
-				for (uint32_t k = weight_map[j].size(); k < 4; ++k)
+				for (uint32_t k = static_cast<uint32_t>(weight_map[j].size()); k < 4; ++k)
 				{
 					verts.emplace_back(0.0f);
 				}
-				for (uint32_t k = 0; k < weight_map[j].size(); ++k)
+				for (uint32_t k = 0; k < static_cast<uint32_t>(weight_map[j].size()); ++k)
 				{
 					verts.emplace_back(weight_map[j][k].mWeight);
 				}
-				for (uint32_t k = weight_map[j].size(); k < 4; ++k)
+				for (uint32_t k = static_cast<uint32_t>(weight_map[j].size()); k < 4; ++k)
 				{
 					verts.emplace_back(0.0f);
 				}
