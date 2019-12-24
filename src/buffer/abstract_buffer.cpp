@@ -9,19 +9,19 @@ std::string Rendy::to_string(BufferTarget target)
 	{
 		case BufferTarget::VertexArray:
 		{
-			return "VBO";
+			return "VertexArray";
 		}
 		case BufferTarget::ElementArray:
 		{
-			return "IBO";
+			return "ElementArray";
 		}
 		case BufferTarget::AtomicCounter:
 		{
-			return "CBO";
+			return "AtomicCounter";
 		}
 		case BufferTarget::ShaderStorage:
 		{
-			return "SBO";
+			return "ShaderStorage";
 		}
 	}
 
