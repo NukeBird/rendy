@@ -24,7 +24,7 @@ Rendy::Engine::Engine(OGL version, VFSRef vfs)
 		content.resize(file->get_size());
 		file->read(content.data(), file->get_size());
 		Rendy::Image2DRef lut_image = std::make_shared<Image2D>(reinterpret_cast<const char*>(content.data()),
-			content.size());
+			static_cast<uint32_t>(content.size()));
 		lut = make_texture2d(lut_image);
 		lut->set_wrap_mode(WrapMode::ClampToEdge);
 		lut->set_min_filter(MinFilter::Linear);
