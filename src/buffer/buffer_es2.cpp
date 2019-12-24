@@ -10,7 +10,7 @@ Rendy::ES2::Buffer::Buffer(BufferTarget target, uint32_t size,
 	OPTICK_TAG("size", size);
 
 	assert(target != BufferTarget::SBO);
-	assert(target != BufferTarget::CBO);
+	assert(target != BufferTarget::AtomicCounter);
 }
 
 void Rendy::ES2::Buffer::bind(uint32_t index)

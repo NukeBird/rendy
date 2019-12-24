@@ -15,7 +15,7 @@ std::string Rendy::to_string(BufferTarget target)
 		{
 			return "IBO";
 		}
-		case BufferTarget::CBO:
+		case BufferTarget::AtomicCounter:
 		{
 			return "CBO";
 		}
@@ -130,7 +130,7 @@ GLenum Rendy::AbstractBuffer::get_gl_target() const
 		{
 			return GL_ELEMENT_ARRAY_BUFFER;
 		}
-		case Rendy::BufferTarget::CBO:
+		case Rendy::BufferTarget::AtomicCounter:
 		{
 			return GL_ATOMIC_COUNTER_BUFFER;
 		}

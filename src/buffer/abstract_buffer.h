@@ -11,7 +11,7 @@ namespace Rendy
 	{
 		VertexArray,
 		ElementArray,
-		CBO,
+		AtomicCounter,
 		SBO,
 		Invalid
 	};
