@@ -175,6 +175,12 @@ Rendy::AbstractBufferRef Rendy::Engine::make_sbo(uint32_t size, const void* ptr)
 	return gapi->make_sbo(size, ptr);
 }
 
+Rendy::AbstractBufferRef Rendy::Engine::make_cbo(uint32_t size, const void* ptr)
+{
+	OPTICK_EVENT();
+	return gapi->make_cbo(size, ptr);
+}
+
 Rendy::IndexType Rendy::Engine::get_index_type() const
 {
 	OPTICK_EVENT();

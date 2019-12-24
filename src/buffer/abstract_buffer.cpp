@@ -15,6 +15,10 @@ std::string Rendy::to_string(BufferTarget target)
 		{
 			return "IBO";
 		}
+		case BufferTarget::CBO:
+		{
+			return "CBO";
+		}
 		case BufferTarget::SBO:
 		{
 			return "SBO";
@@ -44,6 +48,7 @@ Rendy::AbstractBuffer::~AbstractBuffer()
 
 Rendy::BufferTarget Rendy::AbstractBuffer::get_target() const
 {
+	OPTICK_EVENT();
 	return target;
 }
 
@@ -114,8 +119,6 @@ void Rendy::AbstractBuffer::generate_buffer()
 GLenum Rendy::AbstractBuffer::get_gl_target() const
 {
 	OPTICK_EVENT();
-	return (target == BufferTarget::VBO) ? GL_ARRAY_BUFFER :
-		GL_ELEMENT_ARRAY_BUFFER;
 
 	switch (target)
 	{
@@ -126,6 +129,10 @@ GLenum Rendy::AbstractBuffer::get_gl_target() const
 		case Rendy::BufferTarget::IBO:
 		{
 			return GL_ELEMENT_ARRAY_BUFFER;
+		}
+		case Rendy::BufferTarget::CBO:
+		{
+			return GL_ATOMIC_COUNTER_BUFFER;
 		}
 		case Rendy::BufferTarget::SBO:
 		{

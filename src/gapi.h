@@ -28,6 +28,7 @@ namespace Rendy
 		AbstractBufferRef make_vbo(uint32_t size, const void* ptr);
 		AbstractBufferRef make_ibo(uint32_t size, const void* ptr);
 		AbstractBufferRef make_sbo(uint32_t size, const void* ptr);
+		AbstractBufferRef make_cbo(uint32_t size, const void* ptr);
 		BufferFactoryRef get_buffer_factory() const;
 		ShaderFactoryRef get_shader_factory() const;
 		Texture2DFactoryRef get_texture2d_factory() const;
