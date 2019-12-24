@@ -7,7 +7,7 @@ std::string Rendy::to_string(BufferTarget target)
 
 	switch(target)
 	{
-		case BufferTarget::VBO:
+		case BufferTarget::VertexBuffer:
 		{
 			return "VBO";
 		}
@@ -122,7 +122,7 @@ GLenum Rendy::AbstractBuffer::get_gl_target() const
 
 	switch (target)
 	{
-		case Rendy::BufferTarget::VBO:
+		case Rendy::BufferTarget::VertexBuffer:
 		{
 			return GL_ARRAY_BUFFER;
 		}
