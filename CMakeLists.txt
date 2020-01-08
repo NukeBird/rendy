@@ -35,19 +35,13 @@ find_package(glm REQUIRED)
 add_subdirectory(dep)
 set(PROJECT_LIBS stb::stb assimp glm gli spdlog::spdlog)
 
-#if(WIN32)
-    #hunter_add_package(glew)
-    #find_package(glew CONFIG REQUIRED)
-
-    #set(PROJECT_LIBS ${PROJECT_LIBS} glew::glew)
-
-    #add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_FILES})
-#else()
-    #TODO: OPTICK_ENABLED=OFF
-    add_library(${PROJECT_NAME} STATIC ${PROJECT_SOURCE_FILES})
-#endif()
-
 if(WIN32)
+
+    hunter_add_package(glew)
+    find_package(glew CONFIG REQUIRED)
+
+    set(PROJECT_LIBS ${PROJECT_LIBS} glew::glew)
+
     foreach(_source IN ITEMS ${PROJECT_SOURCE_FILES})
         get_filename_component(_source_path "${_source}" PATH)
         string(REPLACE "${CMAKE_SOURCE_DIR}" "" _group_path "${_source_path}")
@@ -55,6 +49,8 @@ if(WIN32)
         source_group("${_group_path}" FILES "${_source}")
     endforeach()
 endif(WIN32)
+
+add_library(${PROJECT_NAME} STATIC ${PROJECT_SOURCE_FILES})
 
 set(PROJECT_LIBS ${PROJECT_LIBS} OptickCore)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${PROJECT_LIBS})
@@ -77,9 +73,6 @@ if(BUILD_SANDBOX)
         endforeach()
     endif(WIN32)
 
-    hunter_add_package(glew)
-    find_package(glew CONFIG REQUIRED)
-
     add_executable(Sandbox ${SANDBOX_SOURCE_FILES})
-    target_link_libraries(Sandbox PUBLIC ${PROJECT_NAME} glew::glew SDL2::SDL2main SDL2::SDL2)
+    target_link_libraries(Sandbox PUBLIC ${PROJECT_NAME} SDL2::SDL2main SDL2::SDL2)
 endif(BUILD_SANDBOX)
