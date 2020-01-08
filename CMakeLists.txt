@@ -10,9 +10,9 @@ HunterGate(
 project(Rendy)
 
 file(GLOB_RECURSE PROJECT_SOURCE_FILES
-    "src/*.h"
-    "src/*.hpp"
-    "src/*.cpp"
+    "engine/*.h"
+    "engine/*.hpp"
+    "engine/*.cpp"
 )
 
 hunter_add_package(SDL2)
