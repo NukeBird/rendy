@@ -32,5 +32,6 @@
 *.app
 
 #Ignore build folder
+build_android/
 build/
 .vs/
