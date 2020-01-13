@@ -26,14 +26,14 @@ find_package(SDL2 CONFIG REQUIRED)
 #hunter_add_package(Assimp)
 #find_package(Assimp CONFIG REQUIRED)
 
-hunter_add_package(spdlog)
-find_package(spdlog CONFIG REQUIRED)
+#hunter_add_package(spdlog)
+#find_package(spdlog CONFIG REQUIRED)
 
 #hunter_add_package(glm)
 #find_package(glm REQUIRED)
 
 add_subdirectory(dep)
-set(PROJECT_LIBS assimp glm::glm gli spdlog::spdlog stb)
+set(PROJECT_LIBS assimp glm::glm gli spdlog::spdlog_header_only stb)
 
 if(WIN32)
 
