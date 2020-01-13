@@ -54,7 +54,7 @@ add_library(${PROJECT_NAME} STATIC ${PROJECT_SOURCE_FILES})
 
 set(PROJECT_LIBS ${PROJECT_LIBS} OptickCore)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${PROJECT_LIBS})
-#target_include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(${PROJECT_NAME} INTERFACE ./)
 
 if(BUILD_SANDBOX)
     file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})

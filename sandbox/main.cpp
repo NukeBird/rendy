@@ -1,12 +1,12 @@
 #include <SDL.h>
-#include "../engine/rendy.h"
+#include <engine/rendy.h>
 //#include "rendy.h"
 #include <regex>
 #include <chrono>
 #include <optick.h>
-#include "../engine/util/log.h"
-#include "../engine/shader/default_shader_executor_es3.hpp"
-#include "../engine/shader/shader_source.h"
+#include <engine/util/log.h>
+#include <engine/shader/default_shader_executor_es3.hpp>
+#include <engine/shader/shader_source.h>
 
 void GLAPIENTRY message_callback(GLenum source,
 	GLenum type,
@@ -32,12 +32,12 @@ void GLAPIENTRY message_callback(GLenum source,
 	Rendy::Log::info(message_string);
 }
 
-#include "../engine/engine.h"
-#include "../engine/util/vfs/vfs.h"
-#include "../engine/pipeline/render_pass/self_sufficient_pass.h"
-#include "../engine/pipeline/render_pass/depth_prepass.h"
-#include "../engine/pipeline/render_pass/opaque_pass.h"
-#include "../engine/pipeline/render_pass/transparent_pass.h"
+#include <engine/engine.h>
+#include <engine/util/vfs/vfs.h>
+#include <engine/pipeline/render_pass/self_sufficient_pass.h>
+#include <engine/pipeline/render_pass/depth_prepass.h>
+#include <engine/pipeline/render_pass/opaque_pass.h>
+#include <engine/pipeline/render_pass/transparent_pass.h>
 
 int main(int argc, char** argv) 
 {
