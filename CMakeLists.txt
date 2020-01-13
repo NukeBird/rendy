@@ -20,8 +20,8 @@ file(GLOB_RECURSE PROJECT_SOURCE_FILES
 hunter_add_package(SDL2)
 find_package(SDL2 CONFIG REQUIRED)
 
-hunter_add_package(stb)
-find_package(stb CONFIG REQUIRED)
+#hunter_add_package(stb)
+#find_package(stb CONFIG REQUIRED)
 
 #hunter_add_package(Assimp)
 #find_package(Assimp CONFIG REQUIRED)
@@ -33,7 +33,7 @@ find_package(spdlog CONFIG REQUIRED)
 #find_package(glm REQUIRED)
 
 add_subdirectory(dep)
-set(PROJECT_LIBS stb::stb assimp glm::glm gli spdlog::spdlog)
+set(PROJECT_LIBS assimp glm::glm gli spdlog::spdlog stb)
 
 if(WIN32)
 
@@ -54,7 +54,7 @@ add_library(${PROJECT_NAME} STATIC ${PROJECT_SOURCE_FILES})
 
 set(PROJECT_LIBS ${PROJECT_LIBS} OptickCore)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${PROJECT_LIBS})
-target_include_directories(${PROJECT_NAME} INTERFACE ./)
+target_include_directories(${PROJECT_NAME} INTERFACE ./ ./dep/)
 
 if(BUILD_SANDBOX)
     file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
