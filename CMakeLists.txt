@@ -29,11 +29,11 @@ find_package(stb CONFIG REQUIRED)
 hunter_add_package(spdlog)
 find_package(spdlog CONFIG REQUIRED)
 
-hunter_add_package(glm)
-find_package(glm REQUIRED)
+#hunter_add_package(glm)
+#find_package(glm REQUIRED)
 
 add_subdirectory(dep)
-set(PROJECT_LIBS stb::stb assimp glm gli spdlog::spdlog)
+set(PROJECT_LIBS stb::stb assimp glm::glm gli spdlog::spdlog)
 
 if(WIN32)
 
