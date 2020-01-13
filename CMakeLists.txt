@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 3.7)
 
-include("cmake/HunterGate.cmake")
+if(WIN32)
+    #include("cmake/HunterGate.cmake")
 
-HunterGate(
-    URL "https://github.com/cpp-pm/hunter/archive/v0.23.228.tar.gz"
-    SHA1 "0546cabd20ed784a2245083eb59e9185bf1d63a9"
-)
+    #HunterGate(
+     #   URL "https://github.com/cpp-pm/hunter/archive/v0.23.228.tar.gz"
+      #  SHA1 "0546cabd20ed784a2245083eb59e9185bf1d63a9"
+    #)
+endif(WIN32)
 
 project(Rendy)
 
@@ -16,9 +18,6 @@ file(GLOB_RECURSE PROJECT_SOURCE_FILES
     "engine/*.hpp"
     "engine/*.cpp"
 )
-
-hunter_add_package(SDL2)
-find_package(SDL2 CONFIG REQUIRED)
 
 #hunter_add_package(stb)
 #find_package(stb CONFIG REQUIRED)
@@ -37,10 +36,10 @@ set(PROJECT_LIBS assimp glm::glm gli spdlog::spdlog_header_only stb)
 
 if(WIN32)
 
-    hunter_add_package(glew)
-    find_package(glew CONFIG REQUIRED)
+    #hunter_add_package(glew)
+    #find_package(glew CONFIG REQUIRED)
 
-    set(PROJECT_LIBS ${PROJECT_LIBS} glew::glew)
+    #set(PROJECT_LIBS ${PROJECT_LIBS} glew::glew)
 
     foreach(_source IN ITEMS ${PROJECT_SOURCE_FILES})
         get_filename_component(_source_path "${_source}" PATH)
@@ -73,6 +72,9 @@ if(BUILD_SANDBOX)
         endforeach()
     endif(WIN32)
 
-    add_executable(Sandbox ${SANDBOX_SOURCE_FILES})
-    target_link_libraries(Sandbox PUBLIC ${PROJECT_NAME} SDL2::SDL2main SDL2::SDL2)
+    #hunter_add_package(SDL2)
+    #find_package(SDL2 CONFIG REQUIRED)
+
+    #add_executable(Sandbox ${SANDBOX_SOURCE_FILES})
+    #target_link_libraries(Sandbox PUBLIC ${PROJECT_NAME} SDL2::SDL2main SDL2::SDL2)
 endif(BUILD_SANDBOX)

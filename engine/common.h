@@ -11,6 +11,8 @@
 	#include <GLES3/gl3.h>
 	#include <GLES3/gl3ext.h>
 	#include <GLES3/gl3platform.h>
+
+	#include <GLES3/gl31.h>
 #endif
 
 #define GLM_FORCE_RADIANS 

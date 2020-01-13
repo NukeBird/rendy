@@ -15,7 +15,7 @@ void Rendy::OpaquePass::execute(const BatchList& batches)
 	OPTICK_EVENT();
 
 	glDisable(GL_BLEND);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glDepthFunc(depth_prepassed ? GL_EQUAL : GL_LESS);
 	glColorMask(1, 1, 1, 1);
 	glDepthMask(GL_TRUE);
