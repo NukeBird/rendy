@@ -78,7 +78,7 @@ OPTION( ASSIMP_ANDROID_JNIIOSYSTEM
 )
 OPTION( ASSIMP_NO_EXPORT
   "Disable Assimp's export functionality."
-  OFF
+  ON
 )
 OPTION( ASSIMP_BUILD_ZLIB
   "Build your own zlib"
@@ -86,7 +86,7 @@ OPTION( ASSIMP_BUILD_ZLIB
 )
 OPTION( ASSIMP_BUILD_ASSIMP_TOOLS
   "If the supplementary tools for Assimp are built in addition to the library."
-  ON
+  OFF
 )
 OPTION ( ASSIMP_BUILD_SAMPLES
   "If the official samples are built as well (needs Glut)."
@@ -94,7 +94,7 @@ OPTION ( ASSIMP_BUILD_SAMPLES
 )
 OPTION ( ASSIMP_BUILD_TESTS
   "If the test suite for Assimp is built in addition to the library."
-  ON
+  OFF
 )
 OPTION ( ASSIMP_COVERALLS
   "Enable this to measure test coverage."
